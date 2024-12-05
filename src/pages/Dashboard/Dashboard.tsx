@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
     BookOutlined,
     DashboardOutlined,
-    DownOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -40,18 +39,18 @@ const Dashboard: React.FC = () => {
     const menuItems = [
         {
             key: "1",
-            icon: <UserOutlined />,
-            label: <Link to="/dashboard/profile">Profile</Link>,
+            icon: <UserOutlined className="font-bold" />,
+            label: <Link className="font-bold" to="/dashboard/profile">Profile</Link>,
         },
         {
             key: "2",
-            icon: <BookOutlined />,
-            label: <Link to="/dashboard/booking">Booking Management</Link>,
+            icon: <BookOutlined className="font-bold" />,
+            label: <Link className="font-bold" to="/dashboard/booking">Booking Management</Link>,
         },
         {
             key: "3",
-            icon: <MoneyCollectOutlined />,
-            label: <Link to="/dashboard/payment">Payment Management</Link>,
+            icon: <MoneyCollectOutlined className="font-bold" />,
+            label: <Link className="font-bold" to="/dashboard/payment">Payment Management</Link>,
         },
     ];
 
@@ -66,7 +65,7 @@ const Dashboard: React.FC = () => {
                 <div className="sticky top-0 z-30">
                     <img
                         src={logo}
-                        className="h-24 w-full object-cover"
+                        className="h-24 w-full object-cover "
                         alt="logo"
                     />
                 </div>
@@ -74,10 +73,11 @@ const Dashboard: React.FC = () => {
                     mode="inline"
                     defaultSelectedKeys={["1"]}
                     items={menuItems}
+                    className="sticky top-24 z-30 bg-[#FFF6E9] h-[500px]"
                 />
             </Sider>
             <Layout>
-                <Header className="flex justify-between bg-white h-24 sticky top-0  z-10 ">
+                <Header className="flex justify-between items-center bg-gradient-to-b from-[#4335A7] to-[#FFF6E9] text-[#FFF6E9] h-24 sticky top-0  z-10 ">
                     <Button
                         type="text"
                         icon={
@@ -88,17 +88,19 @@ const Dashboard: React.FC = () => {
                             )
                         }
                         onClick={() => setCollapsed(!collapsed)}
+                        className="text-[#FFF6E9]"
                         style={{ fontSize: "16px", width: 64, height: 64 }}
                     />
                     {user?.role === "admin" || user?.role === "user" ? (
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-center">
                             <Dropdown
+                                trigger={["click"]}
                                 menu={{
                                     items: [
                                         {
                                             label: (
                                                 <Link to="/dashboard">
-                                                    <DashboardOutlined className="pr-2" />
+                                                    <DashboardOutlined className="pr-2 py-2" />
                                                     Dashboard
                                                 </Link>
                                             ),
@@ -107,7 +109,7 @@ const Dashboard: React.FC = () => {
                                         {
                                             label: (
                                                 <Link to="/">
-                                                    <RollbackOutlined className="pr-2" />
+                                                    <RollbackOutlined className="pr-2  py-2" />
                                                     Home page
                                                 </Link>
                                             ),
@@ -119,7 +121,7 @@ const Dashboard: React.FC = () => {
                                                     onClick={handleLogout}
                                                     to="/login"
                                                 >
-                                                    <LogoutOutlined className="pr-2" />
+                                                    <LogoutOutlined className="pr-2  py-2" />
                                                     Logout
                                                 </Link>
                                             ),
@@ -129,20 +131,18 @@ const Dashboard: React.FC = () => {
                                 }}
                             >
                                 <a onClick={(e) => e.preventDefault()}>
-                                    <Space>
+                                    <Space className="flex justify-center items-center">
                                         <Avatar
                                             size="large"
                                             icon={<UserOutlined />}
                                         />
-                                        <DownOutlined />
+                                        <p className="text-lg font-bold uppercase m-0 text-[#FFF6E9]">
+                                            {user?.name}
+                                        </p>
                                     </Space>
                                 </a>
                             </Dropdown>
-                            <div className="ml-2">
-                                <p className="text-lg font-bold uppercase">
-                                    {user?.name}
-                                </p>
-                            </div>
+
                         </div>
                     ) : null}
                 </Header>

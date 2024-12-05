@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useForgetPasswordMutation } from "@/redux/feature/authApi";
 import { ValidateErrorEntity } from "rc-field-form/lib/interface";
+import { motion } from "framer-motion";
 
 type FieldType = {
     email: string;
@@ -18,9 +19,7 @@ const ForgetPassword: React.FC = () => {
                 email: data.email,
             }).unwrap();
             if (response?.success) {
-                toast.success(
-                    "Password reset link has been sent to your email."
-                );
+                toast.success("Password reset link has been sent to your email.");
             } else {
                 toast.error("Failed to send password reset link.");
             }
@@ -34,12 +33,18 @@ const ForgetPassword: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-                <h2 className="text-3xl font-semibold text-center mb-6 text-black">
+        <div className="container mx-auto flex justify-center items-center min-h-screen" style={{ backgroundColor: "#FFF6E9" }}>
+            <motion.div
+                className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ backgroundColor: "#FFF6E9" }}
+            >
+                <h2 className="text-3xl font-semibold text-center mb-6" style={{ color: "#4335A7" }}>
                     Forgot Password
                 </h2>
-                <p className="text-center mb-4 text-gray-600">
+                <p className="text-center mb-4" style={{ color: "#4335A7" }}>
                     Enter your email and we will send you a password reset link.
                 </p>
                 <Form
@@ -69,8 +74,16 @@ const ForgetPassword: React.FC = () => {
                     <Form.Item>
                         <Button
                             htmlType="submit"
-                            className="w-full py-5 bg-black text-white font-semibold text-xl"
+                            className="w-full py-5 font-semibold text-xl"
                             loading={isLoading}
+                            style={{
+                                backgroundColor: "#4335A7",
+                                color: "white",
+                                fontWeight: "bold",
+                                transition: "background-color 0.3s",
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#FF7F3E"}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#4335A7"}
                         >
                             Send Reset Link
                         </Button>
@@ -85,7 +98,7 @@ const ForgetPassword: React.FC = () => {
                         </p>
                     </div>
                 </Form>
-            </div>
+            </motion.div>
         </div>
     );
 };

@@ -7,11 +7,10 @@ import {
     fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { toast } from "sonner";
 import { logout, setUser } from "../feature/authSlice";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: "https://assignment-3-blond.vercel.app",
+    baseUrl: "http://localhost:5000",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token;
@@ -19,7 +18,7 @@ const baseQuery = fetchBaseQuery({
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
-
+        console.log("Headers:", headers);
         return headers;
     },
 });
@@ -30,21 +29,16 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     FetchBaseQueryError
 > = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-
+    console.log(result);
     // Log errors for different statuses
     if (result?.error) {
         console.error("API Error:", result.error);
 
-        if (result.error.status === 404 || result.error.status === 403) {
-            const errorData = result.error.data as { message: string };
-            toast.error(errorData.message);
-        }
-
-        if (result.error.status === 401) {
+        if (result.error.status === 500) {
             console.log("Sending refresh token");
 
             const res = await fetch(
-                "https://assignment-3-blond.vercel.app/api/auth/refresh-token",
+                "http://localhost:5000/api/auth/refresh-token",
                 {
                     method: "POST",
                     credentials: "include",

@@ -1,35 +1,43 @@
 import Buttons from "@/components/Buttons";
 import { navPaths } from "@/routes/navRoutes";
 import {
-    BarsOutlined,
     CloseCircleOutlined,
     DashboardOutlined,
-    DownOutlined,
     EnvironmentOutlined,
     FacebookOutlined,
+    LoginOutlined,
     LogoutOutlined,
     MailOutlined,
-    RollbackOutlined,
+
     TwitterOutlined,
-    UserOutlined,
+    UserSwitchOutlined,
     YoutubeOutlined,
+
 } from "@ant-design/icons";
-import { Avatar, Dropdown, Menu, MenuProps, Space, Switch } from "antd";
+import { Dropdown, Menu, Space, Switch } from "antd";
 import logo from "../assets/car-lgo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
 import { logout } from "@/redux/feature/authSlice";
-import { TUser } from "@/types/global";
 import { clearBookings } from "@/redux/feature/booking/bookingSlice";
-import { navPaths2 } from "@/routes/navRoutes2";
 import { useEffect, useState } from "react";
+import { TUser } from "@/types/global";
+import { FaBars } from "react-icons/fa";
+import { IoIosHome } from "react-icons/io";
+import { MdRoundaboutRight } from "react-icons/md";
+import { FaCarSide } from "react-icons/fa";
+import { IoMdAppstore } from "react-icons/io";
+import { MdContactPhone } from "react-icons/md";
+
+
+
 
 const Header = () => {
-    const user = useAppSelector((state) => state.auth.user as TUser | null);
+    const user = useAppSelector((state) => state.auth.user) as TUser | null;
+    console.log(user);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
     const [theme, setTheme] = useState(
         localStorage.getItem("theme") || "light"
     );
@@ -41,20 +49,19 @@ const Header = () => {
         navigate("/login");
     };
 
-    // Detect window resize and update state
+    // Handle window resize
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 1024);
+
         };
 
         window.addEventListener("resize", handleResize);
-
-        // Cleanup event listener on component unmount
         return () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    // Save theme to localStorage and apply it to document body
+
+    // Apply theme to the document
     useEffect(() => {
         document.body.className = theme;
         localStorage.setItem("theme", theme);
@@ -64,7 +71,7 @@ const Header = () => {
         setTheme(checked ? "dark" : "light");
     };
 
-    const menuItems = navPaths.map((navItem, index) => ({
+    const navItems = navPaths.map((navItem, index) => ({
         key: index,
         label: (
             <Link to={navItem.path} className="uppercase">
@@ -73,75 +80,114 @@ const Header = () => {
         ),
     }));
 
-    const menuItems2 = navPaths2.map((navItem, index) => ({
-        key: index,
-        label: (
-            <Link
-                to={navItem.path}
-                className="uppercase border-b-2 block border-solid border-blue-500 bg-border-bottom "
-            >
-                {navItem.name}
-            </Link>
-        ),
-    }));
-
-    const items: MenuProps["items"] = [
+    const userMenuItems = [
         {
-            label:
-                user?.role === "admin" ? (
-                    <Link className="text-md font-medium" to="/admin-dashboard">
-                        <DashboardOutlined className="pr-2" />
-                        Admin-dashboard
-                    </Link>
-                ) : (
-                    <Link className="text-md font-medium" to="/dashboard">
-                        <DashboardOutlined className="pr-2" />
-                        Dashboard
-                    </Link>
-                ),
-            key: "1",
-        },
-        {
+            key: "Home",
             label: (
                 <Link to="/">
-                    <RollbackOutlined className="pr-2" />
-                    Home page
+                    <span className="flex items-center md:hidden py-2">
+                        <IoIosHome className="text-xl" />
+                        <span className="pl-2">Home</span>
+                    </span>
                 </Link>
             ),
-            key: "2",
         },
         {
+            key: "About",
             label: (
-                <Link onClick={handleLogout} to="/login">
+                <Link to="/about">
+                    <span className="flex items-center md:hidden py-2">
+                        <MdRoundaboutRight className="text-xl" />
+                        <span className="pl-2">About</span>
+                    </span>
+                </Link>
+            ),
+        },
+        {
+            key: "Carlist",
+            label: (
+                <Link to="/cars">
+                    <span className="flex items-center md:hidden py-2">
+                        <FaCarSide className="text-xl" />
+                        <span className="pl-2">Carlist</span>
+                    </span>
+                </Link>
+            ),
+        },
+        {
+            key: "Booking",
+            label: (
+                <Link to="/bookings">
+                    <span className="flex items-center md:hidden py-2">
+                        <IoMdAppstore className="text-xl" />
+                        <span className="pl-2">Booking</span>
+                    </span>
+                </Link>
+            ),
+        },
+        {
+            key: "Contact",
+            label: (
+                <Link to="/contact">
+                    <span className="flex items-center md:hidden py-2">
+                        <MdContactPhone className="text-xl" />
+                        <span className="pl-2">Contact</span>
+                    </span>
+                </Link>
+            ),
+        },
+    ];
+
+    // Add user-specific menu items dynamically
+    if (user?.role) {
+        userMenuItems.push({
+            key: "dashboard",
+            label: (
+                <Link
+                    to={user.role === "admin" ? "/admin-dashboard" : "/dashboard"}
+                    className="py-2 inline-block"
+                >
+                    <DashboardOutlined className="pr-2" />
+                    {user.role === "admin" ? "Admin Dashboard" : "Dashboard"}
+                </Link>
+            ),
+        });
+
+        userMenuItems.push({
+            key: "logout",
+            label: (
+                <Link onClick={handleLogout} to="/login" className="py-2 inline-block">
                     <LogoutOutlined className="pr-2" />
                     Logout
                 </Link>
             ),
-            key: "3",
-        },
-    ];
+        });
+    } else {
+        userMenuItems.push({
+            key: "login",
+            label: (
+                <Link to="/login" className="py-2 inline-block">
+                    <LoginOutlined className="pr-2" />
+                    Login
+                </Link>
+            ),
+        });
+    }
+
 
     return (
-        <div>
+        <div className="overflow-x-hidden">
             <div
                 className="fixed top-0 w-full z-50"
-                style={{
-                    backgroundColor: "var(--bg-color)",
-                    color: "var(--text-color)",
-                }}
+
+
             >
-                <div className="container mx-auto flex justify-around items-center py-1 bg-gray-800">
-                    <div className="max-md:hidden flex text-white opacity-80 w-full">
-                        <div className="text-md font-medium text-white">
-                            <MailOutlined />
-                            <span className="mx-2">Debos.das.02@gmail.com</span>
-                        </div>
-                        <div className="text-md font-medium text-white">
-                            <EnvironmentOutlined />
-                            <span className="ml-2">
-                                uttar patenga, katgor, chittagong, post-4000
-                            </span>
-                        </div>
+                <div className="bg-[#4335A7]"> <div className="hidden  container mx-auto md:flex justify-between items-center py-1 ">
+                    <div className="text-white opacity-80">
+                        <MailOutlined />
+                        <span className="mx-2">Debos.das.02@gmail.com</span>
+                        <EnvironmentOutlined className="ml-4" />
+                        <span className="ml-2">Chittagong, Bangladesh</span>
                     </div>
                     <div className="flex items-center">
                         <Switch
@@ -150,50 +196,33 @@ const Header = () => {
                             checkedChildren="Dark"
                             unCheckedChildren="Light"
                             className="mr-4"
-                            autoFocus
                         />
-                        <FacebookOutlined className="mr-2 bg-amber-400 p-2 text-sm rounded-full" />
-                        <YoutubeOutlined className="mr-2 bg-amber-400 p-2 text-sm rounded-full" />
-                        <TwitterOutlined className="bg-amber-400 p-2 text-sm rounded-full" />
+                        <FacebookOutlined className="mr-2 bg-amber-400 p-1 text-sm rounded-full" />
+                        <YoutubeOutlined className="mr-2 bg-amber-400 p-1 text-sm rounded-full" />
+                        <TwitterOutlined className="bg-amber-400 p-1 text-sm rounded-full" />
                     </div>
-                </div>
-                <div className="container mx-auto flex justify-between items-center bg-white border-b-2 border-amber-500">
+                </div></div>
+
+                <div className="bg-[#FFF6E9] border-b-2 border-[#4335A7]"><div className="container mx-auto flex justify-between items-center   ">
                     <Link to="/">
-                        <img src={logo} className="h-24 object-cover" alt="" />
+                        <img src={logo} className="h-[60px] md:h-[70px] max-h-full w-full object-cover " alt="Logo" />
                     </Link>
-                    <div>
-                        {!isMobile && (
-                            <Menu
-                                className="max-lg:hidden w-full justify-end items-end font-sans text-xl font-bold bg-white"
-                                mode="horizontal"
-                                items={menuItems}
-                            />
-                        )}
-                    </div>
+                    <Menu
+                        className="max-lg:hidden w-full justify-center items-center text-lg font-bold text-[#4335A7] bg-[#FFF6E9] "
+                        mode="horizontal"
+                        items={navItems}
+                    />
                     {user?.role === "admin" || user?.role === "user" ? (
-                        <div className="flex items-center justify-center">
-                            <Dropdown
-                                menu={{ items }}
-                                className="text-lg text-gray-950 font-bold"
-                            >
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Space>
-                                        <Avatar
-                                            size="large"
-                                            icon={<UserOutlined />}
-                                        />
-                                        <DownOutlined />
-                                    </Space>
-                                </a>
-                            </Dropdown>
-                            <div className="ml-2 mt-3">
-                                <p className="text-lg font-bold uppercase">
-                                    {user?.name}
-                                </p>
-                            </div>
-                        </div>
+                        <Dropdown trigger={["click"]} menu={{ items: userMenuItems }}>
+                            <div className="cursor-pointer" onClick={(e) => e.preventDefault()}>
+                                <Space className="flex items-center justify-between">
+                                    <UserSwitchOutlined className="mr-2 p-4 text-xl bg-[#4335A7] rounded-full text-[#FFF6E9]" />
+                                    <p className="text-[#4335A7] uppercase font-medium md:font-bold m-0">{user?.name}</p>
+                                </Space>
+                            </div >
+                        </Dropdown>
                     ) : (
-                        <div>
+                        <div className="flex items-center">
                             <div className="max-lg:hidden">
                                 <Buttons to="/login">Login</Buttons>
                             </div>
@@ -204,21 +233,22 @@ const Header = () => {
                                 {open ? (
                                     <CloseCircleOutlined className="text-3xl" />
                                 ) : (
-                                    <BarsOutlined className="text-3xl" />
+                                    <FaBars className="text-3xl" />
                                 )}
                             </div>
                             {open && (
                                 <Menu
-                                    className="lg:hidden  text-gray-950 w-full absolute right-0 top-[137px] border-2 justify-end items-center font-sans text-2xl font-bold bg-white"
+                                    className="lg:hidden text-[#4335A7] w-full absolute right-0 top-[82px] md:top-[137px] border-2 bg-[#FFF6E9]"
                                     mode="vertical"
-                                    items={menuItems2}
+                                    items={userMenuItems}
                                 />
                             )}
                         </div>
                     )}
-                </div>
+                </div></div>
+
             </div>
-        </div>
+        </div >
     );
 };
 

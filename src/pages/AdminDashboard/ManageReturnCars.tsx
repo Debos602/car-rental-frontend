@@ -1,4 +1,5 @@
 import { Spin, Table, Button, Popconfirm, message, Tooltip } from "antd";
+import { motion } from "framer-motion";
 import { useGetAllBookingsQuery } from "@/redux/feature/booking/bookingApi";
 import type { ColumnsType } from "antd/es/table";
 import { TBooking } from "@/types/global";
@@ -66,9 +67,9 @@ const ManageReturnCars = () => {
                 return isNaN(date.getTime())
                     ? "N/A"
                     : date.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                      });
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    });
             },
         },
         {
@@ -90,10 +91,11 @@ const ManageReturnCars = () => {
                             cancelText="No"
                         >
                             <Button
-                                type="primary"
+
                                 size="small"
                                 disabled={record.status === "completed"}
                                 loading={loading}
+                                className="bg-[#4335A7] text-white hover:bg-white hover:text-[#4335A7] transition-all duration-300"
                             >
                                 Return Car
                             </Button>
@@ -113,29 +115,45 @@ const ManageReturnCars = () => {
     }
 
     return (
-        <div className="container mx-auto">
-            {" "}
-            <h1 className="text-center from-amber-200 to-amber-50 bg-gradient-to-b  py-16 text-5xl font-normal uppercase rounded-xl">
+        <div>
+            {/* Animated Header */}
+            <motion.h1
+                initial={{ opacity: 0, translateY: -50 }} // Animation starts above
+                animate={{ opacity: 1, translateY: 0 }} // Animates into position
+                transition={{ duration: 0.8, ease: "easeIn" }} // Smooth transition
+                className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg m-0"
+            >
                 Manage Returns Car
-            </h1>
+            </motion.h1>
+
             {/* Table for viewing and managing booked cars */}
-            <Table
-                columns={columns}
-                dataSource={
-                    Array.isArray(bookings?.data)
-                        ? bookings.data.map(
-                              (booking: TBooking, index: number) => ({
-                                  ...booking,
-                                  key: index,
-                              })
-                          )
-                        : []
-                }
-                pagination={{ pageSize: 10 }}
-                bordered
-                scroll={{ x: 800 }}
-            />
-        </div>
+            <motion.div
+                className="px-4"
+                initial={{ opacity: 0, translateY: 50 }} // Animation starts above
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.8, ease: "easeIn" }}
+            >
+                <Table
+                    className="mt-4 rounded-xl bg-[#FFF6E9] shadow-xl border-collapse text-[#4335A7]"
+                    columns={columns}
+                    rowClassName={() => "text-[#4335A7]"}
+                    dataSource={
+                        Array.isArray(bookings?.data)
+                            ? bookings.data.map((booking: TBooking, index: number) => ({
+                                ...booking,
+                                key: index,
+                            }))
+                            : []
+                    }
+                    pagination={{ pageSize: 10 }}
+                    bordered
+                    scroll={{ x: 800 }}
+                    tableLayout="auto"
+
+                />
+            </motion.div>
+
+        </div >
     );
 };
 

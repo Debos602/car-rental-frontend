@@ -13,11 +13,11 @@ const Footer = () => {
 
     return (
         <footer
-            className="bg-gray-900 text-white py-8 bg-cover bg-center bg-no-repeat relative z-10"
+            className="bg-[#4335A7] text-[#FFF6E9] py-8 bg-cover bg-center bg-no-repeat relative z-10"
             style={bgImage}
         >
             {/* Background overlay */}
-            <div className="absolute inset-0 w-full h-full bg-gray-900 opacity-80 -z-10"></div>
+            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-80 -z-10"></div>
 
             <div className="container mx-auto px-4">
                 {/* Footer content */}
@@ -32,7 +32,7 @@ const Footer = () => {
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-amber-600"
+                                className="hover:text-[#FF7F3E]"
                             >
                                 <FacebookFilled />
                             </a>
@@ -40,7 +40,7 @@ const Footer = () => {
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-amber-600"
+                                className="hover:text-[#FF7F3E]"
                             >
                                 <TwitterSquareFilled />
                             </a>
@@ -48,7 +48,7 @@ const Footer = () => {
                                 href="https://instagram.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-amber-600"
+                                className="hover:text-[#FF7F3E]"
                             >
                                 <InstagramFilled />
                             </a>
@@ -103,13 +103,13 @@ const Footer = () => {
                 <div className="mt-8 flex flex-col md:flex-row justify-between items-center text-sm">
                     {/* Footer Links */}
                     <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-                        <Link to="/" className="hover:text-amber-600">
+                        <Link to="/" className="hover:text-[#FF7F3E]">
                             Privacy Policy
                         </Link>
-                        <Link to="/" className="hover:text-amber-600">
+                        <Link to="/" className="hover:text-[#FF7F3E]">
                             Terms of Service
                         </Link>
-                        <Link to="/" className="hover:text-amber-600">
+                        <Link to="/" className="hover:text-[#FF7F3E]">
                             Contact Us
                         </Link>
                     </div>

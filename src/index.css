@@ -1,42 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Exo:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: exo, sans-serif;
+    font-family: "Lora", serif;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-horizontal {
     border-bottom: 0;
 }
-/* :where(.css-dev-only-do-not-override-qnu6hi).ant-btn-default:not(:disabled):not(
-        .ant-btn-disabled
-    ):hover {
-    color: black;
-    border-color: black;
-    background: #ffffff;
-}
-:where(.css-dev-only-do-not-override-qnu6hi).ant-form-item
-    .ant-form-item-label
-    > label.ant-form-item-required:not(
-        .ant-form-item-required-mark-optional
-    )::before {
-    content: "";
-} */
-/* :where(.css-dev-only-do-not-override-qnu6hi).ant-layout .ant-layout-sider {
-    background: #f7f7f3;
-}
-:where(.css-dev-only-do-not-override-qnu6hi).ant-menu
-    .ant-menu-item
-    a.bg-border-bottom::before {
-    position: absolute;
-    inset: 0;
-    background-color: transparent;
-    content: "";
-} */
 
 body.light {
     --bg-color: white;
@@ -52,4 +27,113 @@ body {
 }
 :where(.css-qnu6hi).ant-menu-horizontal {
     border-bottom: none;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light .ant-menu-item a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    .ant-menu-item
+    a:hover,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a:hover {
+    color: #4335a7 !important;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-submenu-selected,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-submenu-selected {
+    color: #4335a7 !important;
+    background-color: transparent;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-item-selected::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-item-selected::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-submenu-selected::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-submenu-selected::after {
+    border-bottom-width: 0;
+    border-bottom-color: transparent !important;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light .ant-menu-item a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    .ant-menu-item
+    a:hover,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a:hover {
+    border-bottom: #4335a7 !important;
+}
+
+/* :where(.css-dev-only-do-not-override-qnu6hi).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+} */
+:where(.css-qnu6hi).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item,
+:where(.css-qnu6hi).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item,
+:where(.css-qnu6hi).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title,
+:where(.css-qnu6hi).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+:where(.css-qnu6hi).ant-menu-light .ant-menu-item,
+:where(.css-qnu6hi).ant-menu-light > .ant-menu .ant-menu-item,
+:where(.css-qnu6hi).ant-menu-light .ant-menu-submenu-title,
+:where(.css-qnu6hi).ant-menu-light > .ant-menu .ant-menu-submenu-title {
+    color: #4335a7 !important;
+}
+.custom-table tbody tr:hover {
+    background-color: rgba(67, 53, 167, 0.1);
+    cursor: pointer;
 }

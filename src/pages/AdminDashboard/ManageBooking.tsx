@@ -1,4 +1,5 @@
 import { Spin, Table, Button, Popconfirm, message } from "antd";
+import { motion } from "framer-motion";
 import {
     useGetAllBookingsQuery,
     useDeleteBookingMutation,
@@ -51,7 +52,7 @@ const ManageBooking = () => {
             title: "User Email",
             dataIndex: ["user", "email"],
             key: "userEmail",
-            responsive: ["md"], // Only show on medium screens and above
+            responsive: ["md"],
         },
         {
             title: "Phone",
@@ -94,7 +95,7 @@ const ManageBooking = () => {
             title: "Total Cost",
             dataIndex: "totalCost",
             key: "totalCost",
-            render: (cost: number) => (cost ? `$${cost}` : "N/A"),
+            render: (cost: number) => (cost ? `$${Math.round(cost)}` : "N/A"),
         },
         {
             title: "Booking Status",
@@ -115,7 +116,7 @@ const ManageBooking = () => {
                     >
                         <Button
                             size="small"
-                            className="mr-2 bg-black text-white"
+                            className="mr-2 bg-[#4335A7] text-[#FFF6E9]"
                             disabled={record.status === "approved"}
                         >
                             Approve
@@ -150,30 +151,49 @@ const ManageBooking = () => {
     }
 
     return (
-        <div className="container mx-auto">
-            <h1 className="text-center from-amber-200 to-amber-50 bg-gradient-to-b  py-16 text-5xl font-normal uppercase rounded-xl">
+        <div
+        >
+            <motion.h1
+                initial={{ opacity: 0, translateY: -50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg mb-6 rounded-lg">
                 Manage Bookings
-            </h1>
+            </motion.h1>
 
-            {/* Ant Design Table with responsive styles */}
-            <Table
-                columns={columns}
-                dataSource={
-                    Array.isArray(bookings?.data)
-                        ? bookings.data.map(
-                              (booking: TBooking, index: number) => ({
-                                  ...booking,
-                                  key: index,
-                              })
-                          )
-                        : []
-                }
-                pagination={{ pageSize: 10 }}
-                bordered
-                scroll={{ x: 800 }}
-                className="w-full overflow-auto"
-            />
-        </div>
+            <motion.div className="px-4" initial={{ opacity: 0, translateY: 50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.8, ease: "easeIn" }}>
+                <Table
+                    columns={columns}
+                    dataSource={
+                        Array.isArray(bookings?.data)
+                            ? bookings.data.map(
+                                (booking: TBooking, index: number) => ({
+                                    ...booking,
+                                    key: index,
+                                })
+                            )
+                            : []
+                    }
+                    pagination={{
+                        defaultPageSize: 5, // Show 5 items per page by default
+                        pageSizeOptions: ['5', '10', '20'], // Available page size options
+                        showSizeChanger: true, // Allow changing the page size
+                        showTotal: (total) => `Total ${total} items`, // Display total items
+                    }}
+                    bordered
+                    scroll={{ x: 800 }}
+                    className="w-full overflow-auto"
+                    style={{
+                        border: "1px solid #4335A7",
+
+                        borderRadius: "10px",
+                    }}
+                    rowClassName={() => "text-[#4335A7]"}
+                />
+
+            </motion.div>
+        </div >
     );
 };
 

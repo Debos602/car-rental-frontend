@@ -3,8 +3,9 @@ import {
     useGetBookingsQuery,
 } from "@/redux/feature/booking/bookingApi";
 import { Bookings } from "@/types/global";
-import { Button, Spin, Table, Modal, message } from "antd";
+import { Spin, Table, Modal, message } from "antd";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 interface ApiError {
     data?: {
@@ -14,8 +15,6 @@ interface ApiError {
 }
 
 const Custombooking = () => {
-    // State to track whether to hit the booking API or not
-
     const {
         data: bookings,
         isLoading,
@@ -55,9 +54,8 @@ const Custombooking = () => {
         }
     };
 
-    if (isLoading) return <Spin size="large" />;
+    if (isLoading) return <Spin className="flex justify-center items-center h-screen" size="large" />;
 
-    // Display message when no bookings are found
     if (!isLoading && bookings?.data?.length === 0) {
         return (
             <div className="text-center">
@@ -72,13 +70,15 @@ const Custombooking = () => {
     const columns = [
         {
             title: "Image",
-            dataIndex: ["car", "image"], // Fix here to directly access car image
+            dataIndex: ["car", "image"],
             key: "image",
             render: (image: string) => (
-                <img
+                <motion.img
                     src={image}
-                    className="h-24 w-48 object-cover rounded-xl shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
+                    className=" w-32 max-w-full object-cover rounded-xl shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
                     alt="Car Image"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                 />
             ),
         },
@@ -87,9 +87,12 @@ const Custombooking = () => {
             dataIndex: ["car", "name"],
             key: "car",
             render: (carName: string) => (
-                <span className="font-semibold text-gray-800 hover:text-blue-500 transition-all duration-300">
+                <motion.span
+                    className="font-semibold text-gray-800 hover:text-[#4335A7] transition-all duration-300"
+                    whileHover={{ color: "#FF7F3E" }}
+                >
                     {carName}
-                </span>
+                </motion.span>
             ),
         },
         {
@@ -103,7 +106,7 @@ const Custombooking = () => {
             key: "endTime",
             render: (endTime: string) => (
                 <span className="text-gray-600">
-                    {new Date(endTime).toLocaleString()}
+                    {new Date(endTime).toLocaleDateString("en-GB")}
                 </span>
             ),
         },
@@ -112,7 +115,7 @@ const Custombooking = () => {
             dataIndex: "totalCost",
             key: "totalCost",
             render: (totalCost: number) => (
-                <span className="font-semibold text-green-600">
+                <span className="font-semibold text-[#FF7F3E]">
                     ${totalCost.toFixed(2)}
                 </span>
             ),
@@ -121,34 +124,50 @@ const Custombooking = () => {
             title: "Actions",
             key: "actions",
             render: (record: Bookings) => (
-                <Button
-                    className={`border-2 text-black px-4 py-1 rounded-lg font-semibold transition-all duration-300 ${
-                        record.status === "approved"
-                            ? "bg-gray-300 cursor-not-allowed border-gray-300"
-                            : "bg-white border-black hover:bg-black hover:text-white"
-                    }`}
-                    type="link"
+                <motion.button
+                    className={`border-2 text-black px-4 py-1 rounded-lg font-semibold transition-all duration-300 ${record.status === "approved"
+                        ? "bg-gray-300 cursor-not-allowed border-gray-300"
+                        : "bg-white border-black hover:bg-[#80C4E9] hover:text-white"
+                        }`}
+                    type="button"
                     onClick={() => showConfirmModal(record._id)}
                     disabled={record.status === "approved"}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
                     Cancel
-                </Button>
+                </motion.button>
             ),
         },
     ];
 
     return (
-        <div className=" bg-white rounded-lg shadow-xl hover:shadow-2xl transition-all duration-500">
-            <h2 className="text-center from-amber-200 to-amber-50 bg-gradient-to-b  py-16 text-5xl font-normal uppercase rounded-xl">
+        <motion.div
+            className="bg-[#FFF6E9] py-4"
+
+        >
+            <motion.h2
+                className="text-center bg-[#80C4E9] py-10 text-3xl sm:text-5xl font-normal uppercase rounded-xl text-[#4335A7] mx-4"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+            >
                 Manage Your Booking
-            </h2>
+            </motion.h2>
             {bookings?.data && bookings.data.length > 0 ? (
-                <Table
-                    dataSource={bookings.data}
-                    columns={columns}
-                    rowKey="_id"
-                    className="hover:shadow-lg transition-all duration-300 bg-gray-50 rounded-lg"
-                />
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <Table
+                        dataSource={bookings.data}
+                        columns={columns}
+                        rowKey="_id"
+                        className="hover:shadow-lg transition-all duration-300 bg-[#FFF6E9] rounded-lg px-4 overflow-x-auto"
+                        scroll={{ x: 500 }}
+                    />
+                </motion.div>
             ) : (
                 <p className="text-center text-gray-600">
                     No bookings found. Please create a booking to see your list
@@ -172,11 +191,16 @@ const Custombooking = () => {
                         "border-gray-300 hover:border-black transition-all duration-300 rounded-full px-6 py-2",
                 }}
             >
-                <p className="text-lg text-gray-700">
+                <motion.p
+                    className="text-lg text-gray-700"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
                     Are you sure you want to cancel this booking?
-                </p>
+                </motion.p>
             </Modal>
-        </div>
+        </motion.div>
     );
 };
 

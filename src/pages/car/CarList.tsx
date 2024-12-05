@@ -4,6 +4,8 @@ import { TCar } from "@/types/global";
 import { Select, Button, Form, Input, Space } from "antd";
 import { Link, useSearchParams } from "react-router-dom";
 import dayjs from "dayjs";
+import { motion } from "framer-motion"; // Import motion from framer-motion
+
 import type { Dayjs } from "dayjs";
 
 // Define the type for the form values
@@ -22,9 +24,7 @@ const CarList = () => {
         refetchOnFocus: true,
     });
 
-    const [filteredCars, setFilteredCars] = useState<TCar[] | undefined>(
-        cars?.data
-    );
+    const [filteredCars, setFilteredCars] = useState<TCar[] | undefined>(cars?.data);
     const [form] = Form.useForm();
     const [searchParams] = useSearchParams();
 
@@ -48,9 +48,7 @@ const CarList = () => {
                     ? dayjs(car.availableUntil).isAfter(dayjs(returnDate))
                     : true;
 
-                return (
-                    matchesLocation && matchesPickUpDate && matchesReturnDate
-                );
+                return matchesLocation && matchesPickUpDate && matchesReturnDate;
             });
 
             setFilteredCars(filteredData);
@@ -75,7 +73,7 @@ const CarList = () => {
             const matchesColor = color ? car?.color === color : true;
             const matchesPrice = pricePerHour
                 ? car.pricePerHour >= pricePerHour[0] &&
-                  car.pricePerHour <= pricePerHour[1]
+                car.pricePerHour <= pricePerHour[1]
                 : true;
             const matchesLocation = location
                 ? car.location?.toLowerCase().includes(location.toLowerCase())
@@ -107,7 +105,7 @@ const CarList = () => {
     };
 
     return (
-        <div className="bg-gray-200">
+        <div className="bg-gradient-to-tr from-[#80C4E9] to-[#f5f5f5]">
             <div className="container mx-auto py-16">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Filters Section */}
@@ -126,10 +124,7 @@ const CarList = () => {
                         <Form.Item name="carName" label="Car Name">
                             <Select placeholder="Select car name" allowClear>
                                 {cars?.data.map((car: TCar) => (
-                                    <Select.Option
-                                        key={car._id}
-                                        value={car.name}
-                                    >
+                                    <Select.Option key={car._id} value={car.name}>
                                         {car.name}
                                     </Select.Option>
                                 ))}
@@ -139,14 +134,9 @@ const CarList = () => {
                         <Form.Item name="color" label="Color">
                             <Select placeholder="Select color" allowClear>
                                 {Array.from(
-                                    new Set(
-                                        cars?.data.map((car: TCar) => car.color)
-                                    )
+                                    new Set(cars?.data.map((car: TCar) => car.color))
                                 ).map((color) => (
-                                    <Select.Option
-                                        key={String(color)}
-                                        value={color}
-                                    >
+                                    <Select.Option key={String(color)} value={color}>
                                         {String(color)}
                                     </Select.Option>
                                 ))}
@@ -157,11 +147,7 @@ const CarList = () => {
                         <Form.Item name="pricePerHour" label="Price Range">
                             <Space.Compact>
                                 <Form.Item name={["pricePerHour", 0]} noStyle>
-                                    <Input
-                                        placeholder="Min"
-                                        min={0}
-                                        className="mr-2"
-                                    />
+                                    <Input placeholder="Min" min={0} className="mr-2" />
                                 </Form.Item>
                                 <Form.Item name={["pricePerHour", 1]} noStyle>
                                     <Input placeholder="Max" min={0} />
@@ -172,13 +158,13 @@ const CarList = () => {
                         <div className="md:flex items-center">
                             <Button
                                 htmlType="submit"
-                                className="bg-black text-white border-2 border-black hover:bg-white hover:text-black mr-2"
+                                className="bg-[#4335A7] text-white border-2 border-[#4335A7] hover:bg-white hover:text-[#4335A7] mr-2"
                             >
                                 Apply Filters
                             </Button>
                             <Button
                                 onClick={handleClearFilters}
-                                className="bg-black text-white border-2 border-black hover:bg-white hover:text-black"
+                                className="bg-[#4335A7] text-white border-2 border-[#4335A7] hover:bg-white hover:text-[#4335A7]"
                             >
                                 Clear Filters
                             </Button>
@@ -188,15 +174,22 @@ const CarList = () => {
                     {/* Cards Section */}
                     <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
                         {filteredCars?.map((car) => (
-                            <div
+                            <motion.div
                                 key={car._id}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.8,
+                                    ease: "easeInOut", // Using smooth ease
+                                }}
+                                viewport={{ once: true }} // Animates once when in view
                                 className="relative from-amber-200 to-amber-50 bg-gradient-to-b shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
                             >
                                 {/* Hover Overlay for full card and image */}
-                                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
+                                <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
                                     <Link
                                         to={`/car-details/${car._id}`}
-                                        className="bg-white hover:text-black uppercase font-semibold text-center rounded-xl px-4 py-2 block text-black border-2 border-transparent hover:border-black transition-all duration-300"
+                                        className="bg-white  uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-2 border-transparent hover:border-[#4335A7] transition-all duration-300"
                                     >
                                         View Details
                                     </Link>
@@ -218,17 +211,11 @@ const CarList = () => {
                                     </p>
                                     <p className="text-gray-600 mb-4">
                                         Description:{" "}
-                                        {car.description
-                                            .split(" ")
-                                            .slice(0, 20)
-                                            .join(" ")}
-                                        ...
+                                        {car.description.split(" ").slice(0, 20).join(" ")}...
                                     </p>
-                                    <p className="text-gray-600 mb-4">
-                                        Status: {car.status}
-                                    </p>
+                                    <p className="text-gray-600 mb-4">Status: {car.status}</p>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

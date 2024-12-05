@@ -25,19 +25,20 @@ export default function OverviewTab({
     setActiveTab,
 }: ProfileTabsProps) {
     return (
-        <div className="rounded-xl p-2 w-full flex xs:gap-2 sm:gap-4 overflow-x-auto border">
-            {tabs.map((tab) => (
-                <Button
-                    key={tab.value}
-                    type="default" // Use a valid type like 'default'
-                    className={`text-md ${
-                        activeTab === tab.value ? "bg-black text-white" : ""
-                    }`} // Add custom classes
-                    onClick={() => setActiveTab(tab.value)}
-                >
-                    {tab.name}
-                </Button>
-            ))}
+        <div className="container mx-auto px-4">
+            <div className="rounded-xl p-2 w-full flex xs:gap-2 sm:gap-4 overflow-x-auto border border-[#4335A7]">
+                {tabs.map((tab) => (
+                    <Button
+                        key={tab.value}
+                        type="default" // Use a valid type like 'default'
+                        className={`text-md ${activeTab === tab.value ? "bg-[#4335A7] text-[#FFF6E9] border border-[#4335A7]" : ""
+                            }`} // Add custom classes
+                        onClick={() => setActiveTab(tab.value)}
+                    >
+                        {tab.name}
+                    </Button>
+                ))}
+            </div>
         </div>
     );
 }

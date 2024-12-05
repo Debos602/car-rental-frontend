@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGetAllBookingsQuery } from "@/redux/feature/booking/bookingApi";
 import { Spin, Table } from "antd";
+import { motion } from "framer-motion";
 
 type Booking = {
     _id: string;
@@ -34,9 +35,6 @@ const TotalBookings = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // Log the bookings data to check its structure
-
-    // Assuming `bookingsData.data` contains the array of bookings
     const bookings: Booking[] = Array.isArray(bookingsData?.data)
         ? bookingsData.data
         : [];
@@ -45,17 +43,17 @@ const TotalBookings = () => {
     const columns = [
         {
             title: "Email",
-            dataIndex: ["user", "email"], // Assuming user data contains 'email'
+            dataIndex: ["user", "email"],
             key: "email",
         },
         {
             title: "User",
-            dataIndex: ["user", "name"], // Assuming user data contains 'name'
+            dataIndex: ["user", "name"],
             key: "user",
         },
         {
             title: "Car Brand",
-            dataIndex: ["car", "name"], // Assuming car data contains 'name'
+            dataIndex: ["car", "name"],
             key: "car",
         },
         {
@@ -72,25 +70,52 @@ const TotalBookings = () => {
     ];
 
     if (isLoading && !showContent) {
-        return <Spin size="large" />;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spin className="text-[#4335A7]" size="large" />
+            </div>
+        );
     }
 
     return (
-        <div>
-            <h1 className="text-3xl font-bold mb-4">
+        <motion.div
+            className="p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg bg-white sm:bg-[#f5f5f5] lg:bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-[#4335A7] text-center sm:text-left">
                 Total Bookings
                 {bookings.length > 0 ? ` (${bookings.length})` : ""}
             </h1>
             {bookings.length > 0 ? (
-                <Table
-                    columns={columns}
-                    dataSource={bookings}
-                    rowKey={(record) => record._id} // Use _id as the unique key
-                />
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                    <Table
+                        columns={columns}
+                        dataSource={bookings}
+                        rowKey={(record) => record._id}
+                        pagination={{
+                            pageSize: 5,
+                        }}
+                        className="overflow-x-auto w-full"
+                        rowClassName={() => "text-[#4335A7]"}
+                    />
+                </motion.div>
             ) : (
-                <p>No bookings available</p>
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="text-center text-[#FF7F3E]"
+                >
+                    No bookings available
+                </motion.p>
             )}
-        </div>
+        </motion.div>
     );
 };
 

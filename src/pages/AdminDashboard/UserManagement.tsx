@@ -5,6 +5,7 @@ import {
 import { Table, Button, message, Card, Space, Spin } from "antd";
 import { UserOutlined, MailOutlined, CrownOutlined } from "@ant-design/icons";
 import "antd/dist/reset.css"; // Make sure Ant Design styles are imported
+import { motion } from "framer-motion";
 
 // Define the User interface
 interface User {
@@ -104,7 +105,7 @@ const UserManagement = () => {
                         </Button>
                     ) : (
                         <Button
-                            className="bg-black text-white hover:bg-white hover:text-black transition-all duration-700"
+                            className="bg-[#4335A7] text-white hover:bg-white hover:text-black transition-all duration-700"
                             onClick={() =>
                                 handleUpdateUserRole(record._id, "admin")
                             }
@@ -135,19 +136,26 @@ const UserManagement = () => {
     }
 
     return (
-        <div className="container mx-auto">
-            <h1 className="text-center from-amber-200 to-amber-50 bg-gradient-to-b  py-16 text-5xl font-normal uppercase rounded-xl">
+        <div>
+            <motion.h1
+                initial={{ opacity: 0, translateY: -50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg mb-6 rounded-lg">
                 User Management
-            </h1>
-            <Card className="shadow-lg rounded-lg">
-                <Table
-                    dataSource={users}
-                    columns={columns}
-                    rowKey="_id"
-                    pagination={{ pageSize: 5 }} // Set pagination
-                    className="rounded-lg overflow-hidden"
-                />
-            </Card>
+            </motion.h1>
+            <motion.div initial={{ opacity: 0, translateY: 50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.8, ease: "easeIn" }}><Card className="shadow-lg rounded-lg">
+                    <Table
+                        dataSource={users}
+                        columns={columns}
+                        rowKey="_id"
+                        pagination={{ pageSize: 5 }} // Set pagination
+                        rowClassName={() => "text-[#4335A7]"}
+                        className="overflow-x-auto"
+                    />
+                </Card></motion.div>
+
         </div>
     );
 };

@@ -1,51 +1,173 @@
+import { motion } from "framer-motion";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { IoLocation } from "react-icons/io5";
+import { MdAttachEmail } from "react-icons/md";
+import { MdAddIcCall } from "react-icons/md";
+
+
+
+// Define the interface for form data
+interface IFormInput {
+    name: string;
+    email: string;
+    message: string;
+}
+
 const Contact = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<IFormInput>();
+
+    const onSubmit: SubmitHandler<IFormInput> = (data) => {
+        console.log("Form Data:", data);
+        reset();
+    };
+
+    const leftAnimation = {
+        hidden: { opacity: 0, x: -100 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    };
+
+    const rightAnimation = {
+        hidden: { opacity: 0, x: 100 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    };
+
     return (
-        <div className="container mx-auto mt-[110px]">
-            <div className="flex flex-col items-center justify-center py-16 min-h-screen">
-                <h2 className="text-5xl font-bold text-gray-800 mb-12">
-                    Get In Touch
-                </h2>
+        <div className="relative bg-gradient-to-t from-[#FFF6E9] to-[#80C4E9]">
+            <div className="container mx-auto mt-[110px] ">
+                <div className="absolute top-0 left-0 w-full h-full  opacity-60 -z-10"></div>
+                <div className="flex flex-col items-center justify-center py-16">
+                    <h2 className="text-5xl font-bold text-[#4335A7] mb-12">
+                        Get In Touch
+                    </h2>
 
-                <div className="bg-white shadow-xl rounded-xl p-10 w-full max-w-4xl flex flex-col lg:flex-row lg:space-x-10">
-                    <div className="w-full lg:w-1/2">
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                                Phone
-                            </h3>
-                            <p className="text-gray-600 hover:text-gray-800 transition duration-300">
-                                +1 234 567 890
-                            </p>
-                        </div>
+                    <motion.div
+                        className=" bg-[#FFF6E9] shadow-xl rounded-xl p-10 w-full max-w-4xl flex flex-col lg:flex-row lg:space-x-10"
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.3 }}
+                    >
+                        {/* Contact Details */}
+                        <motion.div
+                            className="w-full lg:w-1/2 text-[#4335A7]"
+                            variants={leftAnimation}
+                        >
+                            <div className="mb-8">
+                                <MdAddIcCall className="text-2xl" />
+                                <h3 className="text-xl font-semibold mb-1">Phone</h3>
+                                <p className="hover:text-[#FF7F3E] transition duration-300">
+                                    +88 01834491602
+                                </p>
+                            </div>
 
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                                Email
-                            </h3>
-                            <p className="text-gray-600 hover:text-gray-800 transition duration-300">
-                                contact@example.com
-                            </p>
-                        </div>
+                            <div className="mb-8">
+                                <MdAttachEmail className="text-2xl" />
+                                <h3 className="text-xl font-semibold mb-1">Email</h3>
+                                <p className="hover:text-[#FF7F3E] transition duration-300">
+                                    debos.das.02@gmail.com
+                                </p>
+                            </div>
 
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                                Address
-                            </h3>
-                            <p className="text-gray-600 hover:text-gray-800 transition duration-300">
-                                1234 Example St, City, State, ZIP
-                            </p>
-                        </div>
-                    </div>
+                            <div className="mb-8">
+                                <IoLocation className="text-2xl" />
+                                <h3 className="text-xl font-semibold mb-1">Address</h3>
+                                <p className="hover:text-[#FF7F3E] transition duration-300">
+                                    1234 Example St, City, State, ZIP
+                                </p>
+                            </div>
 
-                    {/* Google Map Embed */}
-                    <div className="w-full lg:w-1/2 h-64 lg:h-auto">
-                        <iframe
-                            className="w-full h-full rounded-lg"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0946651781265!2d-122.41941548468124!3d37.77492967975939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809cbae05d4d%3A0xc7f5f1bbed1b65!2sSan+Francisco%2C+CA!5e0!3m2!1sen!2sus!4v1631514244343!5m2!1sen!2sus"
-                            allowFullScreen={true}
-                            loading="lazy"
-                            title="Google Map"
-                        ></iframe>
-                    </div>
+                            {/* Add New Description Here */}
+                            <div className="mb-8">
+                                <h3 className="text-xl font-semibold mb-1">Our Commitment</h3>
+                                <p className="hover:text-[#FF7F3E] transition duration-300">
+                                    We are committed to providing exceptional service and support to all our customers, ensuring that your needs are met with the utmost care and attention.
+                                </p>
+                            </div>
+                        </motion.div>
+
+
+                        {/* Contact Form */}
+                        <motion.div
+                            className="w-full lg:w-1/2"
+                            variants={rightAnimation}
+                        >
+                            <form
+                                onSubmit={handleSubmit(onSubmit)}
+                                className="bg-white p-6 rounded-lg shadow-lg"
+                            >
+                                <div className="mb-6">
+                                    <label
+                                        htmlFor="name"
+                                        className="block text-lg font-semibold mb-2 text-[#4335A7]"
+                                    >
+                                        Name
+                                    </label>
+                                    <input
+                                        id="name"
+                                        type="text"
+                                        {...register("name", { required: "Name is required" })}
+                                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#80C4E9] outline-none"
+                                    />
+                                    {errors.name && (
+                                        <p className="text-[#FF7F3E] mt-1">
+                                            {errors.name.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="mb-6">
+                                    <label
+                                        htmlFor="email"
+                                        className="block text-lg font-semibold mb-2 text-[#4335A7]"
+                                    >
+                                        Email
+                                    </label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        {...register("email", { required: "Email is required" })}
+                                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#80C4E9] outline-none"
+                                    />
+                                    {errors.email && (
+                                        <p className="text-[#FF7F3E] mt-1">
+                                            {errors.email.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="mb-6">
+                                    <label
+                                        htmlFor="message"
+                                        className="block text-lg font-semibold mb-2 text-[#4335A7]"
+                                    >
+                                        Message
+                                    </label>
+                                    <textarea
+                                        id="message"
+                                        rows={4}
+                                        {...register("message", { required: "Message is required" })}
+                                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#80C4E9] outline-none"
+                                    ></textarea>
+                                    {errors.message && (
+                                        <p className="text-[#FF7F3E] mt-1">
+                                            {errors.message.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="w-full rounded-xl py-3 bg-[#4335A7] text-white font-semibold  hover:bg-[#FF7F3E] transition duration-300"
+                                >
+                                    Send Message
+                                </button>
+                            </form>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </div>
         </div>

@@ -1,10 +1,11 @@
-import { Form, Input, Checkbox, Button, Spin, message } from "antd";
+import { Form, Input, Checkbox, Button, message } from "antd";
 import { useGetBookingsQuery } from "@/redux/feature/booking/bookingApi";
 import { Bookings, TOrder } from "@/types/global";
 import {
     useGetUserQuery,
     useUpdateUserMutation,
 } from "@/redux/feature/authApi";
+import { motion } from "framer-motion";  // Importing framer-motion
 
 const BookingForm = () => {
     const { data: booking, isLoading: isBookingLoading } = useGetBookingsQuery(
@@ -23,9 +24,8 @@ const BookingForm = () => {
         }
     );
 
-    const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation(); // Added loading state here
+    const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
-    // Ensure booking and booking.data are defined
     const bookingHistory =
         booking?.data?.map((booking: Bookings) => ({
             carName: booking?.car?.name,
@@ -35,7 +35,6 @@ const BookingForm = () => {
             date: booking?.date,
         })) || [];
 
-    // Extract data safely
     const { carName, startTime, endTime, totalCost, date } =
         bookingHistory[0] || {};
 
@@ -45,149 +44,177 @@ const BookingForm = () => {
         try {
             const updatedData = {
                 ...values,
-                // You might want to keep other fields unchanged
             };
-            await updateUser(updatedData); // Use your Redux update mutation
+            await updateUser(updatedData);
             message.success("User data updated successfully!");
         } catch (error) {
             message.error("Failed to update booking.");
         }
     };
 
-    // Confirm booking handler
-
     const { name, email, phone } = user?.data || {};
 
     // Loading spinner
     if (isUserLoading || isBookingLoading || isUpdating) {
-        return <Spin size="large" />;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                Loading......
+            </div>
+        );
     }
 
     // Check if user or booking data is missing
     if (!user) {
-        return <div>Error loading data. Please try again later.</div>;
+        return <div className="py-16 text-center text-xl text-[#FF7F3E]">User booking empty</div>;
     }
 
     return (
         <div className="container mx-auto py-12 px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    initialValues={{
-                        name: name || "",
-                        email: email || "",
-                        phone: phone || "",
-                        nid: "",
-                        drivingLicense: "",
-                        features: [],
-                    }}
-                    className="bg-white p-8 shadow-md rounded-lg col-span-2"
+                <motion.div
+                    className="bg-white p-8 shadow-md rounded-lg col-span-2 border-2 border-[#4335A7]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
                 >
-                    <h3 className="text-2xl font-bold mb-6 text-gray-900">
-                        User Information
-                    </h3>
-
-                    {/* Full Name */}
-                    <Form.Item
-                        label="Full Name"
-                        name="name"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please enter your full name",
-                            },
-                        ]}
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={onFinish}
+                        initialValues={{
+                            name: name || "",
+                            email: email || "",
+                            phone: phone || "",
+                            nid: "",
+                            drivingLicense: "",
+                            features: [],
+                        }}
                     >
-                        <Input placeholder="Full Name" />
-                    </Form.Item>
+                        <h3 className="text-2xl font-bold mb-6 text-[#4335A7]">
+                            User Information
+                        </h3>
 
-                    {/* Email */}
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please enter your email",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Email" type="email" />
-                    </Form.Item>
-
-                    {/* Phone */}
-                    <Form.Item
-                        label="Phone Number"
-                        name="phone"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please enter your phone number",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Phone Number" />
-                    </Form.Item>
-
-                    {/* NID/Passport */}
-                    <Form.Item
-                        label="NID/Passport Number"
-                        name="nid"
-                        rules={[
-                            {
-                                required: true,
-                                message:
-                                    "Please enter your NID/Passport number",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="NID/Passport Number" />
-                    </Form.Item>
-
-                    {/* Driving License */}
-                    <Form.Item
-                        label="Driving License"
-                        name="drivingLicense"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please enter your driving license",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Driving License" />
-                    </Form.Item>
-
-                    {/* Features */}
-                    <Form.Item
-                        label="Select Additional Features"
-                        name="features"
-                    >
-                        <Checkbox.Group>
-                            <Checkbox value="GPS">GPS</Checkbox>
-                            <Checkbox value="Child Seat">Child Seat</Checkbox>
-                            <Checkbox value="Insurance">Insurance</Checkbox>
-                        </Checkbox.Group>
-                    </Form.Item>
-
-                    {/* Submit Button */}
-                    <Form.Item>
-                        <Button
-                            htmlType="submit"
-                            block
-                            loading={isUpdating} // This is now defined
-                            className="uppercase bg-black text-white hover:bg-white hover:text-black transition-all duration-700"
+                        {/* Full Name */}
+                        <Form.Item
+                            label="Full Name"
+                            name="name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please enter your full name",
+                                },
+                            ]}
                         >
-                            Submit
-                        </Button>
-                    </Form.Item>
-                </Form>
+                            <Input
+                                placeholder="Full Name"
+                                className="transition-all duration-300 hover:bg-gray-200"
+                            />
+                        </Form.Item>
+
+                        {/* Email */}
+                        <Form.Item
+                            label="Email"
+                            name="email"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please enter your email",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Email"
+                                type="email"
+                                className="transition-all duration-300 hover:bg-gray-200"
+                            />
+                        </Form.Item>
+
+                        {/* Phone */}
+                        <Form.Item
+                            label="Phone Number"
+                            name="phone"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please enter your phone number",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Phone Number"
+                                className="transition-all duration-300 hover:bg-gray-200"
+                            />
+                        </Form.Item>
+
+                        {/* NID/Passport */}
+                        <Form.Item
+                            label="NID/Passport Number"
+                            name="nid"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please enter your NID/Passport number",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="NID/Passport Number"
+                                className="transition-all duration-300 hover:bg-gray-200"
+                            />
+                        </Form.Item>
+
+                        {/* Driving License */}
+                        <Form.Item
+                            label="Driving License"
+                            name="drivingLicense"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please enter your driving license",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Driving License"
+                                className="transition-all duration-300 hover:bg-gray-200"
+                            />
+                        </Form.Item>
+
+                        {/* Features */}
+                        <Form.Item
+                            label="Select Additional Features"
+                            name="features"
+                        >
+                            <Checkbox.Group>
+                                <Checkbox value="GPS">GPS</Checkbox>
+                                <Checkbox value="Child Seat">Child Seat</Checkbox>
+                                <Checkbox value="Insurance">Insurance</Checkbox>
+                            </Checkbox.Group>
+                        </Form.Item>
+
+                        {/* Submit Button */}
+                        <Form.Item>
+                            <Button
+                                htmlType="submit"
+                                block
+                                loading={isUpdating}
+                                className="uppercase bg-black text-xl text-white hover:bg-white hover:text-black transition-all duration-700"
+                                style={{ backgroundColor: "#4335A7" }}
+                            >
+                                Submit
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </motion.div>
 
                 {/* Confirmation Section */}
-                <div className="bg-amber-100 p-8 shadow-md rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-800 mb-4">
+                <motion.div
+                    className="bg-amber-100 p-8 shadow-md rounded-lg border-2 border-[#4335A7] col-span-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
+                    <h3 className="text-2xl font-bold text-[#4335A7] mb-4">
                         Booking Confirmed!
                     </h3>
                     <p className="text-lg text-gray-700 mb-2">
@@ -209,7 +236,7 @@ const BookingForm = () => {
                         Total Cost: ${" "}
                         <span className="font-normal">{totalCost}</span>
                     </p>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

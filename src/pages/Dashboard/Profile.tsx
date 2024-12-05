@@ -6,11 +6,9 @@ import {
 } from "@/redux/feature/authApi";
 import { toast } from "sonner";
 import { useGetBookingsQuery } from "@/redux/feature/booking/bookingApi";
-
-// Define the type for a single booking
+import { motion } from "framer-motion";
 
 const Profile = () => {
-    // Fetch user data using RTK Query
     const {
         data: user,
         isLoading,
@@ -20,15 +18,13 @@ const Profile = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-
-    // Mutation for updating profile
+    console.log(user);
     const [updateProfile] = useUpdateUserMutation();
     const { data: bookings } = useGetBookingsQuery(undefined, {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
 
-    // Handle loading state
     if (isLoading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -37,7 +33,6 @@ const Profile = () => {
         );
     }
 
-    // Handle error state
     if (isError || !user?.data) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -48,7 +43,6 @@ const Profile = () => {
 
     const { name, email, phone, role } = user.data as TUser;
 
-    // Type the booking history based on the defined `Booking` interface
     const bookingHistory = bookings?.data?.map((booking: Bookings) => ({
         carName: booking?.car?.name,
         date: booking?.date,
@@ -59,10 +53,8 @@ const Profile = () => {
         paymentStatus: booking?.paymentStatus,
     }));
 
-    // Calculate total cost of all bookings
     const totalCost = bookingHistory?.reduce(
-        (acc: number, booking: { totalCost: number }) =>
-            acc + booking.totalCost,
+        (acc: number, booking: { totalCost: number; }) => acc + booking.totalCost,
         0
     );
 
@@ -96,7 +88,8 @@ const Profile = () => {
             title: "End Time",
             dataIndex: "endTime",
             key: "endTime",
-            render: (endTime: string | null) => (endTime ? endTime : "Ongoing"),
+            render: (endTime: string | null) =>
+                endTime ? new Intl.DateTimeFormat('en-GB').format(new Date(endTime)) : "Ongoing",
         },
         {
             title: "Total Cost",
@@ -107,61 +100,52 @@ const Profile = () => {
     ];
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#FFF6E9] px-4 py-4">
             {/* Profile Banner */}
-            <Card className="mb-8 text-center from-amber-200 to-amber-50 bg-gradient-to-b font-normal uppercase rounded-xl">
-                <Avatar
-                    size={120}
-                    src="https://randomuser.me/api/portraits/women/44.jpg"
-                />
-                <h1 className="text-3xl font-bold mt-4">{name}</h1>
-                <p className="text-md text-gray-500">
-                    {" "}
-                    <strong>Designation:</strong> {role}
-                </p>
-                <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">
-                        Personal Information:
-                    </h2>
-                    <p>
-                        <strong>Name:</strong> {name}
+            <motion.div
+                className="max-w-full mx-auto mb-8"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                <Card className="text-center from-[#80C4E9] to-[#FFF6E9] bg-gradient-to-b font-normal uppercase rounded-xl shadow-lg">
+                    <Avatar
+                        size={120}
+                        src="https://i.ibb.co.com/grvH19N/468063584-3886629091578658-8295155366060814102-n.jpg"
+                        className="border-4 border-[#FF7F3E]"
+                    />
+                    <h1 className="text-3xl font-bold mt-4 text-[#4335A7]">{name}</h1>
+                    <p className="text-md text-gray-500">
+                        <strong>Designation:</strong> {role}
                     </p>
-                    <p>
-                        <strong>Email:</strong> {email}
-                    </p>
-                    <p>
-                        <strong>Phone:</strong> {phone || "N/A"}
-                    </p>
-                </div>
-            </Card>
+                </Card>
+            </motion.div>
 
-            {/* Booking History */}
-            <div className="grid grid-cols-1 gap-8">
-                <Card className="w-2/3 mx-auto">
-                    <h2 className="text-xl font-semibold mb-4 text-center">
+            {/* User Information and Booking History */}
+            <motion.div
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+            >
+                {/* User Information */}
+                <Card className="shadow-lg p-6">
+                    <h2 className="text-xl font-semibold text-[#4335A7] mb-4">
                         User Information
                     </h2>
-                    <Form layout="horizontal" onFinish={handleUpdateProfile}>
+                    <Form layout="vertical" onFinish={handleUpdateProfile}>
                         <Form.Item label="Name" name="name" initialValue={name}>
                             <Input />
                         </Form.Item>
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                            initialValue={email}
-                        >
+                        <Form.Item label="Email" name="email" initialValue={email}>
                             <Input />
                         </Form.Item>
-                        <Form.Item
-                            label="Phone"
-                            name="phone"
-                            initialValue={phone}
-                        >
+                        <Form.Item label="Phone" name="phone" initialValue={phone}>
                             <Input />
                         </Form.Item>
                         <Form.Item className="text-center">
                             <Button
-                                className="bg-gray-700 text-white"
+                                className="bg-[#4335A7] text-white hover:bg-[#FF7F3E]"
                                 htmlType="submit"
                             >
                                 Update Profile
@@ -169,24 +153,24 @@ const Profile = () => {
                         </Form.Item>
                     </Form>
                 </Card>
-                <Card className="text-center ">
-                    <h2 className="text-xl font-semibold text-center">
+
+                {/* Booking History */}
+                <Card className="shadow-lg p-6">
+                    <h2 className="text-xl font-semibold text-[#4335A7] mb-4 text-center">
                         Booking History
                     </h2>
                     <Table
                         dataSource={bookingHistory}
                         columns={columns}
-                        rowKey="carName" // Use a unique key, assuming carName is unique
-                        pagination={false} // Disable pagination if not needed
+                        rowKey="transactionId"
+                        pagination={false}
+                        className="shadow-md overflow-x-auto"
                     />
-                    {/* Display Total Cost */}
-                    <p className="mt-4 text-lg font-semibold">
+                    <p className="mt-4 text-lg font-semibold text-center text-[#FF7F3E]">
                         Total Cost: ${totalCost?.toFixed(2)}
                     </p>
                 </Card>
-
-                {/* Update Profile */}
-            </div>
+            </motion.div>
         </div>
     );
 };

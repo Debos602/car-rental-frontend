@@ -1,19 +1,37 @@
 import { useState } from "react";
+import { motion } from "framer-motion"; // Import framer-motion
 import UpdatesCar from "./UpdatesCar";
 import AddsCar from "./AddsCar";
 import ManageTabs from "./ManageTab";
 
 const ManageCar = () => {
     const [activeTab, setActiveTab] = useState("add");
+
     return (
         <div>
-            <h1 className="text-center from-amber-200 to-amber-50 bg-gradient-to-b  py-16 text-5xl font-normal uppercase rounded-xl">
+            {/* Use motion.h1 instead of h1 for animations */}
+            <motion.h1
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg m-0"
+            >
                 Manage Car
-            </h1>
+            </motion.h1>
             <ManageTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="mt-4 container mx-auto">
-                {activeTab === "add" && <AddsCar />}
-                {activeTab === "update-and-delete" && <UpdatesCar />}
+            <div className="mt-4 container mx-auto px-4">
+                {/* Animated Tab Content with framer-motion */}
+                <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }} // Transition duration
+
+                >
+                    {activeTab === "add" && <AddsCar />}
+                    {activeTab === "update-and-delete" && <UpdatesCar />}
+                </motion.div>
             </div>
         </div>
     );
