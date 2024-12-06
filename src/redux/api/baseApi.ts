@@ -10,7 +10,7 @@ import { RootState } from "../store";
 import { logout, setUser } from "../feature/authSlice";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: "https://car-rental-backend-nine.vercel.app",
+    baseUrl: "http://localhost:5000",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token;
@@ -38,7 +38,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
             console.log("Sending refresh token");
 
             const res = await fetch(
-                "https://car-rental-backend-nine.vercel.app/api/auth/refresh-token",
+                "http://localhost:5000/api/auth/refresh-token",
                 {
                     method: "POST",
                     credentials: "include",

@@ -62,6 +62,11 @@ const BookingForm = () => {
             </div>
         );
     }
+    const formattedDate = new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+    }).format(new Date(endTime));
 
     // Check if user or booking data is missing
     if (!user) {
@@ -72,7 +77,7 @@ const BookingForm = () => {
         <div className="container mx-auto py-12 px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <motion.div
-                    className="bg-white p-8 shadow-md rounded-lg col-span-2 border-2 border-[#4335A7]"
+                    className="bg-white p-8 shadow-md rounded-lg col-span-2 border-2 border-[#4335A7] rounded-xl"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
@@ -209,7 +214,7 @@ const BookingForm = () => {
 
                 {/* Confirmation Section */}
                 <motion.div
-                    className="bg-amber-100 p-8 shadow-md rounded-lg border-2 border-[#4335A7] col-span-1"
+                    className="bg-amber-100 p-8 shadow-md border-2 border-[#4335A7] col-span-1 rounded-xl"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
@@ -217,24 +222,24 @@ const BookingForm = () => {
                     <h3 className="text-2xl font-bold text-[#4335A7] mb-4">
                         Booking Confirmed!
                     </h3>
-                    <p className="text-lg text-gray-700 mb-2">
+                    <p className="text-md text-gray-700 mb-2">
                         You have successfully booked {carName} for your trip.
                     </p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-md font-semibold text-gray-900">
                         Pick-up Date:{" "}
                         <span className="font-normal">{startTime}</span>
                     </p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-md font-semibold text-gray-900">
                         Pick-up Date:{" "}
                         <span className="font-normal">{date}</span>
                     </p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-md font-semibold text-gray-900">
                         Drop-off Date:{" "}
-                        <span className="font-normal">{endTime}</span>
+                        <span className="font-normal">{formattedDate}</span>
                     </p>
-                    <p className="text-lg font-semibold text-green-800">
+                    <p className="text-md font-semibold text-gray-900">
                         Total Cost: ${" "}
-                        <span className="font-normal">{totalCost}</span>
+                        <span className="font-normal">{totalCost.toFixed(2)}</span>
                     </p>
                 </motion.div>
             </div>

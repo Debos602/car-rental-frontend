@@ -77,20 +77,6 @@ body {
     border-bottom-width: 0;
     border-bottom-color: transparent !important;
 }
-:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light .ant-menu-item a,
-:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
-    > .ant-menu
-    .ant-menu-item
-    a,
-:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
-    .ant-menu-item
-    a:hover,
-:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
-    > .ant-menu
-    .ant-menu-item
-    a:hover {
-    border-bottom: #4335a7 !important;
-}
 
 :where(.css-qnu6hi).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item,
 :where(.css-qnu6hi).ant-dropdown-menu-submenu
@@ -183,4 +169,40 @@ body {
     color: #4335a7 !important;
     font-weight: bold !important;
     font-size: 18px !important;
+}
+:where(.css-dev-only-do-not-override-qnu6hi) a:hover {
+    color: #4335a7 !important;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-item:hover::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-item:hover::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-submenu:hover::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-submenu:hover::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-item-active::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-item-active::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-submenu-active::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-submenu-active::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-item-open::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-item-open::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
+    > .ant-menu-submenu-open::after,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu.ant-menu-horizontal
+    > .ant-menu-submenu-open::after {
+    border-bottom-width: 2px;
+    border-bottom-color: #4335a7 !important;
 }

@@ -29,19 +29,19 @@ const BookingCarList = ({ searchParams }: BookingCarListProps) => {
     });
 
     return (
-        <div className="bg-gradient-to-b from-[#80C4E9] to-[#FFF6E9]">
+        <div className="bg-[#FFF6E9]">
             <div className="container mx-auto py-16">
                 <div className=" grid grid-cols-1 md:grid-cols-4 gap-6">
                     {filteredCars && filteredCars.length > 0 ? (
-                        filteredCars.slice(0, 6).map((car: TCar) => (
+                        filteredCars.slice(0, 8).map((car: TCar) => (
                             <div
                                 key={car._id}
-                                className="relative from-amber-200 to-amber-50 bg-gradient-to-b shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
+                                className="relative bg-[#80C4E9] shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
                             >
                                 <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
                                     <Link
                                         to={`/car-details/${car._id}`}
-                                        className="bg-[#FFF6E9] hover:text-[#4335A7] uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-[#4335A7] hover:border-[#4335A7] hover:bg-[#FF7F3E] transition-all duration-300"
+                                        className="bg-[#FFF6E9] hover:text-[#4335A7] uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-[#4335A7] hover:border-[#4335A7]  transition-all duration-300"
                                     >
                                         Book Now
                                     </Link>

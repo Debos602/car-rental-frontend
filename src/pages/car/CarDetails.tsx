@@ -65,7 +65,6 @@ const CarDetails = () => {
         pricePerHour,
         features = [],
         status = "Available",
-        rating,
     } = car.data;
     console.log(car.data);
 
@@ -75,6 +74,7 @@ const CarDetails = () => {
             [extra]: !prev[extra],
         }));
     };
+    const rating = 4.5;
 
     return (
         <div>

@@ -225,7 +225,7 @@ const CarList = () => {
                                 <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
                                     <Link
                                         to={`/car-details/${car._id}`}
-                                        className="bg-white  uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-2 border-transparent hover:border-[#4335A7] transition-all duration-300"
+                                        className="bg-white  uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-2 border-transparent transition-all duration-300"
                                     >
                                         View Details
                                     </Link>

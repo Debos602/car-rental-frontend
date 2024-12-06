@@ -140,7 +140,7 @@ const BookingList = () => {
     ];
 
     return (
-        <div className="bg-gradient-to-b to-[#746ea3] from-[#FFF6E9]"> <motion.div
+        <div className="bg-gradient-to-b to-[#746ea3] from-[#FFF6E9] "> <motion.div
             className="container mx-auto p-6"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -154,6 +154,7 @@ const BookingList = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
+                className="rounded-xl shadow-lg overflow-x-auto"
             >
                 {bookings?.data && bookings.data.length > 0 ? (
                     <Table
