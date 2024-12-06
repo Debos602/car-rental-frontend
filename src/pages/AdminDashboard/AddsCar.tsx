@@ -41,25 +41,28 @@ const AddsCar = () => {
     };
 
     return (
-        <div className="shadow-2xl bg-[#9c8feb] border border-[#4335A7] rounded-xl py-6">
-            <motion.h2
-                className="text-4xl font-extrabold text-center mb-8 text-[#FFF6E9]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
-            >
-                Add a New Car
-            </motion.h2>
+        <div>
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }} // Start below
                 animate={{ opacity: 1, y: 0 }} // Animate to normal position
                 transition={{ duration: 0.5 }}
+                className="border border-[#4335A7] rounded-2xl p-4 mb-4"
             >
+                <motion.h2
+                    className="text-2xl font-extrabold text-center mb-4 text-[#4335A7]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
+                    Add a New Car
+                </motion.h2>
                 <Form
                     form={form}
                     layout="vertical"
                     onFinish={handleSubmit}
-                    className="w-3/4 text-[#4335A7] mx-auto border border-[#4335A7] rounded-2xl p-6 bg-[#FFF6E9]"
+                    className=" text-[#4335A7] "
+
                 >
                     <div className="grid grid-cols-2 gap-4">
                         {/* Car Name */}

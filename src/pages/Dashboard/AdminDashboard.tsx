@@ -12,11 +12,11 @@ import {
     UserOutlined,
     UserSwitchOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, Space } from "antd";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { logout } from "@/redux/feature/authSlice";
-import logo from "@/assets/car-lgo.png";
+import logo from "@/assets/car_lgo.png";
 import { RootState } from "@/redux/store";
 import { TUser } from "@/types/global";
 
@@ -29,9 +29,7 @@ const AdminDashboard: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+
 
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,7 +41,7 @@ const AdminDashboard: React.FC = () => {
         {
             key: "1",
             icon: <UserOutlined className="font-extrabold text-[#4335A7]" />,
-            label: <Link className="font-extrabold" to="dashboard-overview">Dashboard Overview</Link>,
+            label: <Link className="font-extrabold" to="dashboard-overview">Dashboard</Link>,
         },
         {
             key: "2",
@@ -73,8 +71,7 @@ const AdminDashboard: React.FC = () => {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
-                style={{ backgroundColor: "var(--bg-color)" }}
-                className="min-h-screen bg-gradient-to-r from-[#4335A7] to-[#6A4BAA]"
+                className="min-h-screen"
             >
                 <div className="sticky top-0 z-30">
                     <img
@@ -87,11 +84,11 @@ const AdminDashboard: React.FC = () => {
                     mode="inline"
                     defaultSelectedKeys={["1"]}
                     items={menuItems}
-                    className="sticky top-24 z-30 text-[#FFF6E9] h-[500px]"
+                    className="sticky top-24 z-30 h-[505px]"
                 />
             </Sider>
             <Layout>
-                <Header className="flex justify-between items-center bg-gradient-to-b from-[#4335A7] to-[#FFF6E9] h-24 sticky top-0 z-30 border-b-2 border-[#4335A7]">
+                <Header className="flex justify-between items-center sticky top-0 z-30  h-24 border-b-2 bg-[#FFF6E9] mb-4">
                     <Button
                         type="text"
                         icon={
@@ -103,7 +100,7 @@ const AdminDashboard: React.FC = () => {
                         }
                         onClick={() => setCollapsed(!collapsed)}
                         style={{ fontSize: "16px", width: 64, height: 64 }}
-                        className="text-[#FFF6E9] hover:text-[#4335A7] transition-all duration-300"
+                        className="text-[#4335A7]  transition-all duration-300"
                     />
                     {user?.role === "admin" || user?.role === "user" ? (
                         <div>
@@ -150,8 +147,9 @@ const AdminDashboard: React.FC = () => {
                                         <Avatar
                                             size="large"
                                             icon={<UserOutlined />}
+                                            className="text-[#4335A7]"
                                         />
-                                        <p className="text-lg font-bold uppercase m-0 text-[#FFF6E9]">
+                                        <p className="text-lg font-bold uppercase m-0 text-[#4335A7]">
                                             {user?.name}
                                         </p>
                                     </Space>
@@ -162,10 +160,7 @@ const AdminDashboard: React.FC = () => {
                     ) : null}
                 </Header>
                 <Content
-                    style={{
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                    }}
+
                 >
                     <Outlet />
                 </Content>

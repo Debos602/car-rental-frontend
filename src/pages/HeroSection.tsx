@@ -98,7 +98,7 @@ const HeroSection = () => {
     };
 
     return (
-        <div className="relative mt-[82px] md:mt-[125px]">
+        <div className="relative mt-[82px] md:mt-[102px]">
             {/* Carousel */}
             <Carousel arrows {...settings}>
                 {sliderItems.map((item, index) => (

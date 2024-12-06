@@ -67,6 +67,7 @@ const CarDetails = () => {
         status = "Available",
         rating,
     } = car.data;
+    console.log(car.data);
 
     const handleExtraChange = (extra: ExtraOption) => {
         setSelectedExtras((prev) => ({
@@ -82,13 +83,13 @@ const CarDetails = () => {
                 title="Car Details"
                 paragraph="Learn more about our company, our team, and our commitment to excellence."
             />
-            <div className="container mx-auto">
+            <div className="container mx-auto py-8">
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 gap-8 py-16"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-8"
                 >
                     {/* Car Image */}
                     <motion.div
@@ -102,48 +103,52 @@ const CarDetails = () => {
                             <img
                                 src={image}
                                 alt={name}
-                                className="w-full h-full object-cover rounded-xl"
+                                className=""
                             />
                         </Zoom>
                     </motion.div>
 
                     {/* Car Details */}
                     <motion.div
-                        className="border-2 border-[#80C4E9] p-4 bg-gradient-to-b from-[#80C4E9] to-[#FFF6E9] rounded-xl"
+                        className="shadow-xl p-5 border-2 border-[#4335A7] rounded-xl bg-[#FFF6E9]"
                         initial={{ x: 100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
                         <h2 className="text-2xl font-bold text-[#4335A7]">{name}</h2>
-                        <p className="text-lg mt-2">{description}</p>
-                        <p className="mt-4">
-                            <span className="font-semibold">Price per Hour:</span> ${pricePerHour}
-                        </p>
-                        <p className="mt-2">
-                            <span className="font-semibold">Status:</span> {status}
-                        </p>
-                        <div>
-                            <span className="font-semibold">Ratings: </span>
-                            <Rate
-                                className="text-[#FF7F3E]"
-                                defaultValue={rating}
-                            />
+                        <p className="text-md mt-2">{description}</p>
+                        <div className="flex items-center gap-4">
+                            <p >
+                                <span className="font-semibold">Price per Hour:</span> ${pricePerHour}
+                            </p>
+                            <p >
+                                <span className="font-semibold">Status:</span> {status}
+                            </p>
                         </div>
-                        <div>
-                            <h3 className="font-semibold">Features:</h3>
-                            <ul className="list-disc list-inside">
+
+                        <div className="flex items-center gap-4">
+                            <p className="font-semibold m-0">Features:</p>
+                            <ul className="list-inside">
                                 {features.length > 0 ? (
                                     features.map((feature: string, index: number) => (
-                                        <li key={index}>{feature}</li>
+                                        <li className="mt-4" key={index}>{feature}</li>
                                     ))
                                 ) : (
                                     <li>No additional features available.</li>
                                 )}
                             </ul>
+                            <>
+                                <span className="font-semibold">Ratings: </span>
+                                <Rate
+                                    className="text-[#FF7F3E]"
+                                    value={rating}
+                                    disabled
+                                />
+                            </>
                         </div>
-                        <div className="mt-6">
-                            <h3 className="font-semibold">Choose Extras:</h3>
+                        <div className=" flex items-center">
+                            <p className="font-semibold m-0 me-2">Choose Extras:</p>
                             <div className="flex flex-row items-center gap-4">
                                 <label className="flex  items-center ">
                                     <input

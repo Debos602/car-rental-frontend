@@ -9,11 +9,11 @@ import {
     RollbackOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, Space } from "antd";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { logout } from "@/redux/feature/authSlice";
-import logo from "@/assets/car-lgo.png";
+import logo from "@/assets/car_lgo.png";
 import { RootState } from "@/redux/store";
 import { TUser } from "@/types/global";
 
@@ -26,9 +26,7 @@ const Dashboard: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+
 
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();
@@ -60,7 +58,7 @@ const Dashboard: React.FC = () => {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
-                style={{ backgroundColor: "var(--bg-color)" }}
+
             >
                 <div className="sticky top-0 z-30">
                     <img
@@ -77,7 +75,7 @@ const Dashboard: React.FC = () => {
                 />
             </Sider>
             <Layout>
-                <Header className="flex justify-between items-center bg-gradient-to-b from-[#4335A7] to-[#FFF6E9] text-[#FFF6E9] h-24 sticky top-0  z-10 ">
+                <Header className="flex justify-between items-center bg-[#FFF6E9]  h-24 sticky top-0  z-10 ">
                     <Button
                         type="text"
                         icon={
@@ -88,8 +86,8 @@ const Dashboard: React.FC = () => {
                             )
                         }
                         onClick={() => setCollapsed(!collapsed)}
-                        className="text-[#FFF6E9]"
-                        style={{ fontSize: "16px", width: 64, height: 64 }}
+                        className="text-[#4335A7]"
+
                     />
                     {user?.role === "admin" || user?.role === "user" ? (
                         <div className="flex items-center justify-center">
@@ -135,8 +133,9 @@ const Dashboard: React.FC = () => {
                                         <Avatar
                                             size="large"
                                             icon={<UserOutlined />}
+                                            className="text-[#4335A7]"
                                         />
-                                        <p className="text-lg font-bold uppercase m-0 text-[#FFF6E9]">
+                                        <p className="text-lg font-bold uppercase m-0 text-[#4335A7]">
                                             {user?.name}
                                         </p>
                                     </Space>
@@ -147,10 +146,6 @@ const Dashboard: React.FC = () => {
                     ) : null}
                 </Header>
                 <Content
-                    style={{
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                    }}
                 >
                     <Outlet /> {/* This renders the current route's content */}
                 </Content>

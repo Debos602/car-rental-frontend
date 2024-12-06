@@ -141,7 +141,7 @@ const AvailableCar = () => {
                                     showSizeChanger: true,
                                     size: "small",
                                 }}
-                                className="rounded-lg shadow-sm"
+                                className="rounded-lg shadow-sm overflow-x-auto"
                             />
                         </motion.div>
                     ) : (

@@ -156,7 +156,7 @@ const ManageBooking = () => {
             <motion.h1
                 initial={{ opacity: 0, translateY: -50 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg mb-6 rounded-lg">
+                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg mb-4 mx-4 rounded-xl">
                 Manage Bookings
             </motion.h1>
 

@@ -1,4 +1,4 @@
-import { Avatar, Card, Button, Form, Input, Spin, Table } from "antd";
+import { Card, Button, Form, Input, Spin, Table } from "antd";
 import { Bookings, TUser } from "@/types/global";
 import {
     useGetUserQuery,
@@ -100,26 +100,38 @@ const Profile = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FFF6E9] px-4 py-4">
+        <div className="min-h-screen px-4 py-4">
             {/* Profile Banner */}
             <motion.div
-                className="max-w-full mx-auto mb-8"
+                className="max-w-full mx-auto mb-6"
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <Card className="text-center from-[#80C4E9] to-[#FFF6E9] bg-gradient-to-b font-normal uppercase rounded-xl shadow-lg">
-                    <Avatar
-                        size={120}
-                        src="https://i.ibb.co.com/grvH19N/468063584-3886629091578658-8295155366060814102-n.jpg"
-                        className="border-4 border-[#FF7F3E]"
+                <div className="flex items-end gap-6 shadow-lg rounded-xl p-6 bg-gradient-to-r from-[#4335A7] to-[#6E57C9] ">
+                    {/* Profile Image */}
+                    <img
+                        className="object-cover w-28 h-28 rounded-xl border-4 border-[#FFF6E9] shadow-md"
+                        src="https://i.ibb.co/grvH19N/468063584-3886629091578658-8295155366060814102-n.jpg"
+                        alt="Profile"
                     />
-                    <h1 className="text-3xl font-bold mt-4 text-[#4335A7]">{name}</h1>
-                    <p className="text-md text-gray-500">
-                        <strong>Designation:</strong> {role}
-                    </p>
-                </Card>
+
+                    {/* User Details */}
+                    <div className="text-[#FFF6E9]">
+                        <p className="text-md m-1">
+                            <span className="text-[#FFD700]">Name:</span> {name}
+                        </p>
+                        <p className="text-md m-1">
+                            <span className="text-[#FFD700]">Role:</span> {role}
+                        </p>
+                        <p className="text-md m-1">
+                            <span className="text-[#FFD700]">Email:</span> {email}
+                        </p>
+
+                    </div>
+                </div>
             </motion.div>
+
 
             {/* User Information and Booking History */}
             <motion.div
@@ -129,7 +141,7 @@ const Profile = () => {
                 transition={{ duration: 0.6, delay: 0.3 }}
             >
                 {/* User Information */}
-                <Card className="shadow-lg p-6">
+                <Card className="shadow-lg p-6 border-2 border-[#4335A7]">
                     <h2 className="text-xl font-semibold text-[#4335A7] mb-4">
                         User Information
                     </h2>
@@ -155,7 +167,7 @@ const Profile = () => {
                 </Card>
 
                 {/* Booking History */}
-                <Card className="shadow-lg p-6">
+                <Card className="shadow-lg p-6 border-2 border-[#4335A7]">
                     <h2 className="text-xl font-semibold text-[#4335A7] mb-4 text-center">
                         Booking History
                     </h2>

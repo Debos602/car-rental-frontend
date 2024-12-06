@@ -46,14 +46,14 @@ const About = () => {
                                 animate={{ x: 0, opacity: 1 }}    // Move to the normal position
                                 transition={{ duration: 1 }}
                             >
-                                <h2 className="text-xl font-medium text-[#FF7F3E] mb-6">
+                                <h2 className="text-2xl font-medium text-[#FF7F3E] mb-2">
                                     Company History
                                 </h2>
 
-                                <h3 className="text-3xl font-bold text-[#4335A7] mb-6">
+                                <p className="text-3xl font-bold text-[#4335A7] mb-4">
                                     A Legacy of Excellence
-                                </h3>
-                                <p className="text-lg text-[#80C4E9] mb-10">
+                                </p>
+                                <p className="text-lg text-[#0f2e3f] mb-10">
                                     Founded in 2000, our mission is to provide
                                     the best car rental experience possible. Our
                                     vision is to lead the industry in customer
@@ -90,7 +90,7 @@ const About = () => {
                 transition={{ duration: 1 }}
             >
                 <div className="container mx-auto max-w-3xl">
-                    <h2 className="text-7xl font-thin text-[#FF7F3E] mb-6 text-center">
+                    <h2 className="text-7xl font-thin text-[#FF7F3E] mb-4 text-center">
                         Our Team
                     </h2>
                     <div className="grid grid-cols-1 gap-8">
@@ -201,13 +201,13 @@ const About = () => {
                             transition={{ duration: 0.7, ease: "easeInOut" }}
                         >
                             <div className="w-96">
-                                <h2 className="text-xl font-medium text-amber-600 mb-6">
+                                <h2 className="text-2xl font-medium text-[#FF7F3E] mb-4">
                                     Our Fleet
                                 </h2>
-                                <h3 className="text-3xl font-bold text-[#4335A7] mb-6">
+                                <p className="text-3xl font-bold text-[#4335A7] mb-4">
                                     Explore Our Fleet
-                                </h3>
-                                <p className="text-lg text-[#4335A7] mb-6">
+                                </p>
+                                <p className="text-lg text-[#0f2e3f] mb-4">
                                     We offer a diverse range of vehicles including economy cars, luxury vehicles, SUVs, and more.
                                     Whether you need a car for a day or a week, we have the perfect option for you.
                                 </p>
@@ -230,7 +230,7 @@ const About = () => {
 
 
             {/* Values & Commitment */}
-            <section className="py-16 bg-gray-900 text-white" ref={ref}>
+            <section className="py-16 bg-gray-900 text-[#FFF6E9]" ref={ref}>
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <motion.img
@@ -253,12 +253,12 @@ const About = () => {
                             }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h3 className="text-xl font-medium text-amber-600 mb-6">
+                            <h3 className="text-3xl font-medium text-[#FF7F3E] mb-4">
                                 Commitment
                             </h3>
-                            <h2 className="text-3xl font-bold text-white mb-6">
+                            <p className="text-3xl font-bold mb-6">
                                 Values & Commitment
-                            </h2>
+                            </p>
                             <p className="text-lg">
                                 Our commitment to customer service and sustainability is at the core of everything we
                                 do. We strive to offer exceptional service while minimizing our environmental impact.

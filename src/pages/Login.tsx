@@ -68,9 +68,9 @@ const Login: React.FC = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="container mx-auto flex justify-center items-center min-h-screen mt-[84px] md:mt-[133px] px-4"
+                className="container mx-auto flex justify-center items-center min-h-screen mt-[82px] md:mt-[102px] px-4"
             >
-                <div className="bg-[#FFF6E9] shadow-lg rounded-lg p-8 w-full max-w-md">
+                <div className="bg-[#FFF6E9] shadow-xl rounded-xl p-8 w-full max-w-md">
                     <h2 className=" text-2xl md:text-3xl font-semibold text-center mb-6 text-[#4335A7]">
                         Login to Your Account
                     </h2>

@@ -18,7 +18,7 @@ const DashBoardOverview = () => {
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-white py-8 px-4 text-5xl font-semibold uppercase shadow-lg m-0"
+                className="mx-4 rounded-xl bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-white py-8 px-4 text-5xl font-semibold uppercase shadow-lg m-0"
             >
                 Welcome to Admin Dashboard
             </motion.h1>

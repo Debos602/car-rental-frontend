@@ -72,10 +72,10 @@ const FeaturedCars = () => {
                 <div className="grid grid-cols-1 md:grid-cols-5">
                     <div>
                         <h2 className="text-3xl font-medium text-[#FF7F3E] mb-2">Featured Cars</h2>
-                        <h3 className="text-4xl font-semibold text-[#4335A7] mb-4">
+                        <p className="text-4xl font-semibold text-[#4335A7] mb-4">
                             Discover Our Top Picks For You Today!
-                        </h3>
-                        <p className="text-lg text-[#80C4E9] max-w-2xl mx-auto mb-8">
+                        </p>
+                        <p className="text-lg font-medium text-[#0f2e3f] max-w-2xl mx-auto mb-8">
                             Explore our handpicked selection of the most popular cars, offering
                             unbeatable comfort, style, and performance.
                         </p>
@@ -112,7 +112,7 @@ const FeaturedCars = () => {
                                                 }
                                             >
                                                 <Card.Meta
-                                                    className="text-[#4335A7] text-md"
+                                                    className="font-medium text-[#0f2e3f]"
                                                     title={car.name}
                                                     description={`Description: ${car.description.slice(
                                                         0,

@@ -52,26 +52,26 @@ const CustomerTestimonials = () => {
                 {/* Overlay for background dimming */}
                 <div className="absolute inset-0 bg-[#4335A7] opacity-50 -z-10"></div>
                 <motion.h4
-                    className="text-xl font-medium text-[#FF7F3E] text-center mb-4"
+                    className="text-2xl font-bold text-[#FF7F3E] mb-4 text-center"
                     initial={{ opacity: 0, y: -20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.8 }}
                 >
                     Testimonials
                 </motion.h4>
-                <motion.h2
+                <motion.p
                     className="text-3xl font-bold text-[#FFF6E9] text-center mb-8"
                     initial={{ opacity: 0, y: -20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 1 }}
                 >
                     What Our Customers Say
-                </motion.h2>
+                </motion.p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {testimonials.map((testimonial, index) => (
                         <motion.div
                             key={index}
-                            className="p-6 bg-[#FFF6E9] shadow-lg rounded-lg relative border-2 border-[#4335A7]"
+                            className="p-6 bg-[#FFF6E9] shadow-lg rounded-xl relative border-2 border-[#4335A7]"
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             variants={cardVariants}
@@ -84,7 +84,7 @@ const CustomerTestimonials = () => {
                             <img
                                 src={testimonial.image}
                                 alt={testimonial.name}
-                                className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-[#80C4E9]"
+                                className="w-20 h-20 object-cover rounded-full mx-auto mb-4 border-4 border-[#80C4E9]"
                             />
                             <p className="text-lg mb-2 text-[#4335A7] italic">
                                 "{testimonial.review}"

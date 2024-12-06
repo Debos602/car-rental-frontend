@@ -31,19 +31,20 @@ const CommitmentSection = () => {
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.3 }}
                 >
-                    <h3 className="text-2xl font-bold mb-6 text-[#FF7F3E]">
+                    <h3 className="text-3xl font-medium text-[#FF7F3E] mb-4">
                         Commitment
                     </h3>
-                    <h2 className="text-3xl font-bold mb-6">
+                    <p className="text-3xl font-bold mb-6">
                         Our Commitment to You
-                    </h2>
-                    <p className="text-lg mb-6 leading-relaxed">
+                    </p>
+                    <p className="text-lg font-medium text-[#0f2e3f] max-w-2xl mx-auto ">
+
                         We are dedicated to providing the best possible
                         experience for our customers. With quality vehicles,
                         affordable pricing, and outstanding customer support, we
                         ensure your journey is seamless and enjoyable.
                     </p>
-                    <ul className="list-disc pl-5">
+                    <ul className="list-disc pl-5 text-[#0f2e3f] text-base">
                         <li className="mb-4">Reliable and safe transportation</li>
                         <li className="mb-4">
                             Affordable and transparent pricing

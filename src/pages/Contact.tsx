@@ -38,7 +38,7 @@ const Contact = () => {
 
     return (
         <div className="relative bg-gradient-to-t from-[#FFF6E9] to-[#80C4E9]">
-            <div className="container mx-auto mt-[110px] ">
+            <div className="container mx-auto mt-[82px] md:mt-[102px] ">
                 <div className="absolute top-0 left-0 w-full h-full  opacity-60 -z-10"></div>
                 <div className="flex flex-col items-center justify-center py-16">
                     <h2 className="text-5xl font-bold text-[#4335A7] mb-12">

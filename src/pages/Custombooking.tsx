@@ -143,37 +143,42 @@ const Custombooking = () => {
 
     return (
         <motion.div
-            className="bg-[#FFF6E9] py-4"
+            className=" py-4"
 
         >
             <motion.h2
-                className="text-center bg-[#80C4E9] py-10 text-3xl sm:text-5xl font-normal uppercase rounded-xl text-[#4335A7] mx-4"
+                className="text-center bg-gradient-to-r from-[#4335A7] to-[#6E57C9] py-10 text-3xl sm:text-5xl font-normal uppercase rounded-xl text-[#fff6e9] mx-4"
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
                 Manage Your Booking
-            </motion.h2>
-            {bookings?.data && bookings.data.length > 0 ? (
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <Table
-                        dataSource={bookings.data}
-                        columns={columns}
-                        rowKey="_id"
-                        className="hover:shadow-lg transition-all duration-300 bg-[#FFF6E9] rounded-lg px-4 overflow-x-auto"
-                        scroll={{ x: 500 }}
-                    />
-                </motion.div>
-            ) : (
-                <p className="text-center text-gray-600">
-                    No bookings found. Please create a booking to see your list
-                    here.
-                </p>
-            )}
+            </motion.h2>;
+            {
+                bookings?.data && bookings.data.length > 0 ? (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="mx-4"
+                    >
+                        <Table
+                            dataSource={bookings.data}
+                            columns={columns}
+                            rowKey="_id"
+                            className="shadow-xl rounded-xl border-2 border-[#4335A7] transition-all duration-300  px-4 overflow-x-auto"
+                            scroll={{ x: 500 }}
+                        />
+                    </motion.div>
+                ) : (
+                    <p className="text-center text-gray-600">
+                        No bookings found. Please create a booking to see your list
+                        here.
+                    </p>
+                )
+            }
+
+
             <Modal
                 title="Cancel Booking"
                 open={modalVisible}
@@ -200,7 +205,7 @@ const Custombooking = () => {
                     Are you sure you want to cancel this booking?
                 </motion.p>
             </Modal>
-        </motion.div>
+        </motion.div >
     );
 };
 

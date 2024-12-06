@@ -14,8 +14,8 @@ import {
     YoutubeOutlined,
 
 } from "@ant-design/icons";
-import { Dropdown, Menu, Space, Switch } from "antd";
-import logo from "../assets/car-lgo.png";
+import { Dropdown, Menu, Space } from "antd";
+import logo from '../assets/car_lgo.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
 import { logout } from "@/redux/feature/authSlice";
@@ -38,9 +38,7 @@ const Header = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [theme, setTheme] = useState(
-        localStorage.getItem("theme") || "light"
-    );
+
 
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,14 +60,8 @@ const Header = () => {
     }, []);
 
     // Apply theme to the document
-    useEffect(() => {
-        document.body.className = theme;
-        localStorage.setItem("theme", theme);
-    }, [theme]);
 
-    const toggleTheme = (checked: boolean) => {
-        setTheme(checked ? "dark" : "light");
-    };
+
 
     const navItems = navPaths.map((navItem, index) => ({
         key: index,
@@ -183,30 +175,25 @@ const Header = () => {
 
             >
                 <div className="bg-[#4335A7]"> <div className="hidden  container mx-auto md:flex justify-between items-center py-1 ">
-                    <div className="text-white opacity-80">
+                    <div className="text-white opacity-80 text-xs">
                         <MailOutlined />
                         <span className="mx-2">Debos.das.02@gmail.com</span>
                         <EnvironmentOutlined className="ml-4" />
                         <span className="ml-2">Chittagong, Bangladesh</span>
                     </div>
                     <div className="flex items-center">
-                        <Switch
-                            checked={theme === "dark"}
-                            onChange={toggleTheme}
-                            checkedChildren="Dark"
-                            unCheckedChildren="Light"
-                            className="mr-4"
-                        />
-                        <FacebookOutlined className="mr-2 bg-amber-400 p-1 text-sm rounded-full" />
-                        <YoutubeOutlined className="mr-2 bg-amber-400 p-1 text-sm rounded-full" />
-                        <TwitterOutlined className="bg-amber-400 p-1 text-sm rounded-full" />
+                        <FacebookOutlined className="mr-2 bg-amber-400 p-1 text-xs rounded-full" />
+                        <YoutubeOutlined className="mr-2 bg-amber-400 p-1 text-xs rounded-full" />
+                        <TwitterOutlined className="bg-amber-400 p-1 text-xs rounded-full" />
                     </div>
                 </div></div>
 
-                <div className="bg-[#FFF6E9] border-b-2 border-[#4335A7]"><div className="container mx-auto flex justify-between items-center   ">
-                    <Link to="/">
-                        <img src={logo} className="h-[60px] md:h-[70px] max-h-full w-full object-cover " alt="Logo" />
-                    </Link>
+                <div className="bg-[#FFF6E9] border-b-2 border-[#4335A7]"><div className="container mx-auto flex justify-between items-center py-2">
+                    <div className="">
+                        <Link to="/">
+                            <img src={logo} className="max-h-full h-[60px] object-fill" alt="Logo" />
+                        </Link>
+                    </div>
                     <Menu
                         className="max-lg:hidden w-full justify-center items-center text-lg font-bold text-[#4335A7] bg-[#FFF6E9] "
                         mode="horizontal"
@@ -217,7 +204,8 @@ const Header = () => {
                             <div className="cursor-pointer" onClick={(e) => e.preventDefault()}>
                                 <Space className="flex items-center justify-between">
                                     <UserSwitchOutlined className="mr-2 p-4 text-xl bg-[#4335A7] rounded-full text-[#FFF6E9]" />
-                                    <p className="text-[#4335A7] uppercase font-medium md:font-bold m-0">{user?.name}</p>
+                                    <div className="flex flex-col items-start justify-center"><p className="text-[#4335A7]  md:font-bold m-0 inline-block">{user?.name}</p>
+                                        <p className="m-0 font-medium text-xs text-[#4335A7]">{user?.email}</p></div>
                                 </Space>
                             </div >
                         </Dropdown>

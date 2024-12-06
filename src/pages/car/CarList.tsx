@@ -105,7 +105,7 @@ const CarList = () => {
     };
 
     return (
-        <div className="bg-gradient-to-tr from-[#80C4E9] to-[#f5f5f5]">
+        <div className="bg-[#FFF6E9]">
             <div className="container mx-auto py-16">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Filters Section */}
@@ -116,13 +116,28 @@ const CarList = () => {
                         className="mb-5"
                     >
                         {/* Search Bar Inputs */}
-                        <Form.Item name="location" label="Location">
-                            <Input placeholder="Enter location" />
+                        <Form.Item
+                            name="location"
+                            label={<span className="text-[#4335A7] font-semibold text-base">Location</span>}
+                        >
+                            <Input
+                                placeholder="Enter location"
+                                className="text-[#4335A7] placeholder:text-[#4335A7] border border-[#4335A7]"
+                            />
                         </Form.Item>
 
                         {/* Other Filters */}
-                        <Form.Item name="carName" label="Car Name">
-                            <Select placeholder="Select car name" allowClear>
+                        <Form.Item
+                            name="carName"
+                            label={<span className="text-[#4335A7] font-semibold text-base">Car Name</span>}
+                            className="rouned-xl"
+                        >
+                            <Select
+                                placeholder="Select car name"
+                                allowClear
+                                className="text-[#4335A7] border border-[#4335A7] rounded-[8px]"
+                                dropdownStyle={{ color: '#4335A7' }}
+                            >
                                 {cars?.data.map((car: TCar) => (
                                     <Select.Option key={car._id} value={car.name}>
                                         {car.name}
@@ -131,8 +146,17 @@ const CarList = () => {
                             </Select>
                         </Form.Item>
 
-                        <Form.Item name="color" label="Color">
-                            <Select placeholder="Select color" allowClear>
+                        <Form.Item
+                            name="color"
+                            label={<span className="text-[#4335A7] font-semibold text-base">Color</span>}
+                            className="text-[#4335A7]"
+                        >
+                            <Select
+                                placeholder="Select color"
+                                allowClear
+                                className="text-[#4335A7] border border-[#4335A7] rounded-[8px]"
+                                dropdownStyle={{ color: '#4335A7' }}
+                            >
                                 {Array.from(
                                     new Set(cars?.data.map((car: TCar) => car.color))
                                 ).map((color) => (
@@ -144,13 +168,24 @@ const CarList = () => {
                         </Form.Item>
 
                         {/* Price Range */}
-                        <Form.Item name="pricePerHour" label="Price Range">
+                        <Form.Item
+                            name="pricePerHour"
+                            label={<span className="text-[#4335A7] font-semibold text-base">Price Range</span>}
+                        >
                             <Space.Compact>
                                 <Form.Item name={["pricePerHour", 0]} noStyle>
-                                    <Input placeholder="Min" min={0} className="mr-2" />
+                                    <Input
+                                        placeholder="Min"
+                                        min={0}
+                                        className="mr-2 text-[#4335A7] border border-[#4335A7] placeholder:text-[#4335A7]"
+                                    />
                                 </Form.Item>
                                 <Form.Item name={["pricePerHour", 1]} noStyle>
-                                    <Input placeholder="Max" min={0} />
+                                    <Input
+                                        placeholder="Max"
+                                        min={0}
+                                        className="text-[#4335A7] border border-[#4335A7] placeholder:text-[#4335A7]"
+                                    />
                                 </Form.Item>
                             </Space.Compact>
                         </Form.Item>
@@ -171,6 +206,7 @@ const CarList = () => {
                         </div>
                     </Form>
 
+
                     {/* Cards Section */}
                     <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
                         {filteredCars?.map((car) => (
@@ -183,7 +219,7 @@ const CarList = () => {
                                     ease: "easeInOut", // Using smooth ease
                                 }}
                                 viewport={{ once: true }} // Animates once when in view
-                                className="relative from-amber-200 to-amber-50 bg-gradient-to-b shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
+                                className="relative bg-[#80C4E9] shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
                             >
                                 {/* Hover Overlay for full card and image */}
                                 <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
@@ -195,7 +231,7 @@ const CarList = () => {
                                     </Link>
                                 </div>
 
-                                <div className="relative z-0">
+                                <div className="relative z-0 font-medium text-[#0f2e3f]">
                                     <div className="relative">
                                         <img
                                             src={car.image}
@@ -206,14 +242,14 @@ const CarList = () => {
                                     <h2 className="text-lg font-semibold mb-2">
                                         Brand: {car.name}
                                     </h2>
-                                    <p className="text-gray-500 mb-2">
+                                    <p className=" mb-2">
                                         Price: ${car.pricePerHour} per hour
                                     </p>
-                                    <p className="text-gray-600 mb-4">
+                                    <p className=" mb-4">
                                         Description:{" "}
                                         {car.description.split(" ").slice(0, 20).join(" ")}...
                                     </p>
-                                    <p className="text-gray-600 mb-4">Status: {car.status}</p>
+                                    <p className=" mb-4">Status: {car.status}</p>
                                 </div>
                             </motion.div>
                         ))}

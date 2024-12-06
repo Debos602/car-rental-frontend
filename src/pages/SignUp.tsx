@@ -83,12 +83,12 @@ const SignUp: React.FC = () => {
             className="bg-cover bg-center bg-no-repeat relative z-20 "
         >
             <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-70 -z-10"></div>
-            <div className="container mx-auto flex justify-center items-center py-8 px-4 mt-[84px] md:mt-[132px]">
+            <div className="container mx-auto flex justify-center items-center py-8 px-4 mt-[82px] md:mt-[102px]">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="bg-[#FFF6E9] shadow-lg rounded-lg p-8 w-full max-w-md"
+                    className="bg-[#FFF6E9] shadow-xl rounded-xl p-8 w-full max-w-md"
                 >
                     <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6 text-[#4335A7]">
                         Create Your Account
@@ -184,7 +184,7 @@ const SignUp: React.FC = () => {
                                     href="/terms"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-[#FF7F3E] underline"
+                                    className="text-[#f7915f] underline"
                                 >
                                     Terms & Conditions
                                 </a>
@@ -204,7 +204,7 @@ const SignUp: React.FC = () => {
                         <div className="text-center mt-4">
                             <p>
                                 Already have an account?{" "}
-                                <Link to="/login" className="text-[#FF7F3E]">
+                                <Link to="/login" className="text-[#f7915f]">
                                     Sign In Instead
                                 </Link>
                             </p>

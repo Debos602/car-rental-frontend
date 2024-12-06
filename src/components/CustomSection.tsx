@@ -9,7 +9,7 @@ interface CustomSectionProps {
 const CustomSection = ({ image, title, paragraph }: CustomSectionProps) => {
     return (
         <motion.section
-            className="bg-cover bg-center bg-no-repeat py-20 mt-[82px] md:mt-[125px] relative z-10"
+            className="bg-cover bg-center bg-no-repeat py-20 mt-[82px] md:mt-[102px] relative z-10"
             style={{ backgroundImage: `url(${image})` }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
