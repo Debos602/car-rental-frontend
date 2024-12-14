@@ -14,15 +14,12 @@ export const navPaths = [
         element: <Home />,
     },
     {
-        name: "About",
-        path: "/about",
-        element: <About />,
-    },
-    {
         name: "Car-List",
         path: "/cars",
         element: <Car></Car>,
     },
+
+
     {
         name: "Bookings",
         path: "/bookings",
@@ -31,6 +28,11 @@ export const navPaths = [
                 <Booking />
             </ProtectedRoute>
         ),
+    },
+    {
+        name: "About",
+        path: "/about",
+        element: <About />,
     },
     {
         name: "Contact",

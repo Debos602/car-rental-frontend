@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useGetAllCarsQuery } from "@/redux/feature/car/carManagement.api";
 import { TCar } from "@/types/global";
-import { Select, Button, Form, Input, Space } from "antd";
+import { Select, Button, Form, Input, Space, Card, Rate, Badge } from "antd";
 import { Link, useSearchParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { motion } from "framer-motion"; // Import motion from framer-motion
-
+import { useInView } from "react-intersection-observer";
 import type { Dayjs } from "dayjs";
+
 
 // Define the type for the form values
 interface IFilterValues {
@@ -23,7 +24,7 @@ const CarList = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-
+    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
     const [filteredCars, setFilteredCars] = useState<TCar[] | undefined>(cars?.data);
     const [form] = Form.useForm();
     const [searchParams] = useSearchParams();
@@ -103,9 +104,12 @@ const CarList = () => {
         form.resetFields(); // Reset the form fields
         setFilteredCars(cars?.data); // Reset the filtered data to show all cars
     };
+    const getRandomPreviousPrice = (currentPrice: number) => {
+        return (currentPrice + Math.floor(Math.random() * 100 + 50));
+    };
 
     return (
-        <div className="bg-[#FFF6E9]">
+        <div className="bg-[#FFF6E9]" ref={ref}>
             <div className="container mx-auto py-16">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Filters Section */}
@@ -209,48 +213,60 @@ const CarList = () => {
 
                     {/* Cards Section */}
                     <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {filteredCars?.map((car) => (
+                        {filteredCars?.map((car, index) => (
                             <motion.div
                                 key={car._id}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={
+                                    inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                                }
                                 transition={{
                                     duration: 0.8,
-                                    ease: "easeInOut", // Using smooth ease
+                                    delay: index * 0.2,
                                 }}
-                                viewport={{ once: true }} // Animates once when in view
-                                className="relative bg-[#80C4E9] shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
-                            >
-                                {/* Hover Overlay for full card and image */}
-                                <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
-                                    <Link
-                                        to={`/car-details/${car._id}`}
-                                        className="bg-white  uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-2 border-transparent transition-all duration-300"
-                                    >
-                                        View Details
-                                    </Link>
-                                </div>
 
-                                <div className="relative z-0 font-medium text-[#0f2e3f]">
-                                    <div className="relative">
-                                        <img
-                                            src={car.image}
-                                            alt={car.name}
-                                            className="h-48 w-full rounded-xl object-cover mb-4 transform transition-transform duration-300 group-hover:scale-105"
+                            >
+                                <Badge.Ribbon text={car.status} color={car.status === 'available' ? "green" : "red"}>
+                                    <Card
+                                        className="border shadow-lg  group rounded-xl  overflow-hidden transform transition-transform"
+                                        cover={
+                                            <div className="">
+                                                <img
+                                                    alt={car.name}
+                                                    className="h-[150px] max-h-full w-full group-hover:scale-105 transition duration-300 object-cover"
+                                                    src={car.image}
+                                                />
+
+
+                                            </div>
+                                        }
+                                    >
+                                        <Card.Meta
+                                            className="font-medium text-[#0f2e3f]"
+                                            title={car.name}
+                                            description={` ${car.description.slice(
+                                                0,
+                                                50
+                                            )}...`}
                                         />
-                                    </div>
-                                    <h2 className="text-lg font-semibold mb-2">
-                                        Brand: {car.name}
-                                    </h2>
-                                    <p className=" mb-2">
-                                        Price: ${car.pricePerHour} per hour
-                                    </p>
-                                    <p className=" mb-4">
-                                        Description:{" "}
-                                        {car.description.split(" ").slice(0, 20).join(" ")}...
-                                    </p>
-                                    <p className=" mb-4">Status: {car.status}</p>
-                                </div>
+                                        <div className="mt-2 w-full">
+                                            <div className="flex justify-start items-center gap-6">
+                                                <p className="text-lg font-semibold text-[#FF7F3E] m-0">
+                                                    Price: ${car.pricePerHour}
+                                                </p>
+                                                <p className="text-sm line-through text-gray-500 m-0">
+                                                    ${getRandomPreviousPrice(car.pricePerHour)}
+                                                </p>
+                                            </div>
+                                            <Rate disabled defaultValue={4} className="mt-2" />
+                                            <div className="w-full mt-4 text-end">
+                                                <Link to={`/car-details/${car._id}`}  >
+                                                    Car Details
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Badge.Ribbon>
                             </motion.div>
                         ))}
                     </div>

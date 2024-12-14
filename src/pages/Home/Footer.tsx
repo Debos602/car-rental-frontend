@@ -17,7 +17,7 @@ const Footer = () => {
             style={bgImage}
         >
             {/* Background overlay */}
-            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-80 -z-10"></div>
+            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-95 -z-10"></div>
 
             <div className="container mx-auto px-4">
                 {/* Footer content */}

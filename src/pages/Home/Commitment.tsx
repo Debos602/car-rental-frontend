@@ -21,7 +21,7 @@ const CommitmentSection = () => {
     };
 
     return (
-        <div className="bg-gradient-to-b to-[#80C4E9] from-[#FFF6E9]">
+        <div className="bg-white overflow-hidden">
             <section className="container mx-auto py-16 px-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 {/* Content Section */}
                 <motion.div
@@ -55,7 +55,7 @@ const CommitmentSection = () => {
 
                 {/* Image Section */}
                 <motion.div
-                    className="relative rounded-lg overflow-hidden shadow-lg"
+                    className=" rounded-lg overflow-hidden shadow-lg"
                     variants={imageVariants}
                     initial="hidden"
                     whileInView="visible"
@@ -64,9 +64,9 @@ const CommitmentSection = () => {
                     <img
                         src={commitmentImage}
                         alt="Commitment"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-xl"
                     />
-                    <div className="absolute inset-0 bg-[#80C4E9] bg-opacity-30"></div>
+
                 </motion.div>
             </section>
         </div>

@@ -84,17 +84,7 @@ const Header = () => {
                 </Link>
             ),
         },
-        {
-            key: "About",
-            label: (
-                <Link to="/about">
-                    <span className="flex items-center md:hidden py-2">
-                        <MdRoundaboutRight className="text-xl" />
-                        <span className="pl-2">About</span>
-                    </span>
-                </Link>
-            ),
-        },
+
         {
             key: "Carlist",
             label: (
@@ -102,6 +92,17 @@ const Header = () => {
                     <span className="flex items-center md:hidden py-2">
                         <FaCarSide className="text-xl" />
                         <span className="pl-2">Carlist</span>
+                    </span>
+                </Link>
+            ),
+        },
+        {
+            key: "About",
+            label: (
+                <Link to="/about">
+                    <span className="flex items-center md:hidden py-2">
+                        <MdRoundaboutRight className="text-xl" />
+                        <span className="pl-2">About</span>
                     </span>
                 </Link>
             ),
@@ -158,7 +159,7 @@ const Header = () => {
         userMenuItems.push({
             key: "login",
             label: (
-                <Link to="/login" className="py-2 inline-block">
+                <Link to="/login" className="py-2 inline-block hover:text-[#FFF6E9]">
                     <LoginOutlined className="pr-2" />
                     Login
                 </Link>
@@ -168,13 +169,9 @@ const Header = () => {
 
 
     return (
-        <div className="overflow-x-hidden">
-            <div
-                className="fixed top-0 w-full z-50"
-
-
-            >
-                <div className="bg-[#4335A7]"> <div className="hidden  container mx-auto md:flex justify-between items-center py-1 ">
+        <>
+            <div className="bg-[#4335A7]">
+                <div className="hidden  container mx-auto md:flex justify-between items-center py-1 ">
                     <div className="text-white opacity-80 text-xs">
                         <MailOutlined />
                         <span className="mx-2">Debos.das.02@gmail.com</span>
@@ -186,16 +183,18 @@ const Header = () => {
                         <YoutubeOutlined className="mr-2 bg-amber-400 p-1 text-xs rounded-full" />
                         <TwitterOutlined className="bg-amber-400 p-1 text-xs rounded-full" />
                     </div>
-                </div></div>
+                </div>
+            </div>
 
-                <div className="bg-[#FFF6E9] border-b-2 border-[#4335A7]"><div className="container mx-auto flex justify-between items-center py-2">
+            <div className="bg-[#FFF6E9] border-b-2 border-[#4335A7] sticky top-0 z-50">
+                <div className="container mx-auto flex justify-between items-center py-2">
                     <div className="">
                         <Link to="/">
                             <img src={logo} className="max-h-full h-[60px] object-fill" alt="Logo" />
                         </Link>
                     </div>
                     <Menu
-                        className="max-lg:hidden w-full justify-center items-center text-lg font-bold text-[#4335A7] bg-[#FFF6E9] "
+                        className="max-lg:hidden w-full justify-center items-center text-md font-bold text-[#4335A7] bg-[#FFF6E9] "
                         mode="horizontal"
                         items={navItems}
                     />
@@ -203,15 +202,18 @@ const Header = () => {
                         <Dropdown trigger={["click"]} menu={{ items: userMenuItems }}>
                             <div className="cursor-pointer" onClick={(e) => e.preventDefault()}>
                                 <Space className="flex items-center justify-between">
+
+                                    <div className="flex flex-col items-start justify-center">
+                                        <p className="text-[#4335A7]  md:font-bold m-0 inline-block">{user?.name}</p>
+                                        <p className="m-0 font-medium text-xs text-[#4335A7]">{user?.email}</p>
+                                    </div>
                                     <UserSwitchOutlined className="mr-2 p-4 text-xl bg-[#4335A7] rounded-full text-[#FFF6E9]" />
-                                    <div className="flex flex-col items-start justify-center"><p className="text-[#4335A7]  md:font-bold m-0 inline-block">{user?.name}</p>
-                                        <p className="m-0 font-medium text-xs text-[#4335A7]">{user?.email}</p></div>
                                 </Space>
                             </div >
                         </Dropdown>
                     ) : (
                         <div className="flex items-center">
-                            <div className="max-lg:hidden">
+                            <div className="max-lg:hidden ">
                                 <Buttons to="/login">Login</Buttons>
                             </div>
                             <div
@@ -233,10 +235,9 @@ const Header = () => {
                             )}
                         </div>
                     )}
-                </div></div>
-
+                </div>
             </div>
-        </div >
+        </ >
     );
 };
 

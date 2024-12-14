@@ -10,13 +10,10 @@ const { Content } = Layout;
 const Main = () => {
     const theme = localStorage.getItem("theme") || "light";
     return (
-        <Layout className={theme}>
+        <Layout className={`${theme} overerflow-x-hidden`}>
             <Header />
             <Content
-                style={{
-                    backgroundColor: "var(--bg-color)",
-                    color: "var(--text-color)",
-                }}
+
             >
                 <Outlet />
             </Content>

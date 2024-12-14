@@ -31,6 +31,13 @@ const Login: React.FC = () => {
             password: "123456",
         });
     };
+    const handleSetUser = () => {
+        // Set the admin credentials in the form
+        form.setFieldsValue({
+            email: "debos609@gmail.com",
+            password: "debos123",
+        });
+    };
 
     const onFinish: FormProps<FieldType>["onFinish"] = async (data) => {
         try {
@@ -68,7 +75,7 @@ const Login: React.FC = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="container mx-auto flex justify-center items-center min-h-screen mt-[82px] md:mt-[102px] px-4"
+                className="container mx-auto flex justify-center items-center min-h-screen  px-4"
             >
                 <div className="bg-[#FFF6E9] shadow-xl rounded-xl p-8 w-full max-w-md">
                     <h2 className=" text-2xl md:text-3xl font-semibold text-center mb-6 text-[#4335A7]">
@@ -99,7 +106,7 @@ const Login: React.FC = () => {
                         >
                             <Input
                                 placeholder="Enter your email"
-                                className="rounded-md"
+                                className="rounded-xl"
                             />
                         </Form.Item>
 
@@ -115,24 +122,28 @@ const Login: React.FC = () => {
                         >
                             <Input.Password
                                 placeholder="Enter your password"
-                                className="rounded-md"
+                                className="rounded-xl"
                             />
                         </Form.Item>
+                        <Form.Item<FieldType>
+                            name="remember"
+                            valuePropName="checked"
+                            className="mb-1"
+                        >
+                            <Checkbox>Remember me</Checkbox>
+                        </Form.Item>
 
-                        <div className="flex justify-between">
-                            <Form.Item<FieldType>
-                                name="remember"
-                                valuePropName="checked"
-                            >
-                                <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
+                        <div className="flex justify-between items-center mb-2">
+
                             <span onClick={handleSetAdmin} className="underline text-sm mt-1">Admin Credential</span>
+                            <span onClick={handleSetUser} className="underline text-sm mt-1">User Credential</span>
                         </div>
+
 
                         <div className="text-right mb-4">
                             <Link
                                 to="/forgot-password"
-                                className="text-[#FF7F3E] hover:underline"
+                                className="text-[#fa7533] font-medium hover:underline"
                             >
                                 Forgot Password?
                             </Link>
@@ -153,7 +164,7 @@ const Login: React.FC = () => {
                                 Don't have an account?{" "}
                                 <Link
                                     to="/register"
-                                    className="text-[#FF7F3E] hover:underline"
+                                    className="text-[#fa7533] font-medium hover:underline"
                                 >
                                     Register here
                                 </Link>

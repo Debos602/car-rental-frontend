@@ -41,7 +41,7 @@ const BookingSearch: React.FC<BookingSearchProps> = ({ onSearch }) => {
 
     return (
         <div
-            className="relative z-10 mt-[82px] md:mt-[102px] h-[calc(100vh-134px)] bg-cover bg-center bg-no-repeat"
+            className="relative z-10  h-[calc(100vh-134px)] bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${image})` }}
         >
             <div

@@ -5,7 +5,7 @@ import ScrollToTop from "./utilities/ScrollToTop ";
 
 const App = () => {
     return (
-        <div className="overflow-x-hidden">
+        <div>
             <ScrollToTop />
             <Main />
         </div>

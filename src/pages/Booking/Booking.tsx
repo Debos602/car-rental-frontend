@@ -22,9 +22,10 @@ const Booking = () => {
     return (
         <div>
             <BookingSearch onSearch={handleSearch} />
-            <BookingCarList searchParams={searchParams} />
             <BookingList />
             <BookingForm />
+            <BookingCarList searchParams={searchParams} />
+
         </div>
     );
 };

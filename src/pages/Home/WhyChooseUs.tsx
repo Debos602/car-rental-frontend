@@ -18,7 +18,7 @@ const WhyChooseUs = () => {
     };
 
     return (
-        <div className="bg-gradient-to-t to-[#4335A7] from-[#FFF6E9]">
+        <div className="bg-white bg-opacity-80">
             < section
                 ref={ref}
                 className="container mx-auto py-16 text-center  "
@@ -32,7 +32,7 @@ const WhyChooseUs = () => {
                     Why Choose Us?
                 </motion.h2>
                 <motion.p
-                    className="text-4xl font-semibold text-[#FFF6E9] mb-8"
+                    className="text-4xl font-semibold text-[#4335A7] mb-8"
                     initial={{ opacity: 0, y: -20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 1 }}
@@ -41,7 +41,7 @@ const WhyChooseUs = () => {
                 </motion.p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     <motion.div
-                        className="p-6 shadow-lg  rounded-xl bg-white border-2 border-[#4335A7] text-[#4335A7]  hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
+                        className="p-6 shadow-lg  rounded-xl bg-white border-2 border-[#4335A7] border-opacity-5 text-[#4335A7]  hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
                         initial="hidden"
                         animate={inView ? "visible" : "hidden"}
                         variants={cardVariants}
@@ -55,7 +55,7 @@ const WhyChooseUs = () => {
                         </p>
                     </motion.div>
                     <motion.div
-                        className="p-6 shadow-lg  rounded-xl bg-white border-2 border-[#4335A7] text-[#4335A7] hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
+                        className="p-6 shadow-lg  rounded-xl bg-white border-2 border-[#4335A7] border-opacity-5 text-[#4335A7] hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
                         initial="hidden"
                         animate={inView ? "visible" : "hidden"}
                         variants={cardVariants}
@@ -71,7 +71,7 @@ const WhyChooseUs = () => {
                         </p>
                     </motion.div>
                     <motion.div
-                        className="p-6 shadow-lg rounded-xl bg-white border-2 border-[#4335A7] text-[#4335A7] hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
+                        className="p-6 shadow-lg rounded-xl bg-white border-2 border-[#4335A7] border-opacity-5 text-[#4335A7] hover:bg-[#FF7F3E] hover:text-white transition-colors duration-300"
                         initial="hidden"
                         animate={inView ? "visible" : "hidden"}
                         variants={cardVariants}

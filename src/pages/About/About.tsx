@@ -1,10 +1,10 @@
 
 import image from "../../assets/about.png";
 import image2 from "../../assets/shop.jpg";
-import team1 from "../../assets/team.png";
-import team2 from "../../assets/team2.png";
-import team3 from "../../assets/team3.png";
-import team4 from "../../assets/team4.png";
+import team1 from "../../assets/team.jpg";
+import team2 from "../../assets/team2.jpg";
+import team3 from "../../assets/team3.jpg";
+import team4 from "../../assets/team4.jpg";
 import backgroundImage from "../../assets/about-banner.jpg";
 import carRight from "../../assets/car-right.png";
 import carLeft from "../../assets/commit.jpg";
@@ -31,7 +31,7 @@ const About = () => {
 
             {/* Company History */}
             <motion.section
-                className="py-16 bg-[#FFF6E9]"
+                className="py-16 bg-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
@@ -71,7 +71,7 @@ const About = () => {
                         >
                             <motion.img
                                 src={image2}
-                                className="w-full object-cover"
+                                className="w-full max-w-full object-cover rounded-xl shadow-xl"
                                 alt="Company Image"
                                 initial={{ scale: 1.05 }}
                                 animate={{ scale: 1 }}
@@ -84,13 +84,13 @@ const About = () => {
 
             {/* Our Team */}
             <motion.section
-                className="py-16 bg-gradient-to-t to-[#4335A7] from-[#FFF6E9] relative z-10"
+                className="py-16 bg-white bg-opacity-70 relative z-10"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             >
                 <div className="container mx-auto max-w-3xl">
-                    <h2 className="text-7xl font-thin text-[#FF7F3E] mb-4 text-center">
+                    <h2 className="text-5xl font-thin text-[#FF7F3E] mb-10 text-center">
                         Our Team
                     </h2>
                     <div className="grid grid-cols-1 gap-8">
@@ -102,17 +102,17 @@ const About = () => {
                             transition={{ duration: 1 }}
                             viewport={{ once: true }} // Ensures the animation happens only once when in view
                         >
-                            <div className="bg-white shadow-lg rounded-3xl p-6 text-center">
+                            <div className="bg-[#FFF6E9] shadow-lg rounded-xl p-2 text-center border-2 border-[#4335A7] border-solid border-opacity-15">
                                 <img
                                     src={team1}
                                     alt="Team Member 1"
-                                    className="w-48 max-w-full object-cover mx-auto mb-4"
+                                    className="object-cover mx-auto mb-2 -mt-[50px] rounded-full w-32 h-32 max-h-full border-2 border-[#4335A7] border-solid border-opacity-15 shadow-lg"
                                 />
-                                <h3 className="text-xl font-semibold text-[#80C4E9]">Jane Doe</h3>
-                                <p className="text-[#FFF6E9]">CEO</p>
+                                <h3 className="text-lg font-semibold text-[#4335A7]">Jane Doe</h3>
+                                <p className="text-[#4335A7]">CEO</p>
                             </div>
-                            <div className="rounded-lg p-6 text-center relative">
-                                <div className="absolute rounded-tr-2xl bottom-2 left-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E]"></div>
+                            <div className="rounded-lg p-3 text-center relative">
+                                <div className="absolute rounded-tr-2xl bottom-2 left-2 transform h-1/2 w-1/2  border-t-2 border-r-2 border-[#FF7F3E] border-opacity-40"></div>
                             </div>
                         </motion.div>
 
@@ -124,17 +124,17 @@ const About = () => {
                             transition={{ duration: 1 }}
                             viewport={{ once: true }}
                         >
-                            <div className="rounded-lg p-6 text-center relative">
-                                <div className="absolute rotate-180 rounded-tr-2xl top-2 right-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E]"></div>
+                            <div className="rounded-lg p-3 text-center relative">
+                                <div className="absolute rotate-180 rounded-tr-2xl top-2 right-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E] border-opacity-40"></div>
                             </div>
-                            <div className="bg-white shadow-lg rounded-3xl p-6 text-center">
+                            <div className="bg-[#FFF6E9] shadow-lg rounded-xl p-3 text-center  border-2 border-[#4335A7] border-solid border-opacity-15">
                                 <img
                                     src={team2}
                                     alt="Team Member 2"
-                                    className="w-48 max-w-full object-cover mx-auto mb-4"
+                                    className="object-cover mx-auto mb-2 -mt-[50px] rounded-full w-32 h-32 max-h-full border-2 border-[#4335A7] border-solid border-opacity-15 shadow-lg"
                                 />
-                                <h3 className="text-xl font-semibold text-[#80C4E9]">Bob Lee</h3>
-                                <p className="text-[#FFF6E9]">CFO</p>
+                                <h3 className="text-xl font-semibold text-[#4335A7]">Bob Lee</h3>
+                                <p className="text-[#4335A7]">CFO</p>
                             </div>
                         </motion.div>
 
@@ -146,17 +146,17 @@ const About = () => {
                             transition={{ duration: 1 }}
                             viewport={{ once: true }}
                         >
-                            <div className="bg-white shadow-lg rounded-3xl p-6 text-center">
+                            <div className="bg-[#FFF6E9] shadow-lg rounded-xl p-3 text-center  border-2 border-[#4335A7] border-solid border-opacity-15">
                                 <img
                                     src={team3}
                                     alt="Team Member 3"
-                                    className="w-48 max-w-full object-cover mx-auto mb-4"
+                                    className="object-cover mx-auto mb-2 -mt-[50px] rounded-full w-32 h-32 max-h-full border-2 border-[#4335A7] border-solid border-opacity-15 shadow-lg"
                                 />
-                                <h3 className="text-xl font-semibold text-[#80C4E9]">Emma Brown</h3>
-                                <p className="text-[#FFF6E9]">CMO</p>
+                                <h3 className="text-xl font-semibold text-[#4335A7]">Emma Brown</h3>
+                                <p className="text-[#4335A7]">CMO</p>
                             </div>
-                            <div className="rounded-lg p-6 text-center relative">
-                                <div className="absolute rounded-tr-2xl bottom-2 left-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E]"></div>
+                            <div className="rounded-lg p-3 text-center relative">
+                                <div className="absolute rounded-tr-2xl bottom-2 left-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E] border-opacity-40"></div>
                             </div>
                         </motion.div>
 
@@ -168,17 +168,18 @@ const About = () => {
                             transition={{ duration: 1 }}
                             viewport={{ once: true }}
                         >
-                            <div className="rounded-lg p-6 text-center relative">
-                                <div className="absolute rotate-180 rounded-tr-2xl top-2 right-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E]"></div>
+                            <div className="rounded-lg p-3 text-center relative">
+                                <div className="absolute rotate-180 rounded-tr-2xl top-2 right-2 transform h-1/2 w-1/2 border-t-2 border-r-2 border-[#FF7F3E] border-opacity-40"></div>
                             </div>
-                            <div className="bg-white shadow-lg rounded-3xl p-6 text-center">
+                            <div className="bg-[#FFF6E9] shadow-lg rounded-xl p-3 text-center  border-2 border-[#4335A7] border-solid border-opacity-15">
                                 <img
                                     src={team4}
                                     alt="Team Member 4"
-                                    className="w-48 max-w-full object-cover mx-auto mb-4"
+                                    className="object-cover mx-auto mb-2 -mt-[50px] rounded-full w-32 h-32 max-h-full border-2 border-[#4335A7] border-solid border-opacity-15 shadow-lg"
                                 />
-                                <h3 className="text-xl font-semibold text-[#80C4E9]">Daniel White</h3>
-                                <p className="text-[#FFF6E9]">Engineer</p>
+
+                                <h3 className="text-xl font-semibold text-[#4335A7]">Daniel White</h3>
+                                <p className="text-[#4335A7]">Engineer</p>
                             </div>
                         </motion.div>
                     </div>
@@ -187,7 +188,7 @@ const About = () => {
 
             <section
                 ref={ref} // Add the ref to the section element
-                className="py-16 bg-gradient-to-l from-[#4335A7] to-[#80C4E9] bg-cover bg-center bg-no-repeat transition-all duration-500"
+                className="py-16 bg-white bg-cover bg-center bg-no-repeat transition-all duration-500"
                 style={bgImage}
             >
                 <div className="container mx-auto px-4">
@@ -230,13 +231,13 @@ const About = () => {
 
 
             {/* Values & Commitment */}
-            <section className="py-16 bg-gray-900 text-[#FFF6E9]" ref={ref}>
+            <section className="py-16 bg-[#FFF6E9] text-[#0f2e3f]" ref={ref}>
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <motion.img
                             src={carLeft}
                             alt="Car"
-                            className="object-cover"
+                            className="object-cover rounded-xl"
                             initial={{ x: -100, opacity: 0 }}
                             animate={{
                                 x: inView ? 0 : -100,       // Animate from left to right when in view
@@ -256,7 +257,7 @@ const About = () => {
                             <h3 className="text-3xl font-medium text-[#FF7F3E] mb-4">
                                 Commitment
                             </h3>
-                            <p className="text-3xl font-bold mb-6">
+                            <p className="text-3xl text-[#4335A7] font-bold mb-6">
                                 Values & Commitment
                             </p>
                             <p className="text-lg">

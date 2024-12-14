@@ -93,7 +93,7 @@ const CarDetails = () => {
                 >
                     {/* Car Image */}
                     <motion.div
-                        className="border-2 border-[#4335A7] p-4 h-full flex items-center justify-center rounded-xl bg-[#FFF6E9]"
+                        className="border border-[#4335A7] border-opacity-30 p-4 h-full flex items-center justify-center rounded-xl bg-[#FFF6E9]"
                         initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         viewport={{ once: true }}
@@ -110,14 +110,14 @@ const CarDetails = () => {
 
                     {/* Car Details */}
                     <motion.div
-                        className="shadow-xl p-5 border-2 border-[#4335A7] rounded-xl bg-[#FFF6E9]"
+                        className="shadow-xl p-5 border border-[#4335A7] border-opacity-30 rounded-xl bg-[#FFF6E9]"
                         initial={{ x: 100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
                         <h2 className="text-2xl font-bold text-[#4335A7]">{name}</h2>
-                        <p className="text-md mt-2">{description}</p>
+                        <p className="text-md mt-2">{description.slice(0, 99)}</p>
                         <div className="flex items-center gap-4">
                             <p >
                                 <span className="font-semibold">Price per Hour:</span> ${pricePerHour}
@@ -191,14 +191,9 @@ const CarDetails = () => {
                                     : "bg-[#4335A7] hover:bg-[#80C4E9]"
                                     }`}
                             >
-                                {status === "unavailable" ? "Unavailable" : "Book Now"}
+                                {status === "unavailable" ? "Unavailable" : "Add Now"}
                             </Link>
-                            <Link
-                                to="/bookings"
-                                className="mt-6 rounded-xl bg-white hover:bg-[#4335A7] uppercase px-3 py-2 text-black hover:text-white border-2 border-black"
-                            >
-                                Cancel Booking
-                            </Link>
+
                         </div>
                     </motion.div>
                 </motion.div>

@@ -98,7 +98,7 @@ const HeroSection = () => {
     };
 
     return (
-        <div className="relative mt-[82px] md:mt-[102px]">
+        <div className="relative">
             {/* Carousel */}
             <Carousel arrows {...settings}>
                 {sliderItems.map((item, index) => (
@@ -117,7 +117,7 @@ const HeroSection = () => {
 
             {/* Content Overlay */}
             <motion.div
-                className="absolute inset-0 flex flex-col justify-center items-center z-20 bg-opacity-50 bg-[#4335A7] border-2 border-[#FFF6E9] rounded-xl shadow-lg mx-auto my-auto w-[300px] h-[350px]  md:w-[800px] md:h-[300px] lg:w-[900px] lg:h-[350px]"
+                className="absolute inset-0 flex flex-col justify-center items-center z-20 bg-opacity-20 bg-[#4335A7] border border-[#FFF6E9] rounded-xl shadow-lg mx-auto my-auto w-[300px] h-[350px]  md:w-[800px] md:h-[300px] lg:w-[900px] lg:h-[350px]"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -186,7 +186,7 @@ const HeroSection = () => {
                 >
                     <Button
                         size="large"
-                        className="bg-[#4335A7] mt-0 md:mt-3 text-[#FFF6E9] border-2 border-[#FFF6E9] rounded-xl px-8 py-4 shadow-lg"
+                        className="bg-[#4335A7] mt-0 md:mt-3 text-[#FFF6E9] border border-[#FFF6E9] rounded-xl px-8 py-4 shadow-lg"
                         onClick={handleSearch}
                     >
                         Search

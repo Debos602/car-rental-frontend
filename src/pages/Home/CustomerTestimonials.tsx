@@ -1,7 +1,6 @@
 import { Rate } from "antd";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import image from "../../assets/bg-6.jpg";
 import testi1 from "../../assets/team2.jpg";
 import testi2 from "../../assets/testi-2-removebg-preview.png";
 import testi3 from "../../assets/testi-3-removebg-preview.png";
@@ -28,9 +27,7 @@ const CustomerTestimonials = () => {
         },
     ];
 
-    const bgImage = {
-        backgroundImage: `url(${image})`,
-    };
+
 
     const { ref, inView } = useInView({
         triggerOnce: true,
@@ -43,14 +40,13 @@ const CustomerTestimonials = () => {
     };
 
     return (
-        <div style={bgImage} className="bg-cover bg-center bg-no-repeat relative z-10" >
+        <div className="bg-[#FFF6E9]" >
             <section
                 ref={ref}
                 className="py-16 container mx-auto "
 
             >
-                {/* Overlay for background dimming */}
-                <div className="absolute inset-0 bg-[#4335A7] opacity-50 -z-10"></div>
+
                 <motion.h4
                     className="text-2xl font-bold text-[#FF7F3E] mb-4 text-center"
                     initial={{ opacity: 0, y: -20 }}
@@ -60,7 +56,7 @@ const CustomerTestimonials = () => {
                     Testimonials
                 </motion.h4>
                 <motion.p
-                    className="text-3xl font-bold text-[#FFF6E9] text-center mb-8"
+                    className="text-3xl font-bold text-[#4335A7] text-center mb-8"
                     initial={{ opacity: 0, y: -20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 1 }}
@@ -71,7 +67,7 @@ const CustomerTestimonials = () => {
                     {testimonials.map((testimonial, index) => (
                         <motion.div
                             key={index}
-                            className="p-6 bg-[#FFF6E9] shadow-lg rounded-xl relative border-2 border-[#4335A7]"
+                            className="p-6 bg-white shadow-md rounded-xl relative"
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             variants={cardVariants}

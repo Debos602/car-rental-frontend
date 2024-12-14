@@ -3,9 +3,10 @@ import {
     useGetBookingsQuery,
 } from "@/redux/feature/booking/bookingApi";
 import { Bookings } from "@/types/global";
-import { Button, Spin, Table, Modal, message } from "antd";
+import { Spin, Table, Modal, message } from "antd";
 import { useState } from "react";
 import { motion } from "framer-motion"; // For animations
+import { DeleteOutlined } from "@ant-design/icons";
 
 interface ApiError {
     data?: {
@@ -23,6 +24,10 @@ const BookingList = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
+
+    console.log(bookings);
+
+
 
     const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
     const [modalVisible, setModalVisible] = useState(false);
@@ -91,20 +96,27 @@ const BookingList = () => {
             ),
         },
         {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+        },
+        {
             title: "Start Time",
             dataIndex: "startTime",
             key: "startTime",
         },
+
         {
             title: "End Time",
             dataIndex: "endTime",
             key: "endTime",
             render: (endTime: string) => (
                 <span className="text-gray-600">
-                    {new Date(endTime).toLocaleString()}
+                    {new Date(endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
             ),
         },
+
         {
             title: "Total Cost",
             dataIndex: "totalCost",
@@ -123,72 +135,71 @@ const BookingList = () => {
                     whileHover={{ scale: 1.1 }}
                     className="transition-all duration-300"
                 >
-                    <Button
-                        className={`border-2 text-[#4335A7] px-4 py-1 rounded-lg font-semibold transition-all duration-300 ${record.status === "approved"
-                            ? "bg-gray-300 cursor-not-allowed border-gray-300"
-                            : "bg-[#FFF6E9] border-black hover:bg-[#FF7F3E] hover:text-white"
-                            }`}
-                        type="link"
+
+                    <DeleteOutlined className="text-red-600 cursor-pointer text-lg"
                         onClick={() => showConfirmModal(record._id)}
-                        disabled={record.status === "approved"}
-                    >
-                        Cancel
-                    </Button>
+                        disabled={record.status === "approved"} />
+
                 </motion.div>
             ),
         },
     ];
 
     return (
-        <div className="bg-gradient-to-b to-[#746ea3] from-[#FFF6E9] "> <motion.div
-            className="container mx-auto p-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <h2 className="text-3xl font-extrabold text-center mb-8 text-[#4335A7]">
-                Manage Your Booking
-            </h2>
-            <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="rounded-xl shadow-lg overflow-x-auto"
-            >
-                {bookings?.data && bookings.data.length > 0 ? (
-                    <Table
-                        dataSource={bookings.data}
-                        columns={columns}
-                        rowKey="_id"
-                        className="bg-[#FFF6E9] rounded-lg shadow-lg overflow-x-auto"
-                    />
-                ) : (
-                    <div className="text-center py-16 text-2xl text-[#FFF6E9]">No bookings found</div>
-                )}
-            </motion.div>
-            <Modal
-                title="Cancel Booking"
-                open={modalVisible}
-                onOk={handleCancelBooking}
-                onCancel={() => setModalVisible(false)}
-                confirmLoading={isDeleting}
-                centered
-                className="rounded-lg"
-                okButtonProps={{
-                    className:
-                        "bg-[#4335A7] text-white hover:bg-red-600 transition-all duration-300 rounded-full px-6 py-2",
-                }}
-                cancelButtonProps={{
-                    className:
-                        "border-gray-300 hover:border-black transition-all duration-300 rounded-full px-6 py-2",
-                }}
-            >
-                <p className="text-lg text-[#4335A7]">
-                    Are you sure you want to cancel this booking?
-                </p>
-            </Modal>
-        </motion.div></div>
+        <div className="bg-[#FFF6E9] py-12">
+            <div className="container mx-auto">
+                <div>
+                    <motion.div
+                        className="col-span-4"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="rounded-xl shadow-lg overflow-x-auto"
+                        >
+                            {bookings?.data && bookings.data.length > 0 ? (
+                                <Table
+                                    dataSource={bookings.data}
+                                    columns={columns}
+                                    rowKey="_id"
+                                    className="bg-[#FFF6E9] rounded-lg shadow-lg overflow-x-auto"
+                                    pagination={false}
+                                />
+                            ) : (
+                                <div className="text-center py-16 text-2xl text-[#FFF6E9]">No bookings found</div>
+                            )}
+                        </motion.div>
+                        <Modal
+                            title="Cancel Booking"
+                            open={modalVisible}
+                            onOk={handleCancelBooking}
+                            onCancel={() => setModalVisible(false)}
+                            confirmLoading={isDeleting}
+                            centered
+                            className="rounded-lg"
+                            okButtonProps={{
+                                className:
+                                    "bg-[#4335A7] text-white hover:bg-red-600 transition-all duration-300 rounded-full px-6 py-2",
+                            }}
+                            cancelButtonProps={{
+                                className:
+                                    "border-gray-300 hover:border-black transition-all duration-300 rounded-full px-6 py-2",
+                            }}
+                        >
+                            <p className="text-lg text-[#4335A7]">
+                                Are you sure you want to cancel this booking?
+                            </p>
+                        </Modal>
+                    </motion.div>
+                </div>
+            </div>
+        </div>
 
     );
 };

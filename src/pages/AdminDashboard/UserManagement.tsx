@@ -145,7 +145,8 @@ const UserManagement = () => {
             </motion.h1>
             <motion.div initial={{ opacity: 0, translateY: 50 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                transition={{ duration: 0.8, ease: "easeIn" }}><Card className="shadow-xl rounded-xl border border-[#4335A7] mx-4">
+                transition={{ duration: 0.8, ease: "easeIn" }}>
+                <Card className="shadow-xl rounded-xl border border-[#4335A7] mx-4">
                     <Table
                         dataSource={users}
                         columns={columns}
@@ -154,7 +155,8 @@ const UserManagement = () => {
                         rowClassName={() => "text-[#4335A7]"}
                         className="overflow-x-auto"
                     />
-                </Card></motion.div>
+                </Card>
+            </motion.div>
 
         </div>
     );

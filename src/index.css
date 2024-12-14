@@ -91,7 +91,7 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    color: rgba(0, 0, 0, 0.88);
+    color: #4335a7 !important;
     font-weight: normal;
     font-size: 14px;
     line-height: 1.5714285714285714;

@@ -1,19 +1,20 @@
 import { useGetAllCarsQuery } from "@/redux/feature/car/carManagement.api";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Card } from "antd";
+import { Card, Badge, Rate } from "antd";
 import Slider, { CustomArrowProps } from "react-slick";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { TCar } from "@/types/global";
+import { Link } from "react-router-dom";
 
 // Custom Next Arrow
 const NextArrow = (props: CustomArrowProps) => {
     const { onClick } = props;
     return (
         <motion.button
-            className="absolute right-6 top-[48%] transform -translate-y-1/2 bg-gradient-to-r from-[#80C4E9] to-transparent text-white p-4 rounded-full shadow-lg hover:bg-opacity-70 transition z-30"
+            className="absolute right-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-r from-[#4335A7] to-transparent text-white p-2 rounded-full shadow-lg hover:bg-opacity-70 transition z-30"
             onClick={onClick}
             aria-label="Next"
         >
@@ -27,7 +28,7 @@ const PrevArrow = (props: CustomArrowProps) => {
     const { onClick } = props;
     return (
         <motion.button
-            className="absolute left-6 top-[48%] transform -translate-y-1/2 bg-gradient-to-l from-[#80C4E9] to-transparent text-white p-4 rounded-full shadow-lg hover:bg-opacity-70 transition z-30"
+            className="absolute left-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-l from-[#4335A7] to-transparent text-white p-2 rounded-full shadow-lg hover:bg-opacity-70 transition z-30"
             onClick={onClick}
             aria-label="Previous"
         >
@@ -39,7 +40,6 @@ const PrevArrow = (props: CustomArrowProps) => {
 const FeaturedCars = () => {
     const { data: cars, isLoading, isError } = useGetAllCarsQuery(undefined);
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
-
     const carsArray = Array.isArray(cars?.data) ? cars?.data : [];
 
     if (isLoading) return <p className="text-center font-bold text-[#FF7F3E]">Loading...</p>;
@@ -51,7 +51,7 @@ const FeaturedCars = () => {
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 1,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 2000,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
@@ -59,6 +59,10 @@ const FeaturedCars = () => {
             { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1 } },
             { breakpoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } },
         ],
+    };
+
+    const getRandomPreviousPrice = (currentPrice: number) => {
+        return (currentPrice + Math.floor(Math.random() * 100 + 50));
     };
 
     return (
@@ -81,10 +85,10 @@ const FeaturedCars = () => {
                         </p>
                     </div>
 
-                    <div className="col-span-4">
+                    <div className="col-span-4 my-5">
                         {carsArray.length > 0 ? (
-                            <div className="relative">
-                                <Slider {...settings} className="rounded-xl overflow-hidden">
+                            <div>
+                                <Slider {...settings} className=" overflow-hidden ">
                                     {carsArray.map((car: TCar, index: number) => (
                                         <motion.div
                                             key={car._id}
@@ -96,33 +100,48 @@ const FeaturedCars = () => {
                                                 duration: 0.8,
                                                 delay: index * 0.2,
                                             }}
-                                            className="px-3"
+                                            className="px-4 "
                                         >
-                                            <Card
-                                                className="relative shadow-lg rounded-xl overflow-hidden transform transition-transform border-2 border-[#4335A7]"
-                                                cover={
-                                                    <div className="relative">
-                                                        <img
-                                                            alt={car.name}
-                                                            className="h-[220px] max-h-full w-full object-cover rounded-t-xl"
-                                                            src={car.image}
-                                                        />
-                                                        <div className="absolute inset-0 bg-black opacity-60"></div>
+                                            <Badge.Ribbon text={car.status} color={car.status === 'available' ? "green" : "red"}>
+                                                <Card
+                                                    className="border shadow-lg  group rounded-xl  overflow-hidden transform transition-transform"
+                                                    cover={
+                                                        <div className="">
+                                                            <img
+                                                                alt={car.name}
+                                                                className="h-[150px] max-h-full w-full group-hover:scale-105 transition duration-300 object-cover"
+                                                                src={car.image}
+                                                            />
+
+                                                        </div>
+                                                    }
+                                                >
+                                                    <Card.Meta
+                                                        className="font-medium text-[#0f2e3f]"
+                                                        title={car.name}
+                                                        description={` ${car.description.slice(
+                                                            0,
+                                                            50
+                                                        )}...`}
+                                                    />
+                                                    <div className="mt-2 w-full">
+                                                        <div className="flex justify-start items-center gap-6">
+                                                            <p className="text-lg font-semibold text-[#FF7F3E] m-0">
+                                                                Price: ${car.pricePerHour}
+                                                            </p>
+                                                            <p className="text-sm line-through text-gray-500 m-0">
+                                                                ${getRandomPreviousPrice(car.pricePerHour)}
+                                                            </p>
+                                                        </div>
+                                                        <Rate disabled defaultValue={4} className="mt-2" />
+                                                        <div className="w-full mt-4 text-end">
+                                                            <Link to="/cars" className="mt-4 w-full py-2 px-4 rounded-xl bg-[#4335A7] text-white hover:bg-white border hover:border-[#4335A7] transition">
+                                                                Show More
+                                                            </Link>
+                                                        </div>
                                                     </div>
-                                                }
-                                            >
-                                                <Card.Meta
-                                                    className="font-medium text-[#0f2e3f]"
-                                                    title={car.name}
-                                                    description={`Description: ${car.description.slice(
-                                                        0,
-                                                        50
-                                                    )}...`}
-                                                />
-                                                <p className="text-lg font-semibold text-[#FF7F3E] mt-4">
-                                                    Price per hour: ${car.pricePerHour}
-                                                </p>
-                                            </Card>
+                                                </Card>
+                                            </Badge.Ribbon>
                                         </motion.div>
                                     ))}
                                 </Slider>
@@ -138,6 +157,3 @@ const FeaturedCars = () => {
 };
 
 export default FeaturedCars;
-
-
-

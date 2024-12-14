@@ -1,7 +1,9 @@
 import { useGetAllCarsQuery } from "@/redux/feature/car/carManagement.api";
 import { TCar } from "@/types/global";
 import { Link } from "react-router-dom";
-
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { Badge, Card, Rate } from "antd";
 interface BookingCarListProps {
     searchParams: {
         location: string;
@@ -15,7 +17,7 @@ const BookingCarList = ({ searchParams }: BookingCarListProps) => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-
+    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
     // Filter cars based on search parameters
     const filteredCars = cars?.data?.filter((car: TCar) => {
         const matchesLocation = searchParams.location
@@ -27,53 +29,70 @@ const BookingCarList = ({ searchParams }: BookingCarListProps) => {
 
         return matchesLocation && matchesDateRange;
     });
+    const getRandomPreviousPrice = (currentPrice: number) => {
+        return (currentPrice + Math.floor(Math.random() * 100 + 50));
+    };
 
     return (
-        <div className="bg-[#FFF6E9]">
-            <div className="container mx-auto py-16">
-                <div className=" grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-[#FFF6E9]" ref={ref}>
+            <div className="container mx-auto py-12">
+                <div className=" grid grid-cols-1 md:grid-cols-4 gap-8">
                     {filteredCars && filteredCars.length > 0 ? (
-                        filteredCars.slice(0, 8).map((car: TCar) => (
-                            <div
+                        filteredCars.slice(0, 8).map((car: TCar, index: number) => (
+                            <motion.div
                                 key={car._id}
-                                className="relative bg-[#80C4E9] shadow-lg rounded-xl p-4 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:scale-105 group"
-                            >
-                                <div className="absolute inset-0 bg-[#4335A7] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl z-10 flex items-center justify-center">
-                                    <Link
-                                        to={`/car-details/${car._id}`}
-                                        className="bg-[#FFF6E9] hover:text-[#4335A7] uppercase font-semibold text-center rounded-xl px-4 py-2 block text-[#4335A7] border-[#4335A7] hover:border-[#4335A7]  transition-all duration-300"
-                                    >
-                                        Book Now
-                                    </Link>
-                                </div>
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={
+                                    inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                                }
+                                transition={{
+                                    duration: 0.8,
+                                    delay: index * 0.2,
+                                }}
 
-                                <div className="relative z-0">
-                                    <div className="relative">
-                                        <img
-                                            src={car.image}
-                                            alt={car.name}
-                                            className="h-48 max-w-full rounded-xl object-cover mb-4 transform transition-transform duration-300 group-hover:scale-105"
+                            >
+                                <Badge.Ribbon text={car.status} color={car.status === 'available' ? "green" : "red"}>
+                                    <Card
+                                        className="border shadow-lg group rounded-xl  overflow-hidden transform transition-transform"
+                                        cover={
+                                            <div className="">
+                                                <img
+                                                    alt={car.name}
+                                                    className="h-[150px] max-h-full w-full group-hover:scale-105 transition duration-300 object-cover"
+                                                    src={car.image}
+                                                />
+
+
+                                            </div>
+                                        }
+                                    >
+                                        <Card.Meta
+                                            className="font-medium text-[#0f2e3f]"
+                                            title={car.name}
+                                            description={` ${car.description.slice(
+                                                0,
+                                                50
+                                            )}...`}
                                         />
-                                    </div>
-                                    <h2 className="text-lg font-semibold mb-2">
-                                        Brand: {car.name}
-                                    </h2>
-                                    <p className="text-gray-500 mb-2">
-                                        Price: ${car.pricePerHour} per hour
-                                    </p>
-                                    <p className="text-gray-600 mb-4">
-                                        Description:{" "}
-                                        {car.description
-                                            .split(" ")
-                                            .slice(0, 20)
-                                            .join(" ")}
-                                        ...
-                                    </p>
-                                    <p className="text-gray-600 mb-4">
-                                        Status: {car.status}
-                                    </p>
-                                </div>
-                            </div>
+                                        <div className="mt-2 w-full">
+                                            <div className="flex justify-start items-center gap-6">
+                                                <p className="text-lg font-semibold text-[#FF7F3E] m-0">
+                                                    Price: ${car.pricePerHour}
+                                                </p>
+                                                <p className="text-sm line-through text-gray-500 m-0">
+                                                    ${getRandomPreviousPrice(car.pricePerHour)}
+                                                </p>
+                                            </div>
+                                            <Rate disabled defaultValue={4} className="mt-2" />
+                                            <div className="w-full mt-4 text-end">
+                                                <Link to={`/car-details/${car._id}`} className="relative z-20 mt-4 w-full py-2 px-4 rounded-xl bg-[#FF7F3E] text-white hover:bg-[#e06c2e] transition">
+                                                    View Details
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Badge.Ribbon>
+                            </motion.div>
                         ))
                     ) : (
                         <p className="text-lg font-semibold py-14">
