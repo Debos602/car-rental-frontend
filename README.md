@@ -1,7 +1,7 @@
 Car Rental System
 Welcome to the Car Rental System, a web application designed to make vehicle rentals easy and efficient for both users and administrators. The application provides a streamlined, user-friendly interface with robust features to book, manage, and view available cars.
 
-Live URL: https://car-rental-client-mu.vercel.app/
+Live URL: https://car-rental-frontend-cyan.vercel.app/
 Features
 For Users
 Search and Filter: Easily find cars by type, price, color, and availability.
