@@ -26,7 +26,7 @@ export default function OverviewTab({
 }: ProfileTabsProps) {
     return (
         <div className="container mx-auto px-4">
-            <div className="rounded-xl p-2 w-full flex xs:gap-2 sm:gap-4 overflow-x-auto border border-[#4335A7]">
+            <div className="rounded-xl p-2 w-full flex xs:gap-2 sm:gap-4 overflow-x-auto border border-[#4335A7] border-opacity-10">
                 {tabs.map((tab) => (
                     <Button
                         key={tab.value}

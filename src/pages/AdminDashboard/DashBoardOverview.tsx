@@ -18,7 +18,7 @@ const DashBoardOverview = () => {
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="mx-4 rounded-xl bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-white py-8 px-4 text-5xl font-semibold uppercase shadow-lg m-0"
+                className="mx-4 rounded-xl bg-[#4335A7] bg-opacity-70 text-white py-5 px-4 text-xl font-semibold uppercase shadow-lg m-0"
             >
                 Welcome to Admin Dashboard
             </motion.h1>
@@ -33,7 +33,7 @@ const DashBoardOverview = () => {
                     {/* Custom Sliders */}
                     <motion.div
 
-                        className="border-2 border-[#4335A7] p-4 rounded-xl bg-gradient-to-br from-[#FFF6E9] to-[#F8EDEB] shadow-md"
+                        className="border-2 border-[#4335A7] border-opacity-10 p-4 rounded-xl bg-gradient-to-br from-[#FFF6E9] to-[#F8EDEB] shadow-md"
                     >
                         <Typography.Title
                             level={5}
@@ -120,7 +120,7 @@ const DashBoardOverview = () => {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="border border-[#4335A7] rounded-xl shadow-lg"
+                    className="border border-[#4335A7] rounded-xl shadow-lg border-opacity-10"
                 >
                     {activeTab === "bookings" && <TotalBookings />}
                     {activeTab === "cars" && <AvailableCar />}

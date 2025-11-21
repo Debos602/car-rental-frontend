@@ -156,7 +156,7 @@ const ManageBooking = () => {
             <motion.h1
                 initial={{ opacity: 0, translateY: -50 }}
                 animate={{ opacity: 1, translateY: 0 }}
-                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-lg mb-4 mx-4 rounded-xl">
+                transition={{ duration: 0.8, ease: "easeIn" }} className="bg-[#4335A7] bg-opacity-70 text-[#FFF6E9] text-center py-5 px-4 text-xl font-semibold uppercase shadow-lg mb-4 mx-4 rounded-xl">
                 Manage Bookings
             </motion.h1>
 
@@ -181,14 +181,10 @@ const ManageBooking = () => {
                         showSizeChanger: true, // Allow changing the page size
                         showTotal: (total) => `Total ${total} items`, // Display total items
                     }}
-                    bordered
-                    scroll={{ x: 800 }}
-                    className="w-full overflow-auto"
-                    style={{
-                        border: "1px solid #4335A7",
 
-                        borderRadius: "10px",
-                    }}
+                    scroll={{ x: 800 }}
+                    className="w-full overflow-auto border border-[#4335A7] border-opacity-10 rounded-xl"
+
                     rowClassName={() => "text-[#4335A7]"}
                 />
 

@@ -108,7 +108,7 @@ const Profile = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <div className="flex items-end gap-6 shadow-lg rounded-xl p-6 bg-gradient-to-r from-[#4335A7] to-[#6E57C9] ">
+                <div className="flex items-end gap-6 shadow-lg rounded-xl p-6 bg-[#4335A7] bg-opacity-70 ">
                     {/* Profile Image */}
                     <img
                         className="object-cover w-28 h-28 rounded-xl border-4 border-[#FFF6E9] shadow-md"
@@ -135,13 +135,13 @@ const Profile = () => {
 
             {/* User Information and Booking History */}
             <motion.div
-                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                className="grid grid-cols-1 lg:grid-cols-3 gap-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
             >
                 {/* User Information */}
-                <Card className="shadow-lg p-6 border-2 border-[#4335A7]">
+                <Card className="col-span-1 shadow-lg p-6 border-2 border-[#4335A7] border-opacity-10">
                     <h2 className="text-xl font-semibold text-[#4335A7] mb-4">
                         User Information
                     </h2>
@@ -167,7 +167,7 @@ const Profile = () => {
                 </Card>
 
                 {/* Booking History */}
-                <Card className="shadow-lg p-6 border-2 border-[#4335A7]">
+                <Card className="col-span-2 shadow-lg p-6 border-2 border-[#4335A7] border-opacity-10">
                     <h2 className="text-xl font-semibold text-[#4335A7] mb-4 text-center">
                         Booking History
                     </h2>

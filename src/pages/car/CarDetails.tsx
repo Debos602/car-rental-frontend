@@ -64,8 +64,9 @@ const CarDetails = () => {
         description,
         pricePerHour,
         features = [],
-        status = "Available",
+        status = "available",
     } = car.data;
+    const isAvailable = String(status).toLowerCase() === "available";
     console.log(car.data);
 
     const handleExtraChange = (extra: ExtraOption) => {
@@ -77,7 +78,7 @@ const CarDetails = () => {
     const rating = 4.5;
 
     return (
-        <div>
+        <div data-theme="light">
             <CustomSection
                 image={image1}
                 title="Car Details"
@@ -93,7 +94,7 @@ const CarDetails = () => {
                 >
                     {/* Car Image */}
                     <motion.div
-                        className="border border-[#4335A7] border-opacity-30 p-4 h-full flex items-center justify-center rounded-xl bg-[#FFF6E9]"
+                        className="border border-black/10 p-4 h-full flex items-center justify-center rounded-xl bg-black"
                         initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         viewport={{ once: true }}
@@ -103,97 +104,92 @@ const CarDetails = () => {
                             <img
                                 src={image}
                                 alt={name}
-                                className=""
+                                className="max-w-full max-h-[520px] object-contain rounded-lg shadow-lg"
                             />
                         </Zoom>
                     </motion.div>
 
                     {/* Car Details */}
                     <motion.div
-                        className="shadow-xl p-5 border border-[#4335A7] border-opacity-30 rounded-xl bg-[#FFF6E9]"
+                        className="shadow-xl p-6 border border-gray-200 rounded-xl bg-white"
                         initial={{ x: 100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h2 className="text-2xl font-bold text-[#4335A7]">{name}</h2>
-                        <p className="text-md mt-2">{description.slice(0, 99)}</p>
+                        <h2 className="text-2xl font-bold text-black">{name}</h2>
+                        <p className="text-md mt-2 text-gray-700">{description?.slice(0, 220)}</p>
                         <div className="flex items-center gap-4">
-                            <p >
-                                <span className="font-semibold">Price per Hour:</span> ${pricePerHour}
+                            <p>
+                                <span className="font-semibold text-sm">Price per Hour:</span>
+                                <span className="block text-xl font-bold text-[#D2691E]">${Number(pricePerHour).toFixed(2)}</span>
                             </p>
-                            <p >
-                                <span className="font-semibold">Status:</span> {status}
+                            <p>
+                                <span className="font-semibold text-sm">Status:</span>
+                                <span className={`block text-sm font-medium ${isAvailable ? "text-green-600" : "text-red-600"}`}>{String(status).toUpperCase()}</span>
                             </p>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                            <p className="font-semibold m-0">Features:</p>
-                            <ul className="list-inside">
+                        <div className="mt-4">
+                            <p className="font-semibold">Features:</p>
+                            <ul className="list-disc list-inside mt-2 text-gray-700">
                                 {features.length > 0 ? (
                                     features.map((feature: string, index: number) => (
-                                        <li className="mt-4" key={index}>{feature}</li>
+                                        <li className="mt-1" key={index}>{feature}</li>
                                     ))
                                 ) : (
-                                    <li>No additional features available.</li>
+                                    <li className="mt-1">No additional features available.</li>
                                 )}
                             </ul>
-                            <>
-                                <span className="font-semibold">Ratings: </span>
-                                <Rate
-                                    className="text-[#FF7F3E]"
-                                    value={rating}
-                                    disabled
-                                />
-                            </>
+
+                            <div className="mt-4 flex items-center gap-3">
+                                <span className="font-semibold">Ratings:</span>
+                                <Rate value={rating} disabled className="text-[#D2691E]" />
+                            </div>
                         </div>
-                        <div className=" flex items-center">
-                            <p className="font-semibold m-0 me-2">Choose Extras:</p>
-                            <div className="flex flex-row items-center gap-4">
-                                <label className="flex  items-center ">
+                        <div className="mt-6">
+                            <p className="font-semibold mb-2">Choose Extras:</p>
+                            <div className="flex flex-row items-center gap-6">
+                                <label className="flex items-center gap-2">
                                     <input
                                         type="checkbox"
                                         checked={selectedExtras.insurance}
                                         onChange={() => handleExtraChange("insurance")}
                                     />
-                                    <p className="ml-2 mt-3">Insurance</p>
+                                    <span className="text-sm text-gray-700">Insurance</span>
                                 </label>
-                                <label className="flex items-center">
+                                <label className="flex items-center gap-2">
                                     <input
                                         type="checkbox"
                                         checked={selectedExtras.gps}
                                         onChange={() => handleExtraChange("gps")}
                                     />
-                                    <p className="ml-2 mt-3"> GPS</p>
+                                    <span className="text-sm text-gray-700">GPS</span>
                                 </label>
-                                <label className="flex items-center">
+                                <label className="flex items-center gap-2">
                                     <input
                                         type="checkbox"
                                         checked={selectedExtras.childSeat}
                                         onChange={() => handleExtraChange("childSeat")}
                                     />
-                                    <p className="ml-2 mt-3"> Child Seat</p>
+                                    <span className="text-sm text-gray-700">Child Seat</span>
                                 </label>
                             </div>
                         </div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-end mt-6">
                             <Link
                                 onClick={(e) => {
-                                    if (status === "unavailable") {
+                                    if (!isAvailable) {
                                         e.preventDefault();
                                     } else {
                                         handleBookNow(car.data);
                                     }
                                 }}
-                                to={status === "available" ? `/bookings` : "#"}
-                                className={`mt-6 inline-block text-white hover:bg-white border-2 border-black hover:text-black uppercase px-6 py-2 rounded-xl ${status === "unavailable"
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-[#4335A7] hover:bg-[#80C4E9]"
-                                    }`}
+                                to={isAvailable ? `/bookings` : `#`}
+                                className={`mt-2 inline-block text-white uppercase px-6 py-3 rounded-lg shadow-md ${!isAvailable ? "bg-gray-400 cursor-not-allowed" : "bg-[#D2691E] hover:bg-[#a9572d]"}`}
                             >
-                                {status === "unavailable" ? "Unavailable" : "Add Now"}
+                                {isAvailable ? "Book Now" : "Unavailable"}
                             </Link>
-
                         </div>
                     </motion.div>
                 </motion.div>

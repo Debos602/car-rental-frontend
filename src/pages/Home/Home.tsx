@@ -6,7 +6,7 @@ import WhyChooseUs from "./WhyChooseUs";
 
 const Home = () => {
     return (
-        <div>
+        <div data-theme="light">
             <HeroSection />
             <FeaturedCars />
             <WhyChooseUs />

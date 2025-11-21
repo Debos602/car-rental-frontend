@@ -10,11 +10,9 @@ const { Content } = Layout;
 const Main = () => {
     const theme = localStorage.getItem("theme") || "light";
     return (
-        <Layout className={`${theme} overerflow-x-hidden`}>
+        <Layout className={`${theme}`}>
             <Header />
-            <Content
-
-            >
+            <Content className="overflow-hidden">
                 <Outlet />
             </Content>
             <Footer />

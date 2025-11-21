@@ -47,7 +47,7 @@ const AddsCar = () => {
                 initial={{ opacity: 0, y: 20 }} // Start below
                 animate={{ opacity: 1, y: 0 }} // Animate to normal position
                 transition={{ duration: 0.5 }}
-                className="border border-[#4335A7] rounded-2xl p-4 mb-4"
+                className="border border-[#4335A7] border-opacity-10 rounded-2xl p-4 mb-4"
             >
                 <motion.h2
                     className="text-2xl font-extrabold text-center mb-4 text-[#4335A7]"
@@ -114,7 +114,7 @@ const AddsCar = () => {
                                 <Select
                                     mode="tags"
                                     placeholder="Enter car features (e.g., Bluetooth, GPS)"
-                                    className="rounded-xl border-gray-300 shadow-sm focus:border-indigo-600 w-full"
+
                                 />
                             </Form.Item>
                         </motion.div>

@@ -14,7 +14,7 @@ const ManageCar = () => {
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="mx-4 rounded-xl bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase  m-0"
+                className="mx-4 rounded-xl bg-[#4335A7] bg-opacity-70 text-[#FFF6E9] text-center py-5 px-4 text-xl font-semibold uppercase  m-0"
             >
                 Manage Car
             </motion.h1>

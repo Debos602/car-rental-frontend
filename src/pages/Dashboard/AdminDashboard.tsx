@@ -71,12 +71,12 @@ const AdminDashboard: React.FC = () => {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
-                className="min-h-screen"
+                className="min-h-screen bg-[#FFF6E9]"
             >
-                <div className="sticky top-0 z-30">
+                <div className="sticky top-0 z-30 h-24 bg-[#FFF6E9] p-2">
                     <img
                         src={logo}
-                        className="h-24 w-full object-cover"
+                        className="h-24 max-h-full  object-cover "
                         alt="logo"
                     />
                 </div>
@@ -84,7 +84,7 @@ const AdminDashboard: React.FC = () => {
                     mode="inline"
                     defaultSelectedKeys={["1"]}
                     items={menuItems}
-                    className="sticky top-24 z-30 h-[505px]"
+                    className="sticky top-24 z-30 bg-[#FFF6E9] h-[500px]"
                 />
             </Sider>
             <Layout>
@@ -149,7 +149,7 @@ const AdminDashboard: React.FC = () => {
                                             icon={<UserOutlined />}
                                             className="text-[#4335A7]"
                                         />
-                                        <p className="text-lg font-bold uppercase m-0 text-[#4335A7]">
+                                        <p className="text-md font-semibold uppercase m-0 text-[#4335A7]">
                                             {user?.name}
                                         </p>
                                     </Space>

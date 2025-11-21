@@ -13,11 +13,11 @@ const Footer = () => {
 
     return (
         <footer
-            className="bg-[#4335A7] text-[#FFF6E9] py-8 bg-cover bg-center bg-no-repeat relative z-10"
+            className="bg-[#000] text-[#FFF6E9] py-8 bg-cover bg-center bg-no-repeat relative z-10"
             style={bgImage}
         >
             {/* Background overlay */}
-            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-95 -z-10"></div>
+            <div className="absolute inset-0 w-full h-full bg-[#000] opacity-95 -z-10"></div>
 
             <div className="container mx-auto px-4">
                 {/* Footer content */}

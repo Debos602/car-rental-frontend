@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Tooltip } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { FormProps } from "antd";
 import { useLoginMutation } from "@/redux/feature/authApi";
@@ -8,6 +8,7 @@ import { setUser } from "@/redux/feature/authSlice";
 import { toast } from "sonner";
 import bgImage from "../../src/assets/img-1.jpg";
 import { motion } from "framer-motion";
+import { MailOutlined, LockOutlined, HomeOutlined } from "@ant-design/icons";
 
 type FieldType = {
     email?: string;
@@ -66,129 +67,110 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div
-            style={{ backgroundImage: `url(${bgImage})` }}
-            className="bg-cover bg-center bg-no-repeat relative z-20"
-        >
-            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-50 -z-10"></div>
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="container mx-auto flex justify-center items-center min-h-screen  px-4"
-            >
-                <div className="bg-[#FFF6E9] shadow-xl rounded-xl p-8 w-full max-w-md">
-                    <h2 className=" text-2xl md:text-3xl font-semibold text-center mb-6 text-[#4335A7]">
-                        Login to Your Account
-                    </h2>
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+
+            {/* Left: full-height image panel */}
+            <div className="h-screen w-full">
+                <div
+                    className="relative h-full w-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${bgImage})` }}
+                >
+                    <div className="absolute inset-0 bg-black/60" />
+                    <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-br from-[#D2691E] to-transparent transform skew-x-[-12deg] -translate-x-6 hidden md:block" />
+                    <div className="relative z-10 h-full flex items-center justify-center p-8 md:p-10">
+                        <div>
+                            <motion.h2
+                                initial={{ y: -10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.1, duration: 0.6 }}
+                                className="text-4xl md:text-5xl font-extrabold mb-3 text-white"
+                            >
+                                Welcome Back!
+                            </motion.h2>
+                            <motion.p
+                                initial={{ y: 8, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2, duration: 0.6 }}
+                                className="text-md text-white/80 max-w-sm"
+                            >
+                                Please login to your account and continue your journey with us.
+                            </motion.p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right: full-height form panel */}
+            <div className="h-screen w-full flex items-center justify-center bg-white">
+                <div className="w-full max-w-md p-6 md:p-10 relative">
+                    <div className="absolute top-4 right-4">
+                        <Button type="default" icon={<HomeOutlined />} onClick={() => navigate('/')}>
+                            Home
+                        </Button>
+                    </div>
+                    <h2 className="text-3xl font-extrabold text-center mb-2 text-[#111827] tracking-wide">Log in</h2>
+                    <p className="text-center text-gray-600 mb-6 text-base">Sign in to continue</p>
                     <Form
-                        form={form} // Assign form instance
+                        form={form}
                         name="basic"
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
                         layout="vertical"
+                        className="text-lg"
                     >
                         <Form.Item<FieldType>
-                            label="Email"
+                            label={<span className="text-lg font-medium text-gray-700">Email</span>}
                             name="email"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please input your email!",
-                                },
-                                {
-                                    type: "email",
-                                    message: "The input is not valid E-mail!",
-                                },
-                            ]}
+                            rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'The input is not valid E-mail!' }]}
                         >
-                            <Input
-                                placeholder="Enter your email"
-                                className="rounded-xl"
-                            />
+                            <Input prefix={<MailOutlined className="text-gray-400 text-lg" />} placeholder="Enter your email" className="rounded-md py-3 px-4 text-base" />
                         </Form.Item>
 
                         <Form.Item<FieldType>
-                            label="Password"
+                            label={<span className="text-lg font-medium text-gray-700">Password</span>}
                             name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please input your password!",
-                                },
-                            ]}
+                            rules={[{ required: true, message: 'Please input your password!' }]}
                         >
-                            <Input.Password
-                                placeholder="Enter your password"
-                                className="rounded-xl"
-                            />
-                        </Form.Item>
-                        <Form.Item<FieldType>
-                            name="remember"
-                            valuePropName="checked"
-                            className="mb-1"
-                        >
-                            <Checkbox>Remember me</Checkbox>
+                            <Input.Password prefix={<LockOutlined className="text-gray-400 text-lg" />} placeholder="Enter your password" className="rounded-md py-3 px-4 text-base" />
                         </Form.Item>
 
-                        <div className="flex justify-between items-center mb-2">
+                        <Form.Item<FieldType> name="remember" valuePropName="checked" className="mb-2">
+                            <Checkbox className="text-base">Remember me</Checkbox>
+                        </Form.Item>
 
-                            <span onClick={handleSetAdmin} className="underline text-sm mt-1">Admin Credential</span>
-                            <span onClick={handleSetUser} className="underline text-sm mt-1">User Credential</span>
+                        <div className="flex justify-between items-center mb-4">
+                            <Tooltip title="Fill with admin credentials">
+                                <Button type="link" onClick={handleSetAdmin} className="p-0 text-base text-[#D2691E] hover:text-[#a9572d]">Admin Credential</Button>
+                            </Tooltip>
+                            <Tooltip title="Fill with user credentials">
+                                <Button type="link" onClick={handleSetUser} className="p-0 text-base text-[#D2691E] hover:text-[#a9572d]">User Credential</Button>
+                            </Tooltip>
                         </div>
 
-
-                        <div className="text-right mb-4">
-                            <Link
-                                to="/forgot-password"
-                                className="text-[#fa7533] font-medium hover:underline"
-                            >
-                                Forgot Password?
-                            </Link>
+                        <div className="text-right mb-6">
+                            <Link to="/forgot-password" className="text-[#D2691E] font-medium hover:underline text-base">Forgot Password?</Link>
                         </div>
 
                         <Form.Item>
-                            <Button
-                                htmlType="submit"
-                                className="w-full rounded-xl py-5 bg-[#4335A7] hover:bg-[#80C4E9] text-white font-semibold text-xl"
-                                loading={isLoading}
-                            >
-                                Log in
-                            </Button>
+                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                <Button htmlType="submit" className="w-full rounded-md py-3 bg-[#D2691E] hover:bg-[#a9572d] text-white font-semibold text-lg" loading={isLoading}>Log in</Button>
+                            </motion.div>
                         </Form.Item>
 
                         <div className="text-center mt-4">
-                            <p>
-                                Don't have an account?{" "}
-                                <Link
-                                    to="/register"
-                                    className="text-[#fa7533] font-medium hover:underline"
-                                >
-                                    Register here
-                                </Link>
-                            </p>
+                            <p className="text-base">Don't have an account?{' '}<Link to="/register" className="text-[#D2691E] font-medium hover:underline">Register here</Link></p>
                         </div>
                     </Form>
 
-                    <div className="text-center mt-6">
-                        <Link
-                            to="/privacy-policy"
-                            className="text-gray-600 hover:underline"
-                        >
-                            Privacy Policy
-                        </Link>{" "}
-                        |{" "}
-                        <Link
-                            to="/terms-of-service"
-                            className="text-gray-600 hover:underline"
-                        >
-                            Terms of Service
-                        </Link>
+                    <div className="text-center mt-6 text-gray-600 text-sm">
+                        <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>{' '}
+                        |{' '}
+                        <Link to="/terms-of-service" className="hover:underline">Terms of Service</Link>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

@@ -29,14 +29,6 @@ const router = createBrowserRouter([
         children: [
             ...routeGenerator(navPaths),
             {
-                path: "/register",
-                element: <SignUp />,
-            },
-            {
-                path: "/login",
-                element: <Login />,
-            },
-            {
                 path: "/car-details/:id",
                 element: <CarDetails />,
             },
@@ -49,6 +41,14 @@ const router = createBrowserRouter([
                 element: <ErrorPage />,
             },
         ],
+    },
+    {
+        path: "/register",
+        element: <SignUp />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
     },
     {
         path: "/forgot-password",

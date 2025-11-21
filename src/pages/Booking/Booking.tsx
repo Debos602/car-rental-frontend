@@ -20,7 +20,7 @@ const Booking = () => {
     };
 
     return (
-        <div>
+        <div data-theme="light">
             <BookingSearch onSearch={handleSearch} />
             <BookingList />
             <BookingForm />

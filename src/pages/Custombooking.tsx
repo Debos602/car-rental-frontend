@@ -147,7 +147,7 @@ const Custombooking = () => {
 
         >
             <motion.h2
-                className="text-center bg-gradient-to-r from-[#4335A7] to-[#6E57C9] py-10 text-3xl sm:text-5xl font-normal uppercase rounded-xl text-[#fff6e9] mx-4"
+                className="text-center bg-[#4335A7] bg-opacity-70 py-5 font-normal text-xl uppercase rounded-xl text-[#fff6e9] mx-4"
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -166,7 +166,7 @@ const Custombooking = () => {
                             dataSource={bookings.data}
                             columns={columns}
                             rowKey="_id"
-                            className="shadow-xl rounded-xl border-2 border-[#4335A7] transition-all duration-300  px-4 overflow-x-auto"
+                            className="shadow-xl rounded-xl border-2 border-[#4335A7] border-opacity-10 transition-all duration-300  px-4 overflow-x-auto"
                             scroll={{ x: 500 }}
                         />
                     </motion.div>

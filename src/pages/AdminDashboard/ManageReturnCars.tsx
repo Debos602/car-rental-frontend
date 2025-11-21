@@ -121,7 +121,7 @@ const ManageReturnCars = () => {
                 initial={{ opacity: 0, translateY: -50 }} // Animation starts above
                 animate={{ opacity: 1, translateY: 0 }} // Animates into position
                 transition={{ duration: 0.8, ease: "easeIn" }} // Smooth transition
-                className="bg-gradient-to-r from-[#4335A7] to-[#6A4BAA] text-[#FFF6E9] text-center py-8 px-4 text-5xl font-semibold uppercase shadow-xl rounded-xl mb-4 mx-4"
+                className="bg-[#4335A7] text-[#FFF6E9] bg-opacity-70 text-center py-5 px-4 text-xl font-semibold uppercase shadow-xl rounded-xl mb-4 mx-4"
             >
                 Manage Returns Car
             </motion.h1>
@@ -135,7 +135,7 @@ const ManageReturnCars = () => {
 
             >
                 <Table
-                    className="my-4 border border-[#4335A7] rounded-xl shadow-xl text-[#4335A7] p-4 overflow-x-auto"
+                    className="my-4 border border-[#4335A7] border-opacity-10 rounded-xl shadow-xl text-[#4335A7] p-4 overflow-x-auto"
                     columns={columns}
                     rowClassName={() => "text-[#4335A7]"}
                     dataSource={

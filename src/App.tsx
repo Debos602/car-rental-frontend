@@ -5,7 +5,7 @@ import ScrollToTop from "./utilities/ScrollToTop ";
 
 const App = () => {
     return (
-        <div>
+        <div className="">
             <ScrollToTop />
             <Main />
         </div>

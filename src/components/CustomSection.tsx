@@ -1,16 +1,18 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface CustomSectionProps {
     image: string;
     title: string;
     paragraph: string;
+    style?: React.CSSProperties;
 }
 
-const CustomSection = ({ image, title, paragraph }: CustomSectionProps) => {
+const CustomSection = ({ image, title, paragraph, style }: CustomSectionProps) => {
     return (
         <motion.section
             className="bg-cover bg-center bg-no-repeat py-20 relative z-10"
-            style={{ backgroundImage: `url(${image})` }}
+            style={{ backgroundImage: `url(${image})`, ...(style || {}) }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}

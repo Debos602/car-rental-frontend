@@ -49,7 +49,7 @@ body {
     > .ant-menu
     .ant-menu-item
     a:hover {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
     > .ant-menu-item-selected,
@@ -61,7 +61,7 @@ body {
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
     > .ant-menu.ant-menu-horizontal
     > .ant-menu-submenu-selected {
-    color: #4335a7 !important;
+    color: #000 !important;
     background-color: transparent;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
@@ -82,6 +82,60 @@ body {
 :where(.css-qnu6hi).ant-dropdown-menu-submenu
     .ant-dropdown-menu
     .ant-dropdown-menu-item,
+
+/* Theme overrides: convert previous purple/amber palette to black & white globally.
+    Also map common utility classes that embed hex colors so existing Tailwind classes
+    continue to render in black/white without changing every file. These use
+    attribute selectors and !important to override generated utility rules. */
+
+/* Map explicit purple hex usages to black */
+[class*="text-[#000]"] {
+     color: #000 !important;
+}
+[class*="bg-[#000]"] {
+     background-color: #000 !important;
+}
+[class*="border-[#000]"] {
+     border-color: #000 !important;
+}
+
+/* Map the old pale background to white */
+[class*="bg-[#FFF6E9]"] {
+     background-color: #fff !important;
+}
+[class*="text-[#FFF6E9]"] {
+     color: #fff !important;
+}
+
+/* Replace amber-based utility classes (hover/bg) to neutral greys */
+[class*="amber-"],
+[class*="hover:bg-amber"],
+[class*="hover:text-amber"] {
+     /* neutralize amber uses to black/gray */
+     color: inherit !important;
+     background-color: transparent !important;
+}
+
+/* Specific overrides for Ant Design generated selectors that referenced the purple */
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light .ant-menu-item a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    .ant-menu-item
+    a:hover,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
+    > .ant-menu
+    .ant-menu-item
+    a:hover {
+    color: #000 !important;
+}
+
+:where(.css-qnu6hi).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item,
+:where(.css-qnu6hi).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item,
 :where(.css-qnu6hi).ant-dropdown
     .ant-dropdown-menu
     .ant-dropdown-menu-submenu-title,
@@ -91,7 +145,7 @@ body {
     display: flex;
     margin: 0;
     padding: 0;
-    color: #4335a7 !important;
+    color: #000 !important;
     font-weight: normal;
     font-size: 14px;
     line-height: 1.5714285714285714;
@@ -99,11 +153,61 @@ body {
     transition: all 0.2s;
     border-radius: 4px;
 }
-:where(.css-qnu6hi).ant-menu-light .ant-menu-item,
+
+/* Theme overrides: convert previous purple/amber palette to black & white globally. */
+
+/* Map explicit purple hex usages to black */
+[class*="text-[#000]"] {
+    color: #000 !important;
+}
+[class*="bg-[#000]"] {
+    background-color: #000 !important;
+}
+[class*="border-[#000]"] {
+    border-color: #000 !important;
+}
+
+/* Map the old pale background to white */
+[class*="bg-[#FFF6E9]"] {
+    background-color: #fff !important;
+}
+[class*="text-[#FFF6E9]"] {
+    color: #fff !important;
+}
+
+/* Replace amber-based utility classes (hover/bg) to neutral greys */
+[class*="amber-"],
+[class*="hover:bg-amber"],
+[class*="hover:text-amber"] {
+    color: inherit !important;
+    background-color: transparent !important;
+}
+
+/* Generic chocolate helper */
+.chocolate-btn,
+[class*="btn-chocolate"] {
+    background-color: #D2691E !important;
+    border-color: #D2691E !important;
+    color: #fff !important;
+}
+
+/* Ensure hovered table rows and cards remain subtle (black tint) */
+.custom-table tbody tr:hover {
+     background-color: rgba(0,0,0,0.06) !important;
+}
+
+/* Buttons: generic anchor/button fallback so non-Tailwind buttons look chocolate where appropriate.
+    The Buttons component will be updated separately; this rule helps third-party buttons. */
+.chocolate-btn,
+[class*="btn-chocolate"] {
+     background-color: #D2691E !important;
+     border-color: #D2691E !important;
+     color: #fff !important;
+}
 :where(.css-qnu6hi).ant-menu-light > .ant-menu .ant-menu-item,
 :where(.css-qnu6hi).ant-menu-light .ant-menu-submenu-title,
 :where(.css-qnu6hi).ant-menu-light > .ant-menu .ant-menu-submenu-title {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 .custom-table tbody tr:hover {
     background-color: rgba(67, 53, 167, 0.1);
@@ -121,7 +225,7 @@ body {
         .ant-select-customize-input
     )
     .ant-select-selector {
-    border: 0px solid #4335a7 !important;
+    /* border: 0px solid #000 !important; */
     background: #ffffff;
     border-radius: 10px !important;
 }
@@ -134,27 +238,25 @@ body {
     ).ant-select-single.ant-select-show-arrow
     .ant-select-selection-placeholder {
     padding-inline-end: 18px;
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-select-dropdown
     .ant-select-item {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-select .ant-select-arrow {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-select {
-    border: 1px solid #4335a7 !important;
+    /* border: 1px solid #000 !important; */
     border-radius: 6px;
 }
-:where(.css-dev-only-do-not-override-qnu6hi).ant-picker-outlined {
-    border-color: #4335a7 !important;
-}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-picker-outlined,
 :where(.css-dev-only-do-not-override-qnu6hi).ant-picker-outlined:hover {
-    border-color: #4335a7 !important;
+    /* intentionally left blank (picker outline overrides removed) */
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-picker .ant-picker-suffix {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 .zoom-container {
     height: 100%;
@@ -166,12 +268,12 @@ body {
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu
     .ant-menu-submenu-title
     .ant-menu-item-icon {
-    color: #4335a7 !important;
+    color: #000 !important;
     font-weight: bold !important;
     font-size: 18px !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi) a:hover {
-    color: #4335a7 !important;
+    color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light.ant-menu-horizontal
     > .ant-menu-item:hover::after,
@@ -203,6 +305,71 @@ body {
 :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light
     > .ant-menu.ant-menu-horizontal
     > .ant-menu-submenu-open::after {
-    border-bottom-width: 2px;
-    border-bottom-color: #4335a7 !important;
+    border-bottom-width: 0;
+    border-bottom-color: transparent !important;
+}
+:where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light, :where(.css-dev-only-do-not-override-qnu6hi).ant-menu-light > .ant-menu {
+    background: 0;
+}
+
+/* Global override: make Ant Design Select border black on hover/focus across the site */
+/* Use multiple selectors for robustness and !important to override built CSS rules */
+.ant-select .ant-select-selector,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-select .ant-select-selector {
+    border-color: #000 !important;
+}
+.ant-select .ant-select-selector:hover,
+.ant-select-open .ant-select-selector,
+.ant-select-focused .ant-select-selector,
+.ant-select:focus .ant-select-selector,
+:where(.css-dev-only-do-not-override-qnu6hi).ant-select .ant-select-selector:hover {
+    border-color: #000 !important;
+    box-shadow: none !important;
+}
+
+/* For outlined selects that use focus ring, ensure the focus ring is neutral or black */
+.ant-select-focused:not(.ant-select-disabled) .ant-select-selector,
+.ant-select:focus:not(.ant-select-disabled) .ant-select-selector {
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.06) !important;
+    border-color: #000 !important;
+}
+.ant-form-item-label > label {
+    white-space: nowrap;
+}
+
+/* Global dropdown styling for Ant Design Dropdowns using overlayClassName="global-dropdown" */
+.global-dropdown {
+    --dropdown-bg: #ffffff;
+    --dropdown-color: #111827;
+    background: var(--dropdown-bg) !important;
+    color: var(--dropdown-color) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 8px 20px rgba(16,24,40,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    padding: 0.25rem !important;
+}
+
+/* Menu items inside global dropdown */
+.global-dropdown .ant-dropdown-menu-item {
+    padding: 0.5rem 0.75rem !important;
+    margin: 0 !important;
+    color: var(--dropdown-color) !important;
+}
+
+/* Hover state for menu items */
+.global-dropdown .ant-dropdown-menu-item:hover {
+    background: rgba(210,105,30,0.06) !important; /* subtle chocolate tint */
+    color: #111827 !important;
+}
+
+/* Special style for logout action inside dropdown */
+.global-dropdown .logout-action {
+    color: #D2691E !important; /* chocolate */
+    font-weight: 600;
+}
+
+/* Hover for logout to invert bg and white text */
+.global-dropdown .logout-action:hover {
+    background: #D2691E !important;
+    color: #ffffff !important;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Checkbox, message } from "antd";
+import { Button, Form, Input, Checkbox, message, Tooltip } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import type { FormProps } from "antd";
 import { StoreValue } from "rc-field-form/lib/interface";
@@ -7,6 +7,7 @@ import { useSignupMutation } from "@/redux/feature/authApi";
 import { Rule } from "antd/es/form";
 import { motion } from "framer-motion";
 import bgImage from "../../src/assets/img-2.jpg";
+import { UserOutlined, MailOutlined, LockOutlined, PhoneOutlined, HomeOutlined } from "@ant-design/icons";
 
 // Define the type for form fields
 type FieldType = {
@@ -78,152 +79,146 @@ const SignUp: React.FC = () => {
     });
 
     return (
-        <div
-            style={{ backgroundImage: `url(${bgImage})` }}
-            className="bg-cover bg-center bg-no-repeat relative z-20 "
-        >
-            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-70 -z-10"></div>
-            <div className="container mx-auto flex justify-center items-center py-8 px-4 ">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="bg-[#FFF6E9] shadow-xl rounded-xl p-8 w-full max-w-md"
+        <div className="h-screen grid grid-cols-1 md:grid-cols-2">
+
+            {/* Left: full-height image panel */}
+            <div className="w-full">
+                <div
+                    className="relative h-full w-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${bgImage})` }}
                 >
-                    <h2 className="text-2xl md:text-3xl font-semibold text-center mb-6 text-[#4335A7]">
-                        Create Your Account
-                    </h2>
+                    <div className="absolute inset-0 bg-black/60" />
+                    <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-br from-[#D2691E] to-transparent transform skew-x-[-12deg] -translate-x-6 hidden md:block" />
+                    <div className="relative z-10 h-full flex items-center justify-center p-8 md:p-10">
+                        <div>
+                            <motion.h2
+                                initial={{ y: -10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.1, duration: 0.6 }}
+                                className="text-4xl md:text-5xl font-extrabold mb-3 text-white"
+                            >
+                                Join Us Today!
+                            </motion.h2>
+                            <motion.p
+                                initial={{ y: 8, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2, duration: 0.6 }}
+                                className="text-md text-white/80 max-w-sm"
+                            >
+                                Create an account and start your journey with us.
+                            </motion.p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right: full-height form panel */}
+            <div className="w-full flex items-center justify-center bg-white">
+                <div className="w-full max-w-md p-6 md:p-10 relative">
+                    <div className="absolute top-2 right-4">
+                        <Button type="default" icon={<HomeOutlined />} onClick={() => navigate('/')}>Home</Button>
+                    </div>
+                    <h2 className="text-3xl font-extrabold text-center mb-2 text-[#111827] tracking-wide">Create Your Account</h2>
+                    <p className="text-center text-gray-600 mb-6 text-base">Sign up to get started</p>
                     <Form
                         name="signup"
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
                         layout="vertical"
+                        className="text-lg"
                     >
-                        <div className="md:flex gap-4"><Form.Item<FieldType>
-                            label="Name"
-                            name="name"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please input your name!",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Enter your full name" />
-                        </Form.Item>
-
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
                             <Form.Item<FieldType>
-                                label="Email Address"
-                                name="email"
-                                rules={[
-                                    {
-                                        required: true,
-                                        type: "email",
-                                        message: "Please input a valid email address!",
-                                    },
-                                ]}
+                                label={<span className="text-lg font-medium text-gray-700">Name</span>}
+                                name="name"
+                                rules={[{ required: true, message: "Please input your name!" }]}
                             >
-                                <Input placeholder="Enter your email address" />
-                            </Form.Item></div>
-
-                        <div className="md:flex gap-4 ">
-                            <Form.Item<FieldType>
-                                label="Password"
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please input your password!",
-                                    },
-                                    { validator: validatePassword },
-                                ]}
-                            >
-                                <Input.Password placeholder="Enter a password" />
+                                <Input
+                                    prefix={<UserOutlined className="text-gray-400 text-lg" />}
+                                    placeholder="Enter your full name"
+                                    className="rounded-md py-3 px-4 text-base"
+                                />
                             </Form.Item>
 
                             <Form.Item<FieldType>
-                                label="Confirm Password"
-                                name="confirmPassword"
-                                dependencies={["password"]}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please confirm your password!",
-                                    },
-                                    matchPasswords,
-                                ]}
+                                label={<span className="text-lg font-medium text-gray-700">Email Address</span>}
+                                name="email"
+                                rules={[{ required: true, type: "email", message: "Please input a valid email address!" }]}
                             >
-                                <Input.Password placeholder="Confirm your password" />
+                                <Input
+                                    prefix={<MailOutlined className="text-gray-400 text-lg" />}
+                                    placeholder="Enter your email address"
+                                    className="rounded-md py-3 px-4 text-base"
+                                />
                             </Form.Item>
                         </div>
 
-                        <Form.Item<FieldType> label="Phone Number" name="phone">
-                            <Input placeholder="Enter your phone number (optional)" />
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <Form.Item<FieldType>
+                                label={<span className="text-lg font-medium text-gray-700">Password</span>}
+                                name="password"
+                                rules={[{ required: true, message: "Please input your password!" }, { validator: validatePassword }]}
+                            >
+                                <Input.Password
+                                    prefix={<LockOutlined className="text-gray-400 text-lg" />}
+                                    placeholder="Enter a password"
+                                    className="rounded-md py-3 px-4 text-base"
+                                />
+                            </Form.Item>
+
+                            <Form.Item<FieldType>
+                                label={<span className="text-lg font-medium text-gray-700">Confirm Password</span>}
+                                name="confirmPassword"
+                                dependencies={["password"]}
+                                rules={[{ required: true, message: "Please confirm your password!" }, matchPasswords]}
+                            >
+                                <Input.Password
+                                    prefix={<LockOutlined className="text-gray-400 text-lg" />}
+                                    placeholder="Confirm your password"
+                                    className="rounded-md py-3 px-4 text-base"
+                                />
+                            </Form.Item>
+                        </div>
+
+                        <Form.Item<FieldType> label={<span className="text-lg font-medium text-gray-700">Phone Number</span>} name="phone">
+                            <Input
+                                prefix={<PhoneOutlined className="text-gray-400 text-lg" />}
+                                placeholder="Enter your phone number (optional)"
+                                className="rounded-md py-3 px-4 text-base"
+                            />
                         </Form.Item>
 
                         <Form.Item<FieldType>
                             name="terms"
                             valuePropName="checked"
-                            rules={[
-                                {
-                                    validator: (_, value) =>
-                                        value
-                                            ? Promise.resolve()
-                                            : Promise.reject(
-                                                new Error(
-                                                    "You must accept the terms and conditions"
-                                                )
-                                            ),
-                                },
-                            ]}
+                            rules={[{ validator: (_, value) => (value ? Promise.resolve() : Promise.reject(new Error("You must accept the terms and conditions"))) }]}
                         >
-                            <Checkbox>
-                                I agree to the{" "}
-                                <a
-                                    href="/terms"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-[#fa7533] font-medium underline"
-                                >
-                                    Terms & Conditions
-                                </a>
+                            <Checkbox className="text-base">
+                                I agree to the{' '}
+                                <Link to="/terms" className="text-[#D2691E] font-medium underline">Terms & Conditions</Link>
                             </Checkbox>
                         </Form.Item>
 
                         <Form.Item>
-                            <Button
-                                htmlType="submit"
-                                className=" rounded-xl w-full py-3 bg-[#4335A7] hover:bg-[#80C4E9] text-white font-semibold text-xl transition-all duration-300"
-                                loading={loading}
-                            >
-                                Sign Up
-                            </Button>
+                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                <Button htmlType="submit" className="w-full rounded-md py-3 bg-[#D2691E] hover:bg-[#a9572d] text-white font-semibold text-lg" loading={loading}>
+                                    Sign Up
+                                </Button>
+                            </motion.div>
                         </Form.Item>
 
                         <div className="text-center mt-4">
-                            <p>
-                                Already have an account?{" "}
-                                <Link to="/login" className="text-[#fa7533] font-medium">
-                                    Sign In Instead
-                                </Link>
-                            </p>
+                            <p className="text-base">Already have an account?{' '}<Link to="/login" className="text-[#D2691E] font-medium hover:underline">Sign In Instead</Link></p>
                         </div>
                     </Form>
 
-                    <footer className="text-center mt-8">
-                        <Link
-                            to="/privacy-policy"
-                            className="text-gray-500 hover:underline"
-                        >
-                            Privacy Policy
-                        </Link>{" "}
-                        |{" "}
-                        <Link to="/terms" className="text-gray-500 hover:underline">
-                            Terms of Service
-                        </Link>
-                    </footer>
-                </motion.div>
+                    <div className="text-center mt-6 text-gray-600 text-sm">
+                        <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>{' '}
+                        |{' '}
+                        <Link to="/terms" className="hover:underline">Terms of Service</Link>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -84,7 +84,7 @@ const ManagePayment = () => {
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-center text-[#FFF6E9] bg-gradient-to-r from-[#4335A7] to-[#6E57C9] py-10 text-3xl sm:text-5xl font-normal uppercase rounded-xl mx-4 shadow-lg"
+                className="text-center text-[#FFF6E9] bg-[#4335A7] bg-opacity-70 py-5 text-xl font-normal uppercase rounded-xl mx-4 shadow-lg"
             >
                 Manage Payment
             </motion.h1>
@@ -95,7 +95,7 @@ const ManagePayment = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="container mx-auto mt-4 px-4 sm:px-8 lg:px-4"
             >
-                <Card className="text-center shadow-md border-2 border-[#4335A7]">
+                <Card className="text-center shadow-md border-2 border-[#4335A7] border-opacity-10">
                     <h2 className="text-xl font-semibold text-center text-[#4335A7]">
                         Booking Summary
                     </h2>

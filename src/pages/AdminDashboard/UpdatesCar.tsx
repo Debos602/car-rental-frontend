@@ -119,7 +119,7 @@ const UpdatesCar = () => {
     const carList = Array.isArray(cars?.data) ? cars?.data : [];
 
     return (
-        <div className="border-2 rounded-xl bg-[#FFF6E9] p-5">
+        <div className="border-2 rounded-xl bg-[#FFF6E9] p-5 border-opacity-10">
             <motion.div
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}

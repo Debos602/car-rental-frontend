@@ -109,7 +109,7 @@ const CarList = () => {
     };
 
     return (
-        <div className="bg-[#FFF6E9]" ref={ref}>
+        <div data-theme="light" className="bg-[#FFF6E9]" ref={ref}>
             <div className="container mx-auto py-16">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Filters Section */}
@@ -226,46 +226,46 @@ const CarList = () => {
                                 }}
 
                             >
-                                <Badge.Ribbon text={car.status} color={car.status === 'available' ? "green" : "red"}>
+                                <Badge.Ribbon text={car.status} style={{ backgroundColor: '#D2691E' }}>
                                     <Card
-                                        className="border shadow-lg  group rounded-xl  overflow-hidden transform transition-transform"
+                                        className="border-0 bg-gradient-to-b from-transparent to-black/10 shadow-2xl group rounded-xl overflow-hidden transform transition-transform hover:-translate-y-1"
                                         cover={
-                                            <div className="">
+                                            <div className="relative overflow-hidden">
                                                 <img
                                                     alt={car.name}
-                                                    className="h-[150px] max-h-full w-full group-hover:scale-105 transition duration-300 object-cover"
+                                                    className="h-[150px] w-full group-hover:scale-105 transition duration-300 object-cover"
                                                     src={car.image}
                                                 />
-
-
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
                                             </div>
                                         }
                                     >
                                         <Card.Meta
-                                            className="font-medium text-[#0f2e3f]"
-                                            title={car.name}
-                                            description={` ${car.description.slice(
-                                                0,
-                                                50
-                                            )}...`}
+                                            className="font-medium text-black"
+                                            title={<span className="text-lg font-semibold text-black">{car.name}</span>}
+                                            description={<span className="text-sm text-black/80">{`${car.description.slice(0, 60)}...`}</span>}
                                         />
-                                        <div className="mt-2 w-full">
-                                            <div className="flex justify-start items-center gap-6">
-                                                <p className="text-lg font-semibold text-[#FF7F3E] m-0">
-                                                    Price: ${car.pricePerHour}
-                                                </p>
-                                                <p className="text-sm line-through text-gray-500 m-0">
-                                                    ${getRandomPreviousPrice(car.pricePerHour)}
-                                                </p>
-                                            </div>
-                                            <Rate disabled defaultValue={4} className="mt-2" />
-                                            <div className="w-full mt-4 text-end">
-                                                <Link to={`/car-details/${car._id}`}  >
-                                                    Car Details
-                                                </Link>
+                                        <div className="mt-3 w-full">
+                                            <div className="flex justify-between items-center gap-4">
+                                                <div>
+                                                    <p className="text-sm line-through text-gray-400 m-0">${getRandomPreviousPrice(car.pricePerHour)}</p>
+                                                    <p className="text-lg font-semibold text-[#D2691E] m-0">${car.pricePerHour}/hr</p>
+                                                </div>
+                                                <Rate disabled defaultValue={4} className="mt-2 text-yellow-400" />
                                             </div>
                                         </div>
                                     </Card>
+
+                                    {/* Colored footer strip below card */}
+                                    <div className="mt-3 rounded-b-xl overflow-hidden">
+                                        <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#D2691E] to-black text-white">
+                                            <div>
+                                                <div className="text-sm opacity-90">Starting</div>
+                                                <div className="text-lg font-bold">${car.pricePerHour}/hr</div>
+                                            </div>
+                                            <Link to={`/car-details/${car._id}`} className="inline-block bg-[#D2691E] hover:bg-[#a8581a] px-4 py-2 rounded-lg transition text-white">Car Details</Link>
+                                        </div>
+                                    </div>
                                 </Badge.Ribbon>
                             </motion.div>
                         ))}
