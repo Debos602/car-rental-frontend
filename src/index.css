@@ -370,6 +370,46 @@ body {
 
 /* Hover for logout to invert bg and white text */
 .global-dropdown .logout-action:hover {
-    background: #D2691E !important;
-    color: #ffffff !important;
+    /* remove filled background on hover - keep chocolate text color */
+    background: transparent !important;
+    color: #D2691E !important;
 }
+
+/* Header menu hover styles (desktop) */
+.header-menu .ant-menu-item a,
+.header-menu .ant-menu-submenu-title {
+    color: #000 !important; /* base black for header menu items */
+}
+
+.header-menu .ant-menu-item:hover a,
+.header-menu .ant-menu-item-active a,
+.header-menu .ant-menu-item-selected a,
+.header-menu .ant-menu-submenu-open .ant-menu-submenu-title,
+.header-menu .ant-menu-submenu:hover .ant-menu-submenu-title {
+    color: #A0522D !important; /* soft chocolate on hover/active */
+}
+
+/* subtle background tint and rounded hover for header items */
+.header-menu .ant-menu-item:hover,
+.header-menu .ant-menu-submenu:hover {
+    background-color: transparent !important;
+    border-radius: 0 !important;
+}
+
+/* make SVG icons inside menu follow text color on hover */
+.header-menu .ant-menu-item svg,
+.header-menu .ant-menu-submenu-title svg {
+    color: #000 !important; /* ensure icons are black by default */
+}
+
+.header-menu .ant-menu-item:hover svg,
+.header-menu .ant-menu-item-active svg,
+.header-menu .ant-menu-item-selected svg {
+    color: #A0522D !important; /* soft chocolate on hover/active */
+}
+
+/* Remove default bottom underline from Ant Menu horizontal in this header */
+.header-menu.ant-menu-horizontal > .ant-menu-item::after {
+    display: none !important;
+}
+
