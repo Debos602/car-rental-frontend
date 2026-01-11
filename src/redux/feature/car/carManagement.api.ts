@@ -39,6 +39,14 @@ const carManagementApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Car"], // Invalidate cached data after update
         }),
+        updateCarStatus: builder.mutation({
+            query: ({ id, status }) => ({
+                url: `/api/cars/${id}/status`, // dynamic id
+                method: "PATCH",
+                body: { status },
+            }),
+            invalidatesTags: ["Car"],
+        }),
         deleteCar: builder.mutation({
             query: (id) => ({
                 url: `/api/cars/${id}`,
@@ -61,6 +69,7 @@ export const {
     useGetAvailableCarsQuery,
     useCreateCarMutation,
     useUpdateCarMutation,
+    useUpdateCarStatusMutation,
     useDeleteCarMutation,
     useReturnCarMutation,
 } = carManagementApi;

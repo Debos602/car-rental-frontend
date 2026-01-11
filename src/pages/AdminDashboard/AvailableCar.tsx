@@ -1,9 +1,9 @@
 import { useGetAvailableCarsQuery } from "@/redux/feature/car/carManagement.api";
-import { Spin, Table, Typography, Button, Card, Empty } from "antd";
-import { EyeInvisibleOutlined } from "@ant-design/icons";
+import { Spin, Table, Typography, Button, Card, Empty, Tag } from "antd";
+import { EyeInvisibleOutlined, ReloadOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const AvailableCar = () => {
     const params = { status: "available" };
@@ -17,146 +17,139 @@ const AvailableCar = () => {
 
     const columns = [
         {
-            title: "Image",
+            title: "Car",
             dataIndex: "image",
             key: "image",
-            render: (image: string) => (
-                <motion.img
-                    src={image}
-                    alt="Car"
-                    className="h-32 w-52 rounded-3xl border-2 hover:scale-105 transition-transform duration-300 object-cover"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                />
+            width: 120,
+            render: (image: string, record: any) => (
+                <div className="flex items-center gap-2">
+                    <motion.img
+                        src={image}
+                        alt="Car"
+                        className="h-16 w-24 rounded-lg object-cover border"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                    />
+                    <Text strong className="text-sm block md:hidden">{record.name}</Text>
+                </div>
             ),
         },
         {
             title: "Name",
             dataIndex: "name",
             key: "name",
+            className: "hidden md:table-cell",
+            render: (text: string) => <Text strong>{text}</Text>,
         },
         {
-            title: "Color",
-            dataIndex: "color",
-            key: "color",
+            title: "Details",
+            key: "details",
+            render: (_: any, record: any) => (
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <div className="h-3 w-3 rounded-full border" style={{ backgroundColor: record.color }} />
+                        <Text className="text-sm">{record.color}</Text>
+                    </div>
+                    <Tag color={record.isElectric ? "green" : "blue"}>
+                        {record.isElectric ? "Electric" : "Fuel"}
+                    </Tag>
+                </div>
+            ),
         },
         {
-            title: "Price Per Hour",
+            title: "Price",
             dataIndex: "pricePerHour",
             key: "pricePerHour",
-            render: (text: number) => `$${text}`,
+            render: (text: number) => (
+                <Text strong className="text-blue-600">${text}/hr</Text>
+            ),
         },
         {
             title: "Location",
             dataIndex: "location",
             key: "location",
-        },
-        {
-            title: "Is Electric",
-            dataIndex: "isElectric",
-            key: "isElectric",
-            render: (text: boolean) => (text ? "Yes" : "No"),
+            className: "hidden lg:table-cell",
         },
         {
             title: "Status",
             dataIndex: "status",
             key: "status",
             render: (status: "available" | "unavailable") => (
-                <>
-                    {status === "available" ? (
-                        <span style={{ color: "green" }}>Available</span>
-                    ) : (
-                        <span style={{ color: "red" }}>
-                            <EyeInvisibleOutlined style={{ marginRight: 5 }} />
-                            Unavailable
-                        </span>
-                    )}
-                </>
+                <Tag color={status === "available" ? "success" : "error"} className="capitalize">
+                    {status === "available" ? "Available" : "Unavailable"}
+                </Tag>
             ),
         },
     ];
 
     const containerVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.2 },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.4 } },
     };
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center min-h-[300px] relative">
-                <Spin size="large" className="absolute top-1/2 transform -translate-y-1/2" />
+            <div className="flex justify-center items-center min-h-[200px]">
+                <Spin size="large" />
             </div>
         );
     }
 
     if (isError) {
         return (
-            <div className="text-center min-h-[200px] flex justify-center items-center">
-                <p className="text-red-500">Failed to load cars. Please try again later.</p>
+            <div className="text-center p-4">
+                <Text type="danger">Failed to load cars</Text>
+                <Button onClick={refetch} className="ml-2" size="small">
+                    Retry
+                </Button>
             </div>
         );
     }
 
     return (
         <motion.div
-            className="p-6"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
-            <motion.div variants={itemVariants}>
-                <Card
-                    bordered
-                    className="shadow-lg rounded-lg bg-white max-w-6xl mx-auto"
-                >
-                    <motion.div
-                        className="flex justify-between items-center mb-4"
-                        variants={itemVariants}
-                    >
-                        <Title level={3} className="text-[#4335A7]">
-                            Available Cars
-                        </Title>
-                        <Button onClick={refetch} type="primary" className="bg-[#4335A7]">
-                            Refresh Data
-                        </Button>
-                    </motion.div>
-                    {carsArray.length > 0 ? (
-                        <motion.div variants={itemVariants}>
-                            <Table
-                                dataSource={carsArray}
-                                columns={columns}
-                                rowKey="_id"
-                                pagination={{
-                                    pageSize: 5,
-                                    showSizeChanger: true,
-                                    size: "small",
-                                }}
-                                className="rounded-lg shadow-sm overflow-x-auto"
-                            />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            className="flex justify-center items-center min-h-[200px]"
-                            variants={itemVariants}
+            <Card
+                bordered={false}
+                className="shadow-sm"
+                title={
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <Title level={4} className="m-0">Available Cars</Title>
+                        <Button
+                            onClick={refetch}
+                            icon={<ReloadOutlined />}
+                            size="small"
                         >
-                            <Empty
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                description="No available cars"
-                            />
-                        </motion.div>
-                    )}
-                </Card>
-            </motion.div>
+                            Refresh
+                        </Button>
+                    </div>
+                }
+            >
+                {carsArray.length > 0 ? (
+                    <Table
+                        dataSource={carsArray}
+                        columns={columns}
+                        rowKey="_id"
+                        size="small"
+                        pagination={{
+                            pageSize: 6,
+                            showSizeChanger: false,
+                            simple: true,
+                        }}
+                        className="compact-table"
+                    />
+                ) : (
+                    <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="No cars available"
+                        className="py-8"
+                    />
+                )}
+            </Card>
         </motion.div>
     );
 };

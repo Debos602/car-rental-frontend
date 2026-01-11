@@ -20,6 +20,15 @@ import ManagePayment from "@/pages/Dashboard/ManagePayment";
 import BookingList from "@/pages/Booking/BookingList";
 import ForgetPassword from "@/pages/ForgetPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import Settings from "@/pages/Settings/Settings";
+import Documentation from "@/pages/Documentation/Documentation";
+import Reports from "@/pages/Reports/Reports";
+import UserDashBoardOverview from "@/pages/Dashboard/UserDashboardOverview";
+import History from "@/pages/Dashboard/Notifications";
+import CarList from "@/pages/car/CarList";
+import DashboardCarList from "@/pages/Dashboard/DashboardCarList";
+import Notifications from "@/pages/Dashboard/Notifications";
+
 
 const router = createBrowserRouter([
     {
@@ -68,8 +77,9 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Profile />,
+                element: <UserDashBoardOverview />,
             },
+
             {
                 path: "profile",
                 element: <Profile />,
@@ -82,6 +92,14 @@ const router = createBrowserRouter([
                 path: "payment",
                 element: <ManagePayment />,
             },
+            {
+                path: "notifications",
+                element: <Notifications />,
+            },
+            {
+                path: "cars",
+                element: <DashboardCarList />
+            }
         ],
     },
     {
@@ -117,6 +135,19 @@ const router = createBrowserRouter([
                 path: "user-management",
                 element: <UserManagement />,
             },
+            {
+                path: "settings",
+                element: <Settings />,
+            },
+
+            {
+                path: "reports",
+                element: <Reports />,
+            },
+            {
+                path: "documentation",
+                element: <Documentation />
+            }
         ],
     },
 ]);

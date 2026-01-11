@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Checkbox, message, Tooltip } from "antd";
+import { Button, Form, Input, Checkbox, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import type { FormProps } from "antd";
 import { StoreValue } from "rc-field-form/lib/interface";

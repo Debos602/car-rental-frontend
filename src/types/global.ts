@@ -2,14 +2,24 @@ export interface TCar {
     _id: string;
     name: string;
     image: string;
+    images?: string[];
     pricePerHour: number;
-    description: string;
-    color: string;
-    status: "available" | "unavailable";
-    location?: string; // Assuming location is optional
-    availableFrom?: string; // Assuming date as a string, adjust to Dayjs if needed
+    description?: string;
+    color?: string;
+    features?: string[];
+    status?: "available" | "unavailable";
+    brand?: string;
+    model?: string;
+    year?: number;
+    seats?: number;
+    rating?: number;
+    fuelType?: string;
+    category?: string;
+    location?: string;
+    availableFrom?: string;
     availableUntil?: string;
-    [key: string]: string | number | boolean | undefined; // Specify allowed types
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export type TUser = {
@@ -17,6 +27,7 @@ export type TUser = {
     name: string;
     email: string; // Ensure this property is present
     role: "user" | "admin";
+    image: string;
     password?: string;
     confirmPassword?: string;
     needsPasswordChange?: boolean;
@@ -41,7 +52,7 @@ export interface Bookings {
     _id: string;
     date: string;
     startTime: string;
-    endTime: string | null;
+    endTime: string;
     totalCost: number;
     transactionId: string;
     user: {
@@ -66,10 +77,13 @@ export interface Bookings {
 }
 export interface TOrder {
     carName: string; // Assuming carName could be null if booking is not found
-    date: Date; // Assuming date is a Date object
+    date: string; // Assuming date is a Date object
     startTime: string; // Assuming startTime is a string (could also be a Date)
     endTime: string; // Assuming endTime is a string (could also be a Date)
     totalCost: number; // Total cost should be a number
     transactionId: string; // Assuming transactionId is a string
     paymentStatus: string; // Assuming payementStatus is a string
+    name: string;
+    email: string;
+    phone: string;
 }

@@ -5,10 +5,10 @@ import ScrollToTop from "./utilities/ScrollToTop ";
 
 const App = () => {
     return (
-        <div className="">
+        <>
             <ScrollToTop />
             <Main />
-        </div>
+        </>
     );
 };
 

@@ -35,7 +35,7 @@ const Login: React.FC = () => {
     const handleSetUser = () => {
         // Set the admin credentials in the form
         form.setFieldsValue({
-            email: "debos609@gmail.com",
+            email: "Rupash.das.02@gmail.com",
             password: "debos123",
         });
     };
@@ -67,10 +67,10 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2">
 
             {/* Left: full-height image panel */}
-            <div className="h-screen w-full">
+            <div className="w-full">
                 <div
                     className="relative h-full w-full bg-cover bg-center"
                     style={{ backgroundImage: `url(${bgImage})` }}
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
             </div>
 
             {/* Right: full-height form panel */}
-            <div className="h-screen w-full flex items-center justify-center bg-white">
+            <div className="w-full flex items-center justify-center bg-white">
                 <div className="w-full max-w-md p-6 md:p-10 relative">
                     <div className="absolute top-4 right-4">
                         <Button type="default" icon={<HomeOutlined />} onClick={() => navigate('/')}>

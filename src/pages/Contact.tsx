@@ -23,251 +23,275 @@ const Contact = () => {
 
     const appear = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 
-    /* StyledMap component: tries to use Google Maps JS API with a custom style matching
-       black / white / chocolate theme. If `VITE_GOOGLE_MAPS_API_KEY` is not provided
-       the component falls back to a black-and-white tile iframe (Stamen Toner) and
-       places a small chocolate marker overlay. */
-    const StyledMap: React.FC = () => {
-        const mapRef = useRef<HTMLDivElement | null>(null);
-        const [loaded, setLoaded] = useState(false);
 
-        useEffect(() => {
-            const apiKey = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY;
-
-            // Styled map JSON: mostly greyscale with chocolate accents for points/labels
-            const themeStyles = [
-                { elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-                { elementType: "labels.text.fill", stylers: [{ color: "#111827" }] },
-                { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }] },
-                { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
-                { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#6b6b6b" }] },
-                { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-                { featureType: "road", elementType: "geometry", stylers: [{ color: "#e9e9e9" }] },
-                { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#6b6b6b" }] },
-                { featureType: "water", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-                // Chocolate accent: use as marker icon color and subtle highlights
-            ];
-
-            if (apiKey && mapRef.current && !(window as any).google) {
-                // Dynamically load Google Maps script
-                const script = document.createElement("script");
-                script.src = `${apiKey}`;
-                script.async = true;
-                script.defer = true;
-                script.onload = () => {
-                    try {
-                        const google = (window as any).google;
-                        const center = { lat: 22.3569, lng: 91.7832 }; // Chittagong
-                        const map = new google.maps.Map(mapRef.current, {
-                            center,
-                            zoom: 13,
-                            styles: themeStyles,
-                            disableDefaultUI: true,
-                        });
-
-                        // Chocolate SVG marker as data URL
-                        const svg = encodeURIComponent(`
-                            <svg xmlns='http://www.w3.org/2000/svg' width='28' height='40' viewBox='0 0 24 24' fill='none' stroke='none'>
-                              <path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z' fill='%23D2691E'/>
-                              <circle cx='12' cy='9' r='2.5' fill='%23fff'/>
-                            </svg>
-                        `);
-
-                        new google.maps.Marker({
-                            position: center,
-                            map,
-                            icon: `data:image/svg+xml;utf8,${svg}`,
-                        });
-
-                        setLoaded(true);
-                    } catch (err) {
-                        // loading failed --- fallback will show iframe
-                        setLoaded(false);
-                    }
-                };
-                document.head.appendChild(script);
-                return () => {
-                    // remove script? keep it
-                };
-            } else if (apiKey && (window as any).google && mapRef.current) {
-                // already loaded
-                const google = (window as any).google;
-                const center = { lat: 22.3569, lng: 91.7832 };
-                const map = new google.maps.Map(mapRef.current, {
-                    center,
-                    zoom: 13,
-                    styles: themeStyles,
-                    disableDefaultUI: true,
-                });
-                const svg = encodeURIComponent(`
-                    <svg xmlns='http://www.w3.org/2000/svg' width='28' height='40' viewBox='0 0 24 24' fill='none' stroke='none'>
-                      <path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z' fill='%23D2691E'/>
-                      <circle cx='12' cy='9' r='2.5' fill='%23fff'/>
-                    </svg>
-                `);
-                new google.maps.Marker({ position: center, map, icon: `data:image/svg+xml;utf8,${svg}` });
-                setLoaded(true);
-            }
-        }, []);
-
-        // If Google couldn't load or no API key, fallback to black/white Stamen Toner tiles
-        const apiKey = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY;
-        if (!apiKey) {
-            return (
-                <div className="relative w-full h-64 rounded-md overflow-hidden">
-                    <iframe
-                        title="company-map"
-                        className="w-full h-full border-0"
-                        src="https://stamen-tiles.a.ssl.fastly.net/toner-lite/10/501/320.png"
-                    // Note: a single-tile URL above is just a placeholder; use a proper map embed for full coverage.
-                    />
-                    {/* chocolate marker overlay centered */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full">
-                        <div style={{ width: 28, height: 40 }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="40">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#D2691E" />
-                                <circle cx="12" cy="9" r="2.5" fill="#fff" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        return <div ref={mapRef} className="w-full h-64 rounded-md" />;
-    };
 
     return (
         <>
-            {/* Hero / Banner */}
-            <section className="py-20 bg-white">
+            {/* Hero Section */}
+            <section className="py-16 bg-gradient-to-br from-stone-50 via-amber-50 to-stone-100">
                 <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-5xl md:text-7xl font-serif text-[#111827] leading-tight">Contact Us</h1>
-                    <div className="mt-6 flex justify-center">
-                        <div className="inline-flex items-center gap-3 bg-white border border-gray-100 shadow-sm rounded-full px-6 py-2">
-                            <a href="/" className="text-sm text-[#D2691E] font-medium">Home</a>
-                            <span className="text-sm text-gray-400">/</span>
-                            <span className="text-sm text-gray-700">Contact</span>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+                            Get in Touch
+                        </h1>
+                        <p className="text-lg text-chocolate max-w-2xl mx-auto mb-6">
+                            Have questions or need assistance? We're here to help you with your car rental journey.
+                        </p>
+                        <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-stone-200 rounded-full px-6 py-2 shadow-sm">
+                            <a href="/" className="text-sm text-chocolate hover:text-chocolate-dark font-medium transition">Home</a>
+                            <span className="text-sm text-stone-400">/</span>
+                            <span className="text-sm text-stone-700 font-medium">Contact</span>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* Main contact card */}
-            <section data-theme="dark" className="py-12 bg-gradient-to-br from-[#fff] via-[#0f0f0f] to-[#fff]">
+            {/* Main Content */}
+            <section className="py-12 bg-stone-50">
                 <div className="container mx-auto px-4">
-                    <motion.div
-                        className="mx-auto bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl border border-white/6"
-                        initial="hidden"
-                        whileInView="visible"
-                        variants={appear}
-                        viewport={{ once: true, amount: 0.2 }}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Contact Information */}
+                        <motion.div
+                            className="lg:col-span-1"
+                            initial="hidden"
+                            whileInView="visible"
+                            variants={appear}
+                            viewport={{ once: true }}
+                        >
+                            <div className="bg-white rounded-xl shadow-lg p-6 border border-stone-200 h-full">
+                                <div className="flex items-center mb-6">
+                                    <div className="bg-chocolate p-2.5 rounded-lg mr-3">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                        </svg>
+                                    </div>
+                                    <h2 className="text-xl font-bold text-gray-800">Contact Information</h2>
+                                </div>
 
-                            {/* Decorative left column */}
-                            <div className="relative p-8 md:p-10 bg-black/70 text-white">
-                                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-br from-[#D2691E] to-transparent transform skew-x-[-12deg] -translate-x-6 hidden md:block" />
-                                <div className="relative z-10">
-                                    <h2 className="text-3xl md:text-4xl font-extrabold">Let's talk</h2>
-                                    <p className="mt-3 text-white/80">Whether you have a question about pricing, need a demo, or anything else, our team is ready to answer all your questions.</p>
-
-                                    <div className="mt-8 space-y-4">
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[#D2691E] flex items-center justify-center">📞</div>
-                                            <div>
-                                                <div className="text-sm text-white/70">Phone</div>
-                                                <div className="font-semibold">+88 01834491602</div>
+                                <div className="space-y-6">
+                                    <div>
+                                        <h3 className="font-semibold text-gray-700 mb-3">Get in Touch</h3>
+                                        <div className="space-y-4">
+                                            <div className="flex items-start gap-3">
+                                                <div className="flex-shrink-0">
+                                                    <div className="w-8 h-8 rounded-full bg-chocolate/10 flex items-center justify-center">
+                                                        <svg className="w-4 h-4 text-chocolate" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-sm text-gray-600">Phone</div>
+                                                    <div className="font-medium text-gray-800">+1 (555) 123-4567</div>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[#D2691E] flex items-center justify-center">✉️</div>
-                                            <div>
-                                                <div className="text-sm text-white/70">Email</div>
-                                                <div className="font-semibold">debos.das.02@gmail.com</div>
+                                            <div className="flex items-start gap-3">
+                                                <div className="flex-shrink-0">
+                                                    <div className="w-8 h-8 rounded-full bg-chocolate/10 flex items-center justify-center">
+                                                        <svg className="w-4 h-4 text-chocolate" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fillRule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clipRule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-sm text-gray-600">Email</div>
+                                                    <div className="font-medium text-gray-800">contact@rentalhub.com</div>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-[#D2691E] flex items-center justify-center">📍</div>
-                                            <div>
-                                                <div className="text-sm text-white/70">Address</div>
-                                                <div className="font-semibold">1234 Example St, City</div>
+                                            <div className="flex items-start gap-3">
+                                                <div className="flex-shrink-0">
+                                                    <div className="w-8 h-8 rounded-full bg-chocolate/10 flex items-center justify-center">
+                                                        <svg className="w-4 h-4 text-chocolate" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-sm text-gray-600">Address</div>
+                                                    <div className="font-medium text-gray-800">123 Example St, New York, NY 10001</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="mt-8">
-                                        <span className="inline-block bg-[#D2691E] text-white px-3 py-1 rounded-full text-sm font-semibold">Open: 9am — 6pm</span>
+                                    <div className="pt-4 border-t border-stone-200">
+                                        <h3 className="font-semibold text-gray-700 mb-3">Business Hours</h3>
+                                        <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Monday - Friday</span>
+                                                <span className="font-medium">9:00 AM - 7:00 PM</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Saturday</span>
+                                                <span className="font-medium">10:00 AM - 5:00 PM</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Sunday</span>
+                                                <span className="font-medium text-chocolate">Closed</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </motion.div>
 
-                            {/* Form right column */}
-                            <div className="p-6 md:p-10 bg-white">
-                                <h3 className="text-2xl font-bold text-[#111827]">Send a message</h3>
-                                <p className="text-sm text-gray-600 mt-2 mb-6">Fill out the form and we'll get back to you shortly.</p>
+                        {/* Contact Form */}
+                        <motion.div
+                            className="lg:col-span-2"
+                            initial="hidden"
+                            whileInView="visible"
+                            variants={appear}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-stone-200 h-full">
+                                <div className="flex items-center mb-6">
+                                    <div className="bg-chocolate p-2.5 rounded-lg mr-3">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold text-gray-800">Send us a Message</h2>
+                                        <p className="text-sm text-gray-600 mt-1">Fill out the form below and we'll get back to you soon</p>
+                                    </div>
+                                </div>
 
-                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <div className="relative">
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Full Name *
+                                            </label>
                                             <input
                                                 {...register("name", { required: "Name is required" })}
-                                                placeholder=" "
-                                                className="peer w-full rounded-md border border-gray-200 bg-transparent px-3 py-2 text-sm focus:outline-none"
+                                                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:border-chocolate focus:ring-2 focus:ring-chocolate/20 outline-none transition"
+                                                placeholder="John Doe"
                                             />
-                                            <label className="absolute left-3 top-1 text-xs text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs transition-all">Full name</label>
-                                            {errors.name && <div className="text-sm text-[#D2691E] mt-1">{errors.name.message}</div>}
+                                            {errors.name && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                                            )}
                                         </div>
 
-                                        <div className="relative">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Email Address *
+                                            </label>
                                             <input
-                                                {...register("email", { required: "Email is required" })}
-                                                placeholder=" "
-                                                className="peer w-full rounded-md border border-gray-200 bg-transparent px-3 py-2 text-sm focus:outline-none"
+                                                type="email"
+                                                {...register("email", {
+                                                    required: "Email is required",
+                                                    pattern: {
+                                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                        message: "Invalid email address"
+                                                    }
+                                                })}
+                                                className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:border-chocolate focus:ring-2 focus:ring-chocolate/20 outline-none transition"
+                                                placeholder="john@example.com"
                                             />
-                                            <label className="absolute left-3 top-1 text-xs text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs transition-all">Email address</label>
-                                            {errors.email && <div className="text-sm text-[#D2691E] mt-1">{errors.email.message}</div>}
+                                            {errors.email && (
+                                                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <div className="relative">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Your Message *
+                                        </label>
                                         <textarea
-                                            {...register("message", { required: "Message is required" })}
-                                            placeholder=" "
+                                            {...register("message", {
+                                                required: "Message is required",
+                                                minLength: {
+                                                    value: 10,
+                                                    message: "Message must be at least 10 characters"
+                                                }
+                                            })}
                                             rows={5}
-                                            className="peer w-full rounded-md border border-gray-200 bg-transparent px-3 py-2 text-sm focus:outline-none"
+                                            className="w-full px-4 py-2.5 rounded-lg border border-stone-300 focus:border-chocolate focus:ring-2 focus:ring-chocolate/20 outline-none transition resize-none"
+                                            placeholder="Tell us how we can help you..."
                                         />
-                                        <label className="absolute left-3 top-1 text-xs text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs transition-all">Your message</label>
-                                        {errors.message && <div className="text-sm text-[#D2691E] mt-1">{errors.message.message}</div>}
+                                        {errors.message && (
+                                            <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+                                        )}
                                     </div>
 
                                     <div className="pt-2">
-                                        <button type="submit" className="w-full rounded-md bg-[#D2691E] hover:bg-[#46220f] text-white py-3 font-semibold transition">Send Message</button>
+                                        <button
+                                            type="submit"
+                                            className="w-full bg-chocolate hover:bg-chocolate-dark text-white font-semibold py-3 rounded-lg shadow hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
+                                        >
+                                            Send Message
+                                        </button>
                                     </div>
                                 </form>
                             </div>
+                        </motion.div>
+                    </div>
 
-                        </div>
-                    </motion.div>
+                    {/* Map Section */}
+                    <motion.div
+                        className="mt-8"
+                        initial="hidden"
+                        whileInView="visible"
+                        variants={appear}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <div className="bg-white rounded-xl shadow-lg p-6 border border-stone-200">
+                            <div className="flex items-center mb-6">
+                                <div className="bg-chocolate p-2.5 rounded-lg mr-3">
+                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold text-gray-800">Find Us</h2>
+                                    <p className="text-sm text-gray-600 mt-1">Visit our office location</p>
+                                </div>
+                            </div>
 
-                    {/* Map / Location section */}
-                    <div className="mt-10">
-
-                        <div className="bg-white rounded-xl shadow-md p-6">
-                            <h4 className="text-lg font-semibold mb-3">Our Location</h4>
-                            <p className="text-sm text-gray-600 mb-4">1234 Example St, City, Country — come visit us during business hours.</p>
-                            <div className="w-full h-64 bg-gray-100 rounded-md overflow-hidden">
-                                {/* Styled map: uses Google Maps JS API when `VITE_GOOGLE_MAPS_API_KEY` is set, otherwise falls back */}
-                                <StyledMap />
+                            <div className="h-80 rounded-lg overflow-hidden border border-stone-200">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.614586876632!2d-73.98785423465336!3d40.74844997932787!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1635942464218!5m2!1sen!2sus"
+                                    width="100%"
+                                    height="100%"
+                                    frameBorder="0"
+                                    loading="lazy"
+                                    allowFullScreen
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                ></iframe>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
+
+
+
+            {/* Add chocolate theme CSS */}
+            <style>{`
+                :root {
+                    --chocolate: #7B3F00;
+                    --chocolate-dark: #5C2E00;
+                    --chocolate-light: #A0522D;
+                }
+                .bg-chocolate { background-color: #7B3F00 !important; }
+                .bg-chocolate-dark { background-color: #5C2E00 !important; }
+                .bg-chocolate-light { background-color: #A0522D !important; }
+                .text-chocolate { color: #7B3F00 !important; }
+                .text-chocolate-dark { color: #5C2E00 !important; }
+                .text-chocolate-light { color: #A0522D !important; }
+                .border-chocolate { border-color: #7B3F00 !important; }
+            `}</style>
         </>
     );
 };
 
-export default Contact;
+export default Contact; 

@@ -31,7 +31,7 @@ export default function OverviewTab({
                     <Button
                         key={tab.value}
                         type="default" // Use a valid type like 'default'
-                        className={`text-md ${activeTab === tab.value ? "bg-[#4335A7] text-[#FFF6E9] border border-[#4335A7]" : ""
+                        className={`text-xl text-bold ${activeTab === tab.value ? "bg-[#4335A7] text-[#FFF6E9] border border-[#4335A7]" : ""
                             }`} // Add custom classes
                         onClick={() => setActiveTab(tab.value)}
                     >

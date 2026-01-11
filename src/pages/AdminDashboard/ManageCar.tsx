@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion"; // Import framer-motion
+import { motion } from "framer-motion";
+import { CarOutlined } from "@ant-design/icons";
 import UpdatesCar from "./UpdatesCar";
 import AddsCar from "./AddsCar";
 import ManageTabs from "./ManageTab";
@@ -8,31 +9,26 @@ const ManageCar = () => {
     const [activeTab, setActiveTab] = useState("add");
 
     return (
-        <div>
-            {/* Use motion.h1 instead of h1 for animations */}
-            <motion.h1
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="mx-4 rounded-xl bg-[#4335A7] bg-opacity-70 text-[#FFF6E9] text-center py-5 px-4 text-xl font-semibold uppercase  m-0"
-            >
-                Manage Car
-            </motion.h1>
-            <ManageTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="mt-4 container mx-auto px-4">
-                {/* Animated Tab Content with framer-motion */}
-                <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }} // Transition duration
-
-                >
-                    {activeTab === "add" && <AddsCar />}
-                    {activeTab === "update-and-delete" && <UpdatesCar />}
-                </motion.div>
+        <div className="rounded-md shadow-md">
+            <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center justify-center gap-4 p-6">
+                    <CarOutlined className="text-lg text-[#4335A7]" />
+                    <h1 className="text-xl font-bold text-gray-800 m-0">
+                        Manage Cars
+                    </h1>
+                </div>
+                <ManageTabs activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
+
+            <motion.div
+                key={activeTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15 }}
+            >
+                {activeTab === "add" && <AddsCar />}
+                {activeTab === "update-and-delete" && <UpdatesCar />}
+            </motion.div>
         </div>
     );
 };

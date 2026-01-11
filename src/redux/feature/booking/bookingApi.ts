@@ -8,6 +8,8 @@ const bookingApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
+            // Invalidate notifications so the UI refetches new notifications immediately
+            invalidatesTags: ["Car", "Booking", "Notification"],
         }), // Create a new booking record
 
         getBookings: build.query({
@@ -31,6 +33,7 @@ const bookingApi = baseApi.injectEndpoints({
                 url: `/api/bookings/${id}`,
                 method: "DELETE",
             }),
+            invalidatesTags: ["Booking", "Notification"], // Invalidate notifications on booking deletion
         }),
     }),
 });

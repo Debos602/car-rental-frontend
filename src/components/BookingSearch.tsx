@@ -116,7 +116,7 @@ const BookingSearch: React.FC<BookingSearchProps> = ({ onSearch }) => {
 
                             <Button
                                 size="large"
-                                className="bg-[#D2691E] mt-2 md:mt-0 rounded-xl border-2 border-[#D2691E] hover:bg-white hover:text-[#D2691E] text-white px-8 py-4 shadow-lg"
+                                className="brand-btn inverse-hover mt-2 md:mt-0 rounded-xl px-8 py-4 shadow-lg"
                                 onClick={handleSearch}
                             >
                                 Search

@@ -25,7 +25,6 @@ const Booking = () => {
             <BookingList />
             <BookingForm />
             <BookingCarList searchParams={searchParams} />
-
         </div>
     );
 };

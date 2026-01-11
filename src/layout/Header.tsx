@@ -279,7 +279,7 @@ const Header = () => {
 
                         {user?.role === "admin" || user?.role === "user" ? (
                             <Dropdown trigger={["click"]} menu={{ items: userMenuItems }} overlayClassName="global-dropdown">
-                                <button className="cursor-pointer focus:outline-none" onClick={(e) => e.preventDefault()}>
+                                <button className="border-4 rounded-full cursor-pointer focus:outline-none" onClick={(e) => e.preventDefault()}>
                                     <UserOutlined className={`p-3 text-2xl text-current hover:scale-105 transition-transform duration-300 ${scrolled ? "bg-white text-amber-600 ring-white" : "bg-white text-amber-600 ring-white"}`} />
                                 </button>
                             </Dropdown>

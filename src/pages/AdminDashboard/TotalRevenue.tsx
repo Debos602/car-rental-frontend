@@ -10,78 +10,51 @@ const TotalRevenue = () => {
         refetchOnFocus: true,
     });
 
-    // Calculate total revenue
     const totalRevenue = orders?.data?.reduce(
         (sum: number, order: TOrder) =>
             sum + (order.paymentStatus === "paid" ? order.totalCost : 0),
         0
     );
 
-    const containerVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8, ease: "easeOut" },
-        },
-    };
-
-    const iconVariants = {
-        hidden: { scale: 0 },
-        visible: {
-            scale: 1,
-            transition: { duration: 0.5, delay: 0.3, ease: "backOut" },
-        },
-    };
-
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center min-h-[300px]">
-                <Spin size="large" />
-            </div>
+            <Card bordered className="p-4">
+                <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                    <div className="space-y-1 flex-1">
+                        <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+                        <div className="h-6 w-24 bg-gray-300 rounded animate-pulse" />
+                    </div>
+                </div>
+            </Card>
         );
     }
 
     return (
-        <motion.div
-            className="flex justify-center py-10 px-4"
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            <Card
-                bordered={false}
-                className="shadow-lg rounded-lg w-full max-w-md bg-gradient-to-br from-green-100 to-white"
-            >
-                <motion.div
-                    className="text-center mb-6"
-                    variants={iconVariants}
-                >
-                    <DollarCircleOutlined className="text-[#FF7F3E] text-6xl mb-4" />
-                    <h2 className="text-2xl font-semibold text-[#4335A7]">
-                        Total Revenue
-                    </h2>
-                </motion.div>
-                <div className="text-center">
-                    <motion.p
-                        className="text-4xl font-bold text-[#FF7F3E] mb-2"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-                    >
-                        ${totalRevenue?.toFixed(2) ?? "0.00"}
-                    </motion.p>
-                    <motion.p
-                        className="text-[#6A4BAA] text-lg"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.7 }}
-                    >
-                        Total from {orders?.data?.length ?? 0} orders
-                    </motion.p>
+        <Card bordered className="p-4 hover:shadow transition-shadow">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center">
+                        <DollarCircleOutlined className="text-green-600 text-lg" />
+                    </div>
+                    <div>
+                        <div className="text-sm text-gray-500">Total Revenue</div>
+                        <div className="text-2xl font-bold text-gray-800">
+                            ${totalRevenue?.toFixed(2) || "0.00"}
+                        </div>
+                    </div>
                 </div>
-            </Card>
-        </motion.div>
+
+                <div className="text-right">
+                    <div className="text-sm font-medium text-gray-600">
+                        {orders?.data?.length || 0} orders
+                    </div>
+                    <div className="text-xs text-green-600">
+                        All paid
+                    </div>
+                </div>
+            </div>
+        </Card>
     );
 };
 

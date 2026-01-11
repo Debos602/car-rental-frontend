@@ -17,7 +17,7 @@ const CustomSection = ({ image, title, paragraph, style }: CustomSectionProps) =
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
         >
-            <div className="absolute inset-0 w-full h-full bg-[#4335A7] opacity-20 -z-10"></div>
+            <div className="absolute inset-0 w-full h-full bg-[#7c2d12] opacity-20 -z-10"></div>
             <div className="container mx-auto px-4 text-center text-[#FFF6E9]">
                 <motion.h1
                     className="text-4xl font-bold mb-4"

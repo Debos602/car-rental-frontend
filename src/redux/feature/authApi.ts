@@ -45,6 +45,8 @@ const authApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body: data,
             }),
+            // Ensure user data is refreshed after a successful update
+            invalidatesTags: ["User"],
         }),
         updateUserRole: builder.mutation({
             query: (user) => ({
