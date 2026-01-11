@@ -10,7 +10,8 @@ import { RootState } from "../store";
 import { logout, setUser } from "../feature/authSlice";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_URL,
+    // Use a relative URL in development so Vite's proxy can forward requests and avoid CORS
+    baseUrl: import.meta.env.DEV ? "" : import.meta.env.VITE_BASE_URL,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token;
@@ -37,13 +38,14 @@ const baseQueryWithRefreshToken: BaseQueryFn<
         if (result.error.status === 500) {
             console.log("Sending refresh token");
 
-            const res = await fetch(
-                // "http://localhost:5000/api/auth/refresh-token",
-                `${import.meta.env.VITE_BASE_URL}/api/auth/refresh-token`,
-                {
-                    method: "POST",
-                    credentials: "include",
-                }
+            const refreshUrl = import.meta.env.DEV
+                ? "/api/auth/refresh-token"
+                : `${import.meta.env.VITE_BASE_URL}/api/auth/refresh-token`;
+
+            const res = await fetch(refreshUrl, {
+                method: "POST",
+                credentials: "include",
+            }
             );
 
             const data = await res.json();
