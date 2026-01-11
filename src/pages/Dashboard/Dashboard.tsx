@@ -5,7 +5,6 @@ import {
     LogoutOutlined,
     UserOutlined,
     CarOutlined,
-    HistoryOutlined,
     CreditCardOutlined,
     HomeOutlined,
     RightOutlined,
@@ -19,6 +18,7 @@ import {
     Dropdown,
     Layout,
     Menu,
+    Spin,
     Tag
 } from "antd";
 import { Link, useNavigate, Outlet } from "react-router-dom";
@@ -163,7 +163,9 @@ const Dashboard: React.FC = () => {
     ];
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="flex items-center justify-center h-screen">
+            <Spin size="large" />
+        </div>;
     }
 
 
