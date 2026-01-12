@@ -35,6 +35,9 @@ import { Link } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import { useCreateBookingMutation } from "@/redux/feature/booking/bookingApi";
 import { motion } from "framer-motion";
+import { useSocket } from "@/hook/useSocket";
+import { useAppSelector } from "@/redux/hook";
+import { selectCurrentUser } from "@/redux/feature/authSlice";
 
 const { RangePicker } = DatePicker;
 
@@ -98,6 +101,11 @@ const DashboardCarList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedDates, setSelectedDates] = useState<[Dayjs | null, Dayjs | null]>([null, null]);
     const [optimisticBookedIds, setOptimisticBookedIds] = useState<string[]>([]);
+
+    // Socket: auto-join user's room and allow emitting booking events
+    const currentUser = useAppSelector(selectCurrentUser);
+    const userId = currentUser?.userId;
+    const { sendMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
 
     // Initialize query params
     useEffect(() => {
@@ -231,10 +239,19 @@ const DashboardCarList = () => {
             // Add optimistic update immediately
             setOptimisticBookedIds(prev => [...prev, selectedCar._id]);
 
+
             // Create booking
-            await createBooking(bookingData).unwrap();
+            const result = await createBooking(bookingData).unwrap();
 
             message.success(`Booking created for ${selectedCar.name}`);
+
+            // Emit a booking-created event (server may use this or ignore)
+            try {
+                sendMessage('booking-created', { booking: result });
+                // console.log('Emitted booking-created event via socket', result);
+            } catch (e) {
+                // ignore emit errors
+            }
 
             // Force refetch after successful booking
             refetch();
