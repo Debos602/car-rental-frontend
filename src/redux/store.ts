@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./feature/authSlice";
 import bookingReducer from "./feature/booking/bookingSlice";
 import carReducer from "./feature/car/carSlice"; // Import only the reducer, not CarState here
+import notificationReducer from "./feature/notification/notificationSlice";
 import { baseApi } from "./api/baseApi";
 import {
     persistReducer,
@@ -26,6 +27,7 @@ export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
         auth: persistedAuthReducer,
+        notifications: notificationReducer,
         booking: bookingReducer,
         car: carReducer, // Use the carReducer here
     },

@@ -18,8 +18,7 @@ import {
     Modal,
     message,
     Pagination,
-    Spin,
-    notification as AntNotification
+    Spin
 } from "antd";
 import {
     SearchOutlined,
@@ -39,6 +38,7 @@ import { motion } from "framer-motion";
 import { useSocket } from "@/hook/useSocket";
 import { useAppSelector } from "@/redux/hook";
 import { selectCurrentUser } from "@/redux/feature/authSlice";
+import BookingModal from "@/components/BookingModal";
 
 const { RangePicker } = DatePicker;
 
@@ -106,26 +106,7 @@ const DashboardCarList = () => {
     // Socket: auto-join user's room and allow emitting booking events
     const currentUser = useAppSelector(selectCurrentUser);
     const userId = currentUser?.userId;
-    const { sendMessage, onMessage, connected } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
-
-    useEffect(() => {
-        const handleNewNotification = (data: any) => {
-            AntNotification.success({
-                message: data.title || 'New Notification',
-                description: data.message || 'You have a new update.',
-                placement: 'topRight',
-                duration: 5,  // Auto-close after 5 seconds
-            });
-        };
-
-        onMessage('new-notification', handleNewNotification);
-
-        return () => {
-            if (socket) {
-                socket.off('new-notification', handleNewNotification);
-            }
-        };
-    }, [onMessage]);
+    const { sendMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
 
     // Initialize query params
     useEffect(() => {
@@ -485,7 +466,7 @@ const DashboardCarList = () => {
                 initial="hidden"
                 animate="visible"
             >
-                {cars?.data?.map((car: TCar, index: number) => {
+                {cars?.data?.map((car: TCar) => {
                     const days = selectedDates[0] && selectedDates[1]
                         ? selectedDates[1].diff(selectedDates[0], 'day')
                         : 1;
@@ -793,199 +774,19 @@ const DashboardCarList = () => {
                 </Modal>
             )}
 
-            {/* Booking Modal */}
-            {isBookingModalOpen && (
-                <Modal
-                    title={
-                        <div
-                            className="flex items-center"
-                        >
-                            <CarOutlined className="mr-2 text-[#4234a3]" />
-                            <span className="text-lg font-semibold">Book {selectedCar?.name}</span>
-                        </div>
-                    }
+            {/* Booking Modal (extracted) */}
+            {selectedCar && (
+                <BookingModal
+                    selectedCar={selectedCar}
                     open={isBookingModalOpen}
-                    onCancel={() => {
-                        setIsBookingModalOpen(false);
-                        bookingForm.resetFields();
-                    }}
-                    footer={null}
-                    width={500}
-                    centered
-                    styles={{
-                        body: { padding: '24px' },
-                        header: { borderBottom: '1px solid rgba(66, 52, 163, 0.1)', padding: '16px 24px' }
-                    }}
-                >
-                    {selectedCar && (
-                        <motion.div
-                            className="pt-4"
-                            variants={modalVariants}
-                            initial="hidden"
-                            animate="visible"
-                        >
-                            {/* Car Summary */}
-                            <div
-                                className="flex items-center gap-4 mb-6 p-3 rounded-lg"
-                                style={{
-                                    background: 'rgba(66, 52, 163, 0.05)',
-                                    border: '1px solid rgba(66, 52, 163, 0.1)'
-                                }}
-                            >
-                                <img
-                                    src={selectedCar.image}
-                                    alt={selectedCar.name}
-                                    className="w-16 h-16 object-cover rounded-lg"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-gray-900">{selectedCar.name}</h4>
-                                    <p className="text-[#4234a3] font-bold">
-                                        ${selectedCar.pricePerHour}<span className="text-sm font-normal text-gray-600 ml-1">/hour</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Booking Form */}
-                            <Form
-                                form={bookingForm}
-                                layout="vertical"
-                                onFinish={handleBookingSubmit}
-                            >
-                                <div>
-                                    <div>
-                                        <Row gutter={16}>
-                                            <Col span={12}>
-                                                <Form.Item
-                                                    label="Pickup Date"
-                                                    name="pickupDate"
-                                                    rules={[{ required: true, message: 'Please select pickup date' }]}
-                                                >
-                                                    <DatePicker className="w-full rounded-lg" />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={12}>
-                                                <Form.Item
-                                                    label="Return Date"
-                                                    name="returnDate"
-                                                    rules={[{ required: true, message: 'Please select return date' }]}
-                                                >
-                                                    <DatePicker className="w-full rounded-lg" />
-                                                </Form.Item>
-                                            </Col>
-                                        </Row>
-                                    </div>
-
-                                    <div>
-                                        <Row gutter={16}>
-                                            <Col span={12}>
-                                                <Form.Item
-                                                    label="Pickup Time"
-                                                    name="pickupTime"
-                                                    rules={[{ required: true, message: 'Please select pickup time' }]}
-                                                >
-                                                    <TimePicker className="w-full rounded-lg" format="HH:mm" minuteStep={15} />
-                                                </Form.Item>
-                                            </Col>
-                                            <Col span={12}>
-                                                <Form.Item
-                                                    label="Return Time"
-                                                    name="returnTime"
-                                                    rules={[{ required: true, message: 'Please select return time' }]}
-                                                >
-                                                    <TimePicker className="w-full rounded-lg" format="HH:mm" minuteStep={15} />
-                                                </Form.Item>
-                                            </Col>
-                                        </Row>
-                                    </div>
-
-                                    <div>
-                                        <Form.Item
-                                            label="Pickup Location"
-                                            name="pickupLocation"
-                                            rules={[{ required: true, message: 'Please enter pickup location' }]}
-                                        >
-                                            <Input placeholder="Enter pickup location" className="rounded-lg" />
-                                        </Form.Item>
-                                    </div>
-
-                                    <div>
-                                        <Form.Item
-                                            label="Return Location"
-                                            name="returnLocation"
-                                            rules={[{ required: true, message: 'Please enter return location' }]}
-                                        >
-                                            <Input placeholder="Enter return location" className="rounded-lg" />
-                                        </Form.Item>
-                                    </div>
-
-                                    <div>
-                                        {/* Price Summary */}
-                                        <div
-                                            className="mt-6 p-4 rounded-lg border"
-                                            style={{
-                                                background: 'rgba(66, 52, 163, 0.05)',
-                                                borderColor: 'rgba(66, 52, 163, 0.2)'
-                                            }}
-                                        >
-                                            <div className="flex justify-between mb-2">
-                                                <span className="text-gray-700">Price per day:</span>
-                                                <span className="font-semibold text-[#4234a3]">
-                                                    ${(selectedCar.pricePerHour * 24).toFixed(2)}
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between text-sm text-gray-600 mb-2">
-                                                <span>(${selectedCar.pricePerHour} × 24 hours)</span>
-                                            </div>
-                                            <div className="border-t pt-2 mt-2" style={{ borderColor: 'rgba(66, 52, 163, 0.2)' }}>
-                                                <div className="flex justify-between font-bold text-lg">
-                                                    <span className="text-gray-900">Estimated Total:</span>
-                                                    <span className="text-[#4234a3]">
-                                                        ${bookingForm.getFieldValue('pickupDate') && bookingForm.getFieldValue('returnDate')
-                                                            ? calculateTotalPrice(
-                                                                selectedCar.pricePerHour,
-                                                                bookingForm.getFieldValue('returnDate').diff(
-                                                                    bookingForm.getFieldValue('pickupDate'),
-                                                                    'day'
-                                                                )
-                                                            ).toFixed(2)
-                                                            : '0.00'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div className="mt-6 flex justify-end gap-3">
-                                            <div>
-                                                <Button onClick={() => setIsBookingModalOpen(false)} className="rounded-lg">
-                                                    Cancel
-                                                </Button>
-                                            </div>
-                                            <div>
-                                                <Button
-                                                    type="primary"
-                                                    htmlType="submit"
-                                                    loading={isBookingLoading}
-                                                    className="rounded-lg shadow-lg"
-                                                    style={{
-                                                        background: 'linear-gradient(135deg, #4234a3, #5a4ac9)',
-                                                        border: 'none'
-                                                    }}
-                                                >
-                                                    Confirm Booking
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Form>
-                        </motion.div>
-                    )}
-                </Modal>
+                    bookingForm={bookingForm}
+                    onCancel={() => { setIsBookingModalOpen(false); bookingForm.resetFields(); }}
+                    onSubmit={handleBookingSubmit}
+                    isLoading={isBookingLoading}
+                />
             )}
         </div>
     );
 };
 
-export default DashboardCarList;
+export default DashboardCarList;   

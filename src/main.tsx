@@ -7,6 +7,7 @@ import { persistor, store } from "./redux/store.ts";
 import { Toaster } from "sonner";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes/routes.tsx";
+import NotificationProvider from "@/components/NotificationProvider";
 import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             {" "}
             <PersistGate loading={null} persistor={persistor}>
-                <RouterProvider router={router} />
+                <NotificationProvider>
+                    <RouterProvider router={router} />
+                </NotificationProvider>
             </PersistGate>
             <Toaster />
         </Provider>
