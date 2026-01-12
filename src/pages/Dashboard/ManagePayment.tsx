@@ -49,7 +49,7 @@ const ManagePayment = () => {
         refetchOnFocus: true,
     });
 
-    console.log("Bookings Data from payment:", bookings);
+    // console.log("Bookings Data from payment:", bookings);
 
     const handleCreateOrder = async () => {
         // Get all bookings
@@ -89,7 +89,7 @@ const ManagePayment = () => {
                 window.open(response.data.payment_url, "_self");
             }
         } catch (error: any) {
-            console.error("Error creating order:", error);
+            // console.error("Error creating order:", error);
             toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
         }
     };
@@ -123,7 +123,7 @@ const ManagePayment = () => {
                 window.open(response.data.payment_url, "_self");
             }
         } catch (error: any) {
-            console.error("Error creating order:", error);
+            // console.error("Error creating order:", error);
             toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
         }
     };

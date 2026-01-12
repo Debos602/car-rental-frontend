@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-    console.log("Current User:", user);
+    // console.log("Current User:", user);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
 
 
 
-    console.log("Notifications:", notifications);
+    // console.log("Notifications:", notifications);
 
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();

@@ -46,7 +46,7 @@ const BookingForm = () => {
             deleteBooking(booking?.data[0]?._id);
             window.open(response?.data?.payment_url, "_self");
         } catch (error) {
-            console.error("Error creating order:", error);
+            // console.error("Error creating order:", error);
             toast.error("Need to admin approval");
         }
     };

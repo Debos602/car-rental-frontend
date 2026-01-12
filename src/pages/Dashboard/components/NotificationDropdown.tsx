@@ -72,7 +72,7 @@ const NotificationDropdown: React.FC = () => {
     const [deleteNotification] = useDeleteNotificationMutation();
     const [markAsUnread] = useMarkAsUnreadMutation();
 
-    console.log('Notifications Response:', notificationsResponse);
+    // console.log('Notifications Response:', notificationsResponse);
 
     // Directly use the API response - it already matches NotificationItem interface
     const notifications: NotificationItem[] = (notificationsResponse?.data?.result || []).map((item: any) => ({
@@ -81,7 +81,7 @@ const NotificationDropdown: React.FC = () => {
         updatedAt: item.updatedAt ? String(item.updatedAt) : undefined
     }));
 
-    console.log('Notifications Data:', notifications);
+    // console.log('Notifications Data:', notifications);
 
     // Play sound when a new notification arrives
     const prevCountRef = useRef<number>(0);
@@ -656,7 +656,7 @@ const NotificationDropdown: React.FC = () => {
             open={drawerVisible}
             width="100%"
             style={{ maxWidth: 400 }}
-            bodyStyle={{ padding: 0 }}
+            styles={{ body: { padding: 0 } }}
         >
             <div className="h-full flex flex-col">
                 {/* Header with stats and actions */}

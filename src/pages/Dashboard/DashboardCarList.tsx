@@ -245,7 +245,7 @@ const DashboardCarList = () => {
             // Remove optimistic update on error
             setOptimisticBookedIds(prev => prev.filter(id => id !== selectedCar._id));
 
-            console.error('Create booking failed', err);
+            // console.error('Create booking failed', err);
             message.error('Failed to create booking. Please try again.');
         }
     };

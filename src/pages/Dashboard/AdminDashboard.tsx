@@ -86,7 +86,7 @@ const AdminDashboard: React.FC = () => {
 
     const notifications: NotificationItem[] = notificationsData?.data ?? [];
     const unreadCount = notifications.filter((n) => !n.read).length;
-    console.log("Notifications Data:", notifications.length);
+    // console.log("Notifications Data:", notifications.length);
     // Format time label
     const getTimeLabel = (createdAt?: string): string => {
         if (!createdAt) return 'Some time ago';

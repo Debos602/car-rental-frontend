@@ -17,7 +17,7 @@ const Contact = () => {
     } = useForm<IFormInput>();
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
-        console.log("Form Data:", data);
+        // console.log("Form Data:", data);
         reset();
     };
 

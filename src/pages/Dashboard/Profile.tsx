@@ -53,7 +53,7 @@ const Profile = () => {
         refetchOnFocus: true,
     });
 
-    console.log("Fetched User Data:", user);
+    // console.log("Fetched User Data:", user);
 
     const [updateProfile] = useUpdateUserMutation();
 
@@ -136,7 +136,7 @@ const Profile = () => {
             if (selectedImage) formData.append('image', selectedImage);
 
             const result = await updateProfile(formData as any).unwrap();
-            console.log("result", result);
+            // console.log("result", result);
             if (result.success) {
                 toast.success("Profile updated successfully");
                 setSelectedImage(null);
@@ -146,7 +146,7 @@ const Profile = () => {
                 toast.error(result.message || "Failed to update profile");
             }
         } catch (error: any) {
-            console.error("Update profile error:", error);
+            // console.error("Update profile error:", error);
             toast.error(error?.data?.message || "Failed to update profile. Please try again.");
         }
     };

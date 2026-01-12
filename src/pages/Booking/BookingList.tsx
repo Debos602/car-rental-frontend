@@ -27,7 +27,7 @@ const BookingList = () => {
         refetchOnFocus: true,
     });
 
-    console.log("Bookings Data:", bookings);
+    // console.log("Bookings Data:", bookings);
 
     const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
     const dispatch = useAppDispatch();

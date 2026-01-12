@@ -19,7 +19,7 @@ const baseQuery = fetchBaseQuery({
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
-        console.log("Headers:", headers);
+        // console.log("Headers:", headers);
         return headers;
     },
 });
@@ -30,7 +30,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     FetchBaseQueryError
 > = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-    console.log(result);
+    // console.log(result);
     // Log errors for different statuses
     if (result?.error) {
         console.error("API Error:", result.error);
