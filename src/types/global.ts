@@ -14,6 +14,7 @@ export interface TCar {
     seats?: number;
     rating?: number;
     fuelType?: string;
+    isElectric?: boolean;
     category?: string;
     location?: string;
     availableFrom?: string;
