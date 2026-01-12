@@ -9,6 +9,7 @@ type UseSocketReturn = {
     joinRoom: (room: string) => void;
     sendMessage: (event: string, data: any) => void;
     onMessage: (event: string, callback: (data: any) => void) => void;
+    offMessage: (event: string, callback: (data: any) => void) => void;
 };
 
 /**
@@ -84,5 +85,9 @@ export const useSocket = (serverUrl: string, userId?: string): UseSocketReturn =
         socket?.on(event, callback);
     };
 
-    return { connected, joinRoom, sendMessage, onMessage };
+    const offMessage = (event: string, callback: (data: any) => void) => {
+        socket?.off(event, callback);
+    };
+
+    return { connected, joinRoom, sendMessage, onMessage, offMessage };
 };

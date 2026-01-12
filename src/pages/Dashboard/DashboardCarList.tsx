@@ -18,7 +18,8 @@ import {
     Modal,
     message,
     Pagination,
-    Spin
+    Spin,
+    notification as AntNotification
 } from "antd";
 import {
     SearchOutlined,
@@ -105,7 +106,26 @@ const DashboardCarList = () => {
     // Socket: auto-join user's room and allow emitting booking events
     const currentUser = useAppSelector(selectCurrentUser);
     const userId = currentUser?.userId;
-    const { sendMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
+    const { sendMessage, onMessage, connected } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
+
+    useEffect(() => {
+        const handleNewNotification = (data: any) => {
+            AntNotification.success({
+                message: data.title || 'New Notification',
+                description: data.message || 'You have a new update.',
+                placement: 'topRight',
+                duration: 5,  // Auto-close after 5 seconds
+            });
+        };
+
+        onMessage('new-notification', handleNewNotification);
+
+        return () => {
+            if (socket) {
+                socket.off('new-notification', handleNewNotification);
+            }
+        };
+    }, [onMessage]);
 
     // Initialize query params
     useEffect(() => {
@@ -968,4 +988,4 @@ const DashboardCarList = () => {
     );
 };
 
-export default DashboardCarList;   
+export default DashboardCarList;
