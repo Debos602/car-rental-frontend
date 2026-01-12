@@ -5,6 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import image from "../../assets/footer-bg.jpg";
+import SocketTest from "@/components/SocketTest";
 
 const Footer = () => {
     const bgImage = {
@@ -121,6 +122,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+
         </footer>
     );
 };

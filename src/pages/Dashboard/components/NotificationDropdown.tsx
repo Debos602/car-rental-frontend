@@ -27,6 +27,9 @@ import {
 
     Grid
 } from "antd";
+import { useAppSelector } from "@/redux/hook";
+import { selectCurrentUser } from "@/redux/feature/authSlice";
+import { useSocket } from "@/hook/useSocket";
 import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import {
@@ -128,6 +131,28 @@ const NotificationDropdown: React.FC = () => {
     const unreadNotifications = notifications.filter(item => !item.read);
     const unreadCount = unreadNotifications.length;
     const hasNotifications = notifications.length > 0;
+
+    // Hook up socket to receive real-time notifications for current user
+    const currentUser = useAppSelector(selectCurrentUser);
+    const userId = currentUser?.userId;
+    const { onMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
+
+    useEffect(() => {
+        onMessage("new-notification", (payload: any) => {
+            console.log("Socket received new-notification:", payload);
+            // prevent double sound from refetch effect by bumping prevCount
+            try {
+                prevCountRef.current = notifications.length + 1;
+            } catch (e) {
+                // ignore
+            }
+            playNotificationSound();
+            // show a small toast
+            messageApi.open({ type: 'info', content: payload?.message || payload?.title || 'New notification' });
+            // refresh notifications list
+            refetch();
+        });
+    }, [onMessage, notifications.length, messageApi, refetch]);
 
     // Helper function to format time label
     function getTimeLabel(createdAt?: string): string {
