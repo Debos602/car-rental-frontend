@@ -4,7 +4,7 @@ import {
 } from "@/redux/feature/booking/bookingApi";
 import { Bookings } from "@/types/global";
 import { Spin, Table, Modal, message, Tag, Tooltip, Card, Badge } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
     DeleteOutlined,
@@ -16,6 +16,9 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined
 } from "@ant-design/icons";
+import { useSocket } from "@/hook/useSocket";
+import { useSelector } from "react-redux";
+import { useAppSelector } from "@/redux/hook";
 
 // Theme colors based on your dashboard
 const themeColors = {
@@ -39,6 +42,9 @@ interface ApiError {
 }
 
 const CustomBooking = () => {
+
+    const userId = useAppSelector((state: any) => state.auth.user?.userId ?? state.auth.user?._id ?? null);
+    console.log("User ID in CustomBooking:", userId);
     const {
         data: bookings,
         isLoading,
@@ -47,7 +53,7 @@ const CustomBooking = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-
+    const { onMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
     const [deleteBooking, { isLoading: isDeleting }] =
         useDeleteBookingMutation();
     const [modalVisible, setModalVisible] = useState(false);
@@ -61,6 +67,32 @@ const CustomBooking = () => {
         setSelectedBookingCar(carName);
         setModalVisible(true);
     };
+
+
+
+
+    useEffect(() => {
+        console.log("Listening for 'booking-deleted' with userId:", userId);
+        const handleBookingDeleted = (payload: { bookingId: string; }) => {
+            console.log("Real-time booking deleted:", payload.bookingId);
+
+            // লিস্ট থেকে অপসারণ (optimistic update)
+            // যদি RTK Query cache ম্যানুয়ালি আপডেট করতে চাও
+            // dispatch(bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
+            //   draft.data = draft.data.filter(b => b._id !== payload.bookingId);
+            // }));
+
+            // অথবা সিম্পলি refetch করো (সবচেয়ে সহজ)
+            refetch();
+        };
+
+        onMessage('booking-deleted', handleBookingDeleted);
+
+        return () => {
+            // cleanup (যদি offMessage থাকে)
+            // offMessage('booking-deleted', handleBookingDeleted);
+        };
+    }, [onMessage, refetch]);
 
     const handleCancelBooking = async () => {
         if (!selectedBookingId) return;

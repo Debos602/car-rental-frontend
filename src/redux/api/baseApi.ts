@@ -18,7 +18,13 @@ const baseQuery = fetchBaseQuery({
 
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
-            console.log("Authorization header set with token:", token.substring(0, 10) + "..."); // ডিবাগ
+            try {
+                const masked = token.length > 10 ? `${token.substring(0, 6)}...${token.substring(token.length - 4)}` : "[token]";
+                console.debug("baseApi: Authorization token set (masked):", masked);
+            } catch (e) {
+                console.debug("baseApi: Authorization token set");
+            }
+
         } else {
             console.log("No token found in Redux - Authorization header not set");
         }
@@ -51,7 +57,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
                 credentials: "include",
             })(
                 {
-                    url: "/auth/refresh-token",
+                    url: "/api/auth/refresh-token",
                     method: "POST",
                 },
                 api,
