@@ -1,4 +1,4 @@
-import {
+import bookingApi, {
     useDeleteBookingMutation,
     useGetBookingsQuery,
 } from "@/redux/feature/booking/bookingApi";
@@ -17,8 +17,8 @@ import {
     CloseCircleOutlined
 } from "@ant-design/icons";
 import { useSocket } from "@/hook/useSocket";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "@/redux/hook";
+
 
 // Theme colors based on your dashboard
 const themeColors = {
@@ -49,6 +49,7 @@ const CustomBooking = () => {
         data: bookings,
         isLoading,
         refetch,
+        isUninitialized, // ← নতুন: query start হয়েছে কিনা চেক
     } = useGetBookingsQuery(undefined, {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
@@ -68,32 +69,19 @@ const CustomBooking = () => {
         setModalVisible(true);
     };
 
-
-
-
     useEffect(() => {
-        console.log("Listening for 'booking-deleted' with userId:", userId);
         const handleBookingDeleted = (payload: { bookingId: string; }) => {
             console.log("Real-time booking deleted:", payload.bookingId);
 
-            // লিস্ট থেকে অপসারণ (optimistic update)
-            // যদি RTK Query cache ম্যানুয়ালি আপডেট করতে চাও
-            // dispatch(bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
-            //   draft.data = draft.data.filter(b => b._id !== payload.bookingId);
-            // }));
-
-            // অথবা সিম্পলি refetch করো (সবচেয়ে সহজ)
-            refetch();
+            bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
+                if (draft?.data) {
+                    draft.data = draft.data.filter((b: Bookings) => b._id !== payload.bookingId);
+                }
+            });
         };
 
         onMessage('booking-deleted', handleBookingDeleted);
-
-        return () => {
-            // cleanup (যদি offMessage থাকে)
-            // offMessage('booking-deleted', handleBookingDeleted);
-        };
-    }, [onMessage, refetch]);
-
+    }, [onMessage]);
     const handleCancelBooking = async () => {
         if (!selectedBookingId) return;
 

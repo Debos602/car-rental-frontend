@@ -44,3 +44,5 @@ export const {
     useGetAllBookingsQuery,
     useUpdateBookingMutation,
 } = bookingApi;
+
+export default bookingApi;
