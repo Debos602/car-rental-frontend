@@ -70,43 +70,50 @@ const CustomBooking = () => {
     };
 
     useEffect(() => {
-        if (!currentUser) return;
+        if (!userId) {
+            console.log("No userId - skipping socket setup");
+            return;
+        }
 
-        const ownerIdPrimary = currentUser._id as string | undefined;
-        const ownerIdAlternate = currentUser.userId as string | undefined;
-
-        console.log("Setting up socket listener for user (joining rooms):", { ownerIdPrimary, ownerIdAlternate });
-
-        // Join both possible room ids (some backends use _id, some use userId)
-        if (ownerIdPrimary) joinRoom(ownerIdPrimary);
-        if (ownerIdAlternate && ownerIdAlternate !== ownerIdPrimary) joinRoom(ownerIdAlternate);
+        console.log("Setting up booking-deleted listener for userId:", userId);
 
         const handleBookingDeleted = (payload: { bookingId: string; }) => {
             console.log("Real-time booking-deleted received:", payload);
+
+            let removed = false;
             bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
                 if (draft?.data) {
+                    const before = draft.data.length;
                     draft.data = draft.data.filter((b: Bookings) => b._id !== payload.bookingId);
+                    removed = draft.data.length < before;
                 }
             });
+
+            if (removed) {
+                console.log("Booking removed from cache successfully");
+            } else if (!isUninitialized) {
+                console.log("No match in cache, refetching...");
+                refetch(); // শুধু তখনই refetch যদি query active থাকে
+            } else {
+                console.log("Query uninitialized - skipping refetch");
+            }
+
+            message.info("A booking has been cancelled");
         };
 
         onMessage('booking-deleted', handleBookingDeleted);
 
         return () => {
-            offMessage('booking-deleted', handleBookingDeleted);
+            console.log("Cleaning up booking-deleted listener");
+            offMessage('booking-deleted', handleBookingDeleted); // ← cleanup অত্যন্ত জরুরি!
         };
-    }, [currentUser, joinRoom, onMessage, offMessage]);
+    }, [onMessage, offMessage, refetch, isUninitialized, userId]); // dependencies ঠিক রাখো
     const handleCancelBooking = async () => {
         if (!selectedBookingId) return;
 
         try {
             await deleteBooking(selectedBookingId).unwrap();
-            message.success({
-                content: 'Booking cancelled successfully!',
-                style: {
-                    marginTop: '50px',
-                },
-            });
+
             refetch();
         } catch (error) {
             const apiError = error as ApiError;
@@ -558,9 +565,7 @@ const CustomBooking = () => {
                                         <h2 className="text-base sm:text-lg font-semibold" style={{ color: themeColors.text }}>
                                             Your Bookings
                                         </h2>
-                                        <p className="text-xs sm:text-sm" style={{ color: themeColors.lightText }}>
-                                            Showing {bookings.data.length} booking{bookings.data.length !== 1 ? 's' : ''}
-                                        </p>
+
                                     </div>
                                     <div className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: themeColors.background, color: themeColors.lightText }}>
                                         Updated just now
