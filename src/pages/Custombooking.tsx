@@ -43,8 +43,8 @@ interface ApiError {
 
 const CustomBooking = () => {
 
-    const userId = useAppSelector((state: any) => state.auth.user?.userId ?? state.auth.user?._id ?? null);
-    console.log("User ID in CustomBooking:", userId);
+    const currentUser = useAppSelector((state: any) => state.auth.user);
+    const userId = currentUser?.userId ?? currentUser?._id ?? null;
     const {
         data: bookings,
         isLoading,
@@ -54,7 +54,7 @@ const CustomBooking = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-    const { onMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
+    const { onMessage, offMessage, joinRoom } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL);
     const [deleteBooking, { isLoading: isDeleting }] =
         useDeleteBookingMutation();
     const [modalVisible, setModalVisible] = useState(false);
@@ -70,12 +70,19 @@ const CustomBooking = () => {
     };
 
     useEffect(() => {
-        if (!userId) return;
+        if (!currentUser) return;
 
-        console.log("Setting up socket listener for userId:", userId);
+        const ownerIdPrimary = currentUser._id as string | undefined;
+        const ownerIdAlternate = currentUser.userId as string | undefined;
+
+        console.log("Setting up socket listener for user (joining rooms):", { ownerIdPrimary, ownerIdAlternate });
+
+        // Join both possible room ids (some backends use _id, some use userId)
+        if (ownerIdPrimary) joinRoom(ownerIdPrimary);
+        if (ownerIdAlternate && ownerIdAlternate !== ownerIdPrimary) joinRoom(ownerIdAlternate);
 
         const handleBookingDeleted = (payload: { bookingId: string; }) => {
-            console.log("Real-time booking deleted:", payload.bookingId);
+            console.log("Real-time booking-deleted received:", payload);
             bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
                 if (draft?.data) {
                     draft.data = draft.data.filter((b: Bookings) => b._id !== payload.bookingId);
@@ -86,10 +93,9 @@ const CustomBooking = () => {
         onMessage('booking-deleted', handleBookingDeleted);
 
         return () => {
-            // যদি useSocket-এ offMessage থাকে
-            // offMessage('booking-deleted', handleBookingDeleted);
+            offMessage('booking-deleted', handleBookingDeleted);
         };
-    }, [onMessage, userId]); // ← userId dependency অ্যাড করো
+    }, [currentUser, joinRoom, onMessage, offMessage]);
     const handleCancelBooking = async () => {
         if (!selectedBookingId) return;
 
