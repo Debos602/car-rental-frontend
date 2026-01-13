@@ -43,7 +43,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     if (result.error) {
         console.error("API Error:", result.error);
 
-        // 401 বা 403-এ refresh চেষ্টা করো (500-এর পরিবর্তে, কারণ auth error সাধারণত 401)
+
         if (result.error.status === 401 || result.error.status === 403) {
             console.log("Access token expired/invalid → Trying refresh");
 
