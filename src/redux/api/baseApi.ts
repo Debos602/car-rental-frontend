@@ -26,7 +26,35 @@ const baseQuery = fetchBaseQuery({
             }
 
         } else {
-            console.log("No token found in Redux - Authorization header not set");
+            // Try to read token from redux-persist localStorage as a fallback
+            try {
+                const persisted = localStorage.getItem("persist:auth");
+                if (persisted) {
+                    const parsed = JSON.parse(persisted);
+                    // parsed.token may be a string or a JSON-stringified value depending on setup
+                    let persistedToken = parsed.token;
+                    if (!persistedToken && typeof parsed === 'object') {
+                        // attempt to parse nested string
+                        try {
+                            const nested = JSON.parse(parsed);
+                            persistedToken = nested.token;
+                        } catch (e) {
+                            // ignore
+                        }
+                    }
+
+                    if (persistedToken) {
+                        headers.set("authorization", `Bearer ${persistedToken}`);
+                        const masked = persistedToken.length > 10 ? `${persistedToken.substring(0, 6)}...${persistedToken.substring(persistedToken.length - 4)}` : "[token]";
+                        console.debug("baseApi: Authorization token set from persist (masked):", masked);
+                        return headers;
+                    }
+                }
+            } catch (err) {
+                console.debug("baseApi: error reading persisted token", err);
+            }
+
+            console.log("No token found in Redux or persist - Authorization header not set");
         }
 
         return headers;

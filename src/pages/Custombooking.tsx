@@ -70,9 +70,12 @@ const CustomBooking = () => {
     };
 
     useEffect(() => {
+        if (!userId) return;
+
+        console.log("Setting up socket listener for userId:", userId);
+
         const handleBookingDeleted = (payload: { bookingId: string; }) => {
             console.log("Real-time booking deleted:", payload.bookingId);
-
             bookingApi.util.updateQueryData('getBookings', undefined, (draft) => {
                 if (draft?.data) {
                     draft.data = draft.data.filter((b: Bookings) => b._id !== payload.bookingId);
@@ -81,7 +84,12 @@ const CustomBooking = () => {
         };
 
         onMessage('booking-deleted', handleBookingDeleted);
-    }, [onMessage]);
+
+        return () => {
+            // যদি useSocket-এ offMessage থাকে
+            // offMessage('booking-deleted', handleBookingDeleted);
+        };
+    }, [onMessage, userId]); // ← userId dependency অ্যাড করো
     const handleCancelBooking = async () => {
         if (!selectedBookingId) return;
 
