@@ -3,6 +3,7 @@ import { RootState } from "../store";
 
 export type TUser = {
     userId: string;
+    _id?: string;
     role: "admin" | "user";
     iat: number;
     exp: number;
@@ -24,7 +25,14 @@ const authSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             const { user, token } = action.payload;
-            state.user = user;
+            // normalize: derive a consistent userId and _id from possible server fields
+            const derivedUserId = user?._id ?? user?.userId ?? user?.id ?? user?.uid ?? undefined;
+            const normalizedUser = {
+                ...(user || {}),
+                userId: user?.userId ?? derivedUserId,
+                _id: user?._id ?? derivedUserId,
+            };
+            state.user = normalizedUser as TUser;
             state.token = token;
         },
 

@@ -4,28 +4,28 @@ const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (userInfo) => ({
-                url: "/api/auth/signin",
+                url: "/auth/signin",
                 method: "POST",
                 body: userInfo,
             }),
         }),
         signup: builder.mutation({
             query: (userInfo) => ({
-                url: "/api/auth/signup",
+                url: "/auth/signup",
                 method: "POST",
                 body: userInfo,
             }),
         }),
         getAllUsers: builder.query({
             query: () => ({
-                url: "/api/auth/all-users",
+                url: "/auth/all-users",
                 method: "GET",
             }),
         }),
 
         getAdmin: builder.query({
             query: (data) => ({
-                url: "/api/auth/admin",
+                url: "/auth/admin",
                 method: "GET",
                 body: data,
             }),
@@ -33,7 +33,7 @@ const authApi = baseApi.injectEndpoints({
         }),
         getUser: builder.query({
             query: (userInfo) => ({
-                url: "/api/auth/user",
+                url: "/auth/user",
                 method: "GET",
                 body: userInfo,
             }),
@@ -41,7 +41,7 @@ const authApi = baseApi.injectEndpoints({
         }),
         updateUser: builder.mutation({
             query: (data) => ({
-                url: "/api/auth/update-user",
+                url: "/auth/update-user",
                 method: "PUT",
                 body: data,
             }),
@@ -50,21 +50,21 @@ const authApi = baseApi.injectEndpoints({
         }),
         updateUserRole: builder.mutation({
             query: (user) => ({
-                url: `/api/auth/update-role/${user.userId}`,
+                url: `/auth/update-role/${user.userId}`,
                 method: "PUT",
                 body: user,
             }),
         }),
         forgetPassword: builder.mutation({
             query: (userId) => ({
-                url: "/api/auth/forget-password",
+                url: "/auth/forget-password",
                 method: "POST",
                 body: userId,
             }),
         }),
         resetPassword: builder.mutation({
             query: ({ payload, token }) => ({
-                url: "/api/auth/reset-password",
+                url: "/auth/reset-password",
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

@@ -5,43 +5,48 @@ import { logout, useCurrentToken } from "@/redux/feature/authSlice";
 import { verifyToken } from "@/utilities/verifyToken";
 import { toast } from "sonner";
 
-type TUser = {
+interface TUser {
+    userId: string;
     role: "admin" | "user";
-};
+    // যদি আরও ফিল্ড থাকে, এখানে অ্যাড করো
+}
 
-type TProtectedRoute = {
+interface TProtectedRoute {
     children: ReactNode;
     allowedRoles: string[];
-};
+}
 
 const ProtectedRoute = ({ children, allowedRoles }: TProtectedRoute) => {
     const dispatch = useAppDispatch();
     const token = useAppSelector(useCurrentToken);
-    const location = useLocation(); // Capture current location to redirect users after login
-    let user: TUser | null = null;
+    const location = useLocation();
 
-    if (token) {
-        try {
-            user = verifyToken(token) as TUser;
-        } catch (error) {
-            // If token verification fails (e.g., expired or tampered token)
-            toast.error("Session expired. Please log in again.");
-            dispatch(logout());
-            return <Navigate to="/login" state={{ from: location }} replace />;
-        }
-    }
-
-    // If there's no token, log out and navigate to login
     if (!token) {
+        toast.warning("Please log in to continue");
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    // If the user's role doesn't match any of the allowed roles, redirect to an unauthorized page
-    if (user && !allowedRoles.includes(user.role)) {
+    let user: TUser | null = null;
+
+    try {
+        user = verifyToken(token) as TUser;
+    } catch (error) {
+        console.error("Token verification failed:", error);
+        toast.error("Session expired or invalid. Please log in again.");
+        dispatch(logout());
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+
+    // Role চেক (case-insensitive)
+    const userRole = user.role.toLowerCase();
+    const normalizedAllowedRoles = allowedRoles.map(role => role.toLowerCase());
+
+    if (!normalizedAllowedRoles.includes(userRole)) {
+        toast.error("You don't have permission to access this page");
         return <Navigate to="/unauthorized" replace />;
     }
 
-    // If everything is valid, render the children components
+    // সব ঠিক থাকলে children রেন্ডার
     return <>{children}</>;
 };
 

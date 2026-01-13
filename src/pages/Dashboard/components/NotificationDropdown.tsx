@@ -134,27 +134,26 @@ const NotificationDropdown: React.FC = () => {
 
     // Hook up socket to receive real-time notifications for current user
     const currentUser = useAppSelector(selectCurrentUser);
-    const userId = currentUser?.userId;
-    const { onMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
+    // console.log("Current User in NotificationDropdown:", currentUser);
+    const userId = currentUser?._id;
+    const { onMessage, offMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
 
     useEffect(() => {
-        onMessage("new-notification", (payload: any) => {
-            console.log("Socket received new-notification:", payload);
-            // prevent double sound from refetch effect by bumping prevCount
-            try {
-                prevCountRef.current = notifications.length + 1;
-            } catch (e) {
-                // ignore
-            }
+        const handleNewNotification = (payload: any) => {
+            console.log("Socket new-notification:", payload);
             playNotificationSound();
-            // show a small toast
-            messageApi.open({ type: 'info', content: payload?.message || payload?.title || 'New notification' });
-            // refresh notifications list
+            messageApi.info(payload?.message || "New notification!", 4);
             refetch();
-        });
-    }, [onMessage, notifications.length, messageApi, refetch]);
+        };
 
-    // Helper function to format time label
+        onMessage("new-notification", handleNewNotification);
+
+        return () => {
+            offMessage("new-notification", handleNewNotification);
+        };
+    }, [onMessage, offMessage, messageApi, refetch]); // dependencies included
+
+
     function getTimeLabel(createdAt?: string): string {
         if (!createdAt) return 'Some time ago';
 

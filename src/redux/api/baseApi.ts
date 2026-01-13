@@ -1,5 +1,4 @@
 import {
-    // BaseQueryApi,
     BaseQueryFn,
     FetchArgs,
     FetchBaseQueryError,
@@ -9,17 +8,21 @@ import {
 import { RootState } from "../store";
 import { logout, setUser } from "../feature/authSlice";
 
+// Base query with proxy support in dev
 const baseQuery = fetchBaseQuery({
-    // Use a relative URL in development so Vite's proxy can forward requests and avoid CORS
-    baseUrl: import.meta.env.DEV ? "" : import.meta.env.VITE_BASE_URL,
+    // Dev-এ empty baseUrl দিয়ে proxy ব্যবহার করো (vite.config.ts-এ /api proxy আছে)
+    baseUrl: `${import.meta.env.VITE_BASE_URL}/api`,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token;
 
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
+            console.log("Authorization header set with token:", token.substring(0, 10) + "..."); // ডিবাগ
+        } else {
+            console.log("No token found in Redux - Authorization header not set");
         }
-        // console.log("Headers:", headers);
+
         return headers;
     },
 });
@@ -30,43 +33,48 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     FetchBaseQueryError
 > = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-    // console.log(result);
-    // Log errors for different statuses
-    if (result?.error) {
+
+    if (result.error) {
         console.error("API Error:", result.error);
 
-        if (result.error.status === 500) {
-            console.log("Sending refresh token");
+        // 401 বা 403-এ refresh চেষ্টা করো (500-এর পরিবর্তে, কারণ auth error সাধারণত 401)
+        if (result.error.status === 401 || result.error.status === 403) {
+            console.log("Access token expired/invalid → Trying refresh");
 
-            const refreshUrl = import.meta.env.DEV
-                ? "/api/auth/refresh-token"
-                : `${import.meta.env.VITE_BASE_URL}/api/auth/refresh-token`;
+            type RefreshResult =
+                | { data?: { data?: { accessToken?: string; }; }; }
+                | { error?: FetchBaseQueryError; }
+                | any;
 
-            const res = await fetch(refreshUrl, {
-                method: "POST",
+            const refreshResult = (await fetchBaseQuery({
+                baseUrl: import.meta.env.DEV ? "/" : import.meta.env.VITE_BASE_URL,
                 credentials: "include",
-            }
-            );
+            })(
+                {
+                    url: "/auth/refresh-token",
+                    method: "POST",
+                },
+                api,
+                extraOptions
+            )) as RefreshResult;
 
-            const data = await res.json();
-            console.log("Refresh token response:", data); // Log the response
-
-            if (data?.data?.accessToken) {
-                console.log("Setting new token:", data.data.accessToken);
+            if (refreshResult && 'data' in refreshResult && refreshResult.data?.data?.accessToken) {
+                const newToken = refreshResult.data.data.accessToken;
                 const user = (api.getState() as RootState).auth.user;
+
+                console.log("New token received:", newToken.substring(0, 10) + "...");
 
                 api.dispatch(
                     setUser({
                         user,
-                        token: data.data.accessToken,
+                        token: newToken,
                     })
                 );
 
-                // Reattempt the original request with the new token
+                // Retry original request
                 result = await baseQuery(args, api, extraOptions);
-                console.log("Result after retrying with new token:", result);
             } else {
-                console.error("No access token received, dispatching logout.");
+                console.error("Refresh failed, logging out");
                 api.dispatch(logout());
             }
         }

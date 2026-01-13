@@ -4,7 +4,7 @@ const bookingApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         createBooking: build.mutation({
             query: (data) => ({
-                url: "/api/bookings",
+                url: "/bookings",
                 method: "POST",
                 body: data,
             }),
@@ -13,15 +13,15 @@ const bookingApi = baseApi.injectEndpoints({
         }), // Create a new booking record
 
         getBookings: build.query({
-            query: () => ({ url: "/api/bookings/my-bookings", method: "GET" }),
+            query: () => ({ url: "/bookings/my-bookings", method: "GET" }),
         }), // Get all booking records
         getAllBookings: build.query({
-            query: () => ({ url: "/api/bookings", method: "GET" }),
+            query: () => ({ url: "/bookings", method: "GET" }),
         }),
 
         updateBooking: build.mutation({
             query: (data) => ({
-                url: `/api/bookings/${data._id}`, // Ensure data._id exists
+                url: `/bookings/${data._id}`, // Ensure data._id exists
                 method: "PATCH",
                 body: data,
             }),
@@ -30,7 +30,7 @@ const bookingApi = baseApi.injectEndpoints({
 
         deleteBooking: build.mutation({
             query: (id) => ({
-                url: `/api/bookings/${id}`,
+                url: `/bookings/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Booking", "Notification"], // Invalidate notifications on booking deletion

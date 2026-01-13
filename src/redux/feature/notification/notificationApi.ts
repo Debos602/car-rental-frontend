@@ -7,7 +7,7 @@ export const notificationApi = baseApi.injectEndpoints({
         // 🔹 Get all notifications
         getNotifications: builder.query({
             query: (params) => ({
-                url: "/api/notifications",
+                url: "/notifications",
                 method: "GET",
                 params,
             }),
@@ -16,7 +16,7 @@ export const notificationApi = baseApi.injectEndpoints({
 
         getAllNotifications: builder.query({
             query: () => ({
-                url: "/api/notifications/admin",
+                url: "/notifications/admin",
                 method: "GET",
             }),
             providesTags: ["Booking", "Notification"],
@@ -26,7 +26,7 @@ export const notificationApi = baseApi.injectEndpoints({
         // 🔹 Mark notification as read (example)
         markAsRead: builder.mutation<void, void>({
             query: () => ({
-                url: `/api/notifications/mark-read`,
+                url: `/notifications/mark-read`,
                 method: "PATCH",
             }),
             invalidatesTags: ["Notification"],
@@ -34,7 +34,7 @@ export const notificationApi = baseApi.injectEndpoints({
         // Add this mutation to your notification API
         markAsUnread: builder.mutation({
             query: (notificationId: string) => ({
-                url: `/api/notifications/mark-unread/${notificationId}`,
+                url: `/notifications/mark-unread/${notificationId}`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['Notification'],
@@ -42,7 +42,7 @@ export const notificationApi = baseApi.injectEndpoints({
 
         deleteNotification: builder.mutation<void, { id: string; }>({
             query: ({ id }) => ({
-                url: `/api/notifications/${id}`,
+                url: `/notifications/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Notification", "Booking"],

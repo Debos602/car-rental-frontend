@@ -1,17 +1,18 @@
 import { baseApi } from "@/redux/api/baseApi";
 
+
 const carManagementApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         createCar: builder.mutation({
             query: (data) => ({
-                url: "/api/cars",
+                url: "/cars",
                 method: "POST",
                 body: data,
             }),
         }),
         getAllCars: builder.query({
             query: (params) => ({
-                url: "/api/cars",
+                url: "/cars",
                 method: "GET",
                 params,
             }),
@@ -19,13 +20,13 @@ const carManagementApi = baseApi.injectEndpoints({
         }),
         getCarById: builder.query({
             query: (id) => ({
-                url: `/api/cars/${id}`,
+                url: `/cars/${id}`,
                 method: "GET",
             }),
         }),
         getAvailableCars: builder.query({
             query: (params) => ({
-                url: "/api/cars/available",
+                url: "/cars/available",
                 method: "GET",
                 params,
             }),
@@ -33,7 +34,7 @@ const carManagementApi = baseApi.injectEndpoints({
         }),
         updateCar: builder.mutation({
             query: (car) => ({
-                url: `/api/cars/update`, // Ensure data includes _id
+                url: `/cars/update`, // Ensure data includes _id
                 method: "PATCH",
                 body: car,
             }),
@@ -41,7 +42,7 @@ const carManagementApi = baseApi.injectEndpoints({
         }),
         updateCarStatus: builder.mutation({
             query: ({ id, status }) => ({
-                url: `/api/cars/${id}/status`, // dynamic id
+                url: `/cars/${id}/status`, // dynamic id
                 method: "PATCH",
                 body: { status },
             }),
@@ -49,13 +50,13 @@ const carManagementApi = baseApi.injectEndpoints({
         }),
         deleteCar: builder.mutation({
             query: (id) => ({
-                url: `/api/cars/${id}`,
+                url: `/cars/${id}`,
                 method: "DELETE",
             }),
         }),
         returnCar: builder.mutation({
             query: (data) => ({
-                url: `api/cars/return`,
+                url: `/cars/return`,
                 method: "PUT",
                 body: data,
             }),

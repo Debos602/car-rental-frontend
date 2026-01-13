@@ -4,21 +4,21 @@ const OrderManagementApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         createOrder: build.mutation({
             query: (data) => ({
-                url: "/api/orders",
+                url: "/orders",
                 method: "POST",
                 body: data,
             }),
         }),
         getAllOrders: build.query({
             query: () => ({
-                url: "/api/orders",
+                url: "/orders",
                 method: "GET",
             }),
         }),
 
         updateOrder: build.mutation({
             query: (data) => ({
-                url: `/api/orders/update`,
+                url: `/orders/update`,
                 method: "PATCH",
                 body: data,
             }),

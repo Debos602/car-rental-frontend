@@ -244,7 +244,7 @@ const DashboardCarList = () => {
             // Create booking
             const result = await createBooking(bookingData).unwrap();
 
-            message.success(`Booking created for ${selectedCar.name}`);
+            // message.success(`Booking created for ${selectedCar.name}`);
 
             // Emit a booking-created event (server may use this or ignore)
             try {
