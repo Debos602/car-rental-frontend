@@ -464,7 +464,7 @@ export default function UserDashBoardOverview() {
                         title="Payment Status"
                         size="small"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <div className="h-64 sm:h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -502,7 +502,7 @@ export default function UserDashBoardOverview() {
                         title="Monthly Spending"
                         size="small"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <div className="h-64 sm:h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -546,7 +546,7 @@ export default function UserDashBoardOverview() {
                         title="Bookings by Car"
                         size="small"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <div className="h-64 sm:h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -584,7 +584,7 @@ export default function UserDashBoardOverview() {
                         title="Booking by Day"
                         size="small"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <div className="h-64 sm:h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -625,7 +625,7 @@ export default function UserDashBoardOverview() {
                 className="mb-6 sm:mb-8"
                 size="small"
                 style={{ borderColor: themeColors.border }}
-                headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
             >
                 <Row gutter={[12, 12]}>
                     <Col xs={24} sm={12} md={8}>
@@ -681,7 +681,7 @@ export default function UserDashBoardOverview() {
                 }
                 className="mb-6 sm:mb-8"
                 style={{ borderColor: themeColors.border }}
-                headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
             >
                 {/* Desktop/Tablet View - Horizontal Scroll Table */}
                 <div className="hidden md:block">
@@ -738,7 +738,7 @@ export default function UserDashBoardOverview() {
                         size="small"
                         title="Booking Insights"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <List
                             size="small"
@@ -761,7 +761,7 @@ export default function UserDashBoardOverview() {
                         size="small"
                         title="Payment Summary"
                         style={{ borderColor: themeColors.border }}
-                        headStyle={{ borderBottomColor: themeColors.border, color: themeColors.text }}
+                        styles={{ header: { borderBottomColor: themeColors.border, color: themeColors.text } }}
                     >
                         <List
                             size="small"

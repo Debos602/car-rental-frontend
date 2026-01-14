@@ -97,7 +97,7 @@ const NOTIFICATION_THEME = {
 
 const Notifications: React.FC = () => {
     const navigate = useNavigate();
-    const [messageApi, contextHolder] = message.useMessage();
+    // Using global antd message singleton; the shared NotificationProvider renders the primary context holder at app root.
     const [filterStatus, setFilterStatus] = useState<string>("all");
     const [searchText, setSearchText] = useState<string>("");
     const [dateRange, setDateRange] = useState<any>(null);
@@ -207,9 +207,9 @@ const Notifications: React.FC = () => {
         if (!item.read && item._id) {
             try {
                 await markAsRead().unwrap();
-                messageApi.success('Marked as read');
+                message.success('Marked as read');
             } catch (error) {
-                messageApi.error('Failed to mark as read');
+                message.error('Failed to mark as read');
             }
         }
 
@@ -223,10 +223,10 @@ const Notifications: React.FC = () => {
     const handleMarkAsUnread = async (id: string) => {
         try {
             await markAsUnread(id).unwrap();
-            messageApi.success('Marked as unread');
+            message.success('Marked as unread');
             refetch();
         } catch (error) {
-            messageApi.error('Failed to mark as unread');
+            message.error('Failed to mark as unread');
         }
     };
 
@@ -234,12 +234,12 @@ const Notifications: React.FC = () => {
     const handleDeleteNotification = async (id: string) => {
         try {
             await deleteNotification({ id }).unwrap();
-            messageApi.success('Notification deleted');
+            message.success('Notification deleted');
             refetch();
             // Remove from selected if it was selected
             setSelectedNotifications(prev => prev.filter(itemId => itemId !== id));
         } catch (error) {
-            messageApi.error('Failed to delete notification');
+            message.error('Failed to delete notification');
         }
     };
 
@@ -247,10 +247,10 @@ const Notifications: React.FC = () => {
     const handleMarkAllAsRead = async () => {
         try {
             await markAsRead().unwrap();
-            messageApi.success('All notifications marked as read');
+            message.success('All notifications marked as read');
             refetch();
         } catch (error) {
-            messageApi.error('Failed to mark all as read');
+            message.error('Failed to mark all as read');
         }
     };
 
@@ -258,11 +258,11 @@ const Notifications: React.FC = () => {
     const handleBulkMarkAsRead = async () => {
         try {
             await markAsRead().unwrap();
-            messageApi.success('Selected notifications marked as read');
+            message.success('Selected notifications marked as read');
             refetch();
             setSelectedNotifications([]);
         } catch (error) {
-            messageApi.error('Failed to mark as read');
+            message.error('Failed to mark as read');
         }
     };
 
@@ -271,11 +271,11 @@ const Notifications: React.FC = () => {
             for (const id of selectedNotifications) {
                 await deleteNotification({ id }).unwrap();
             }
-            messageApi.success('Selected notifications deleted');
+            message.success('Selected notifications deleted');
             refetch();
             setSelectedNotifications([]);
         } catch (error) {
-            messageApi.error('Failed to delete notifications');
+            message.error('Failed to delete notifications');
         }
     };
 
@@ -319,7 +319,6 @@ const Notifications: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6">
-            {contextHolder}
 
             {/* Header Section */}
             <div className="mb-8">

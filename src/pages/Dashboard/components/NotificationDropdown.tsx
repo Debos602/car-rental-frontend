@@ -67,8 +67,8 @@ const NotificationDropdown: React.FC = () => {
     const navigate = useNavigate();
     const { token } = useToken();
     const screens = useBreakpoint();
-    const [messageApi, contextHolder] = message.useMessage();
     const [drawerVisible, setDrawerVisible] = useState(false);
+    const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string } | null>(null);
 
     const { data: notificationsResponse, isLoading, refetch } = useGetNotificationsQuery(undefined);
     const [markAsRead] = useMarkAsReadMutation();
@@ -142,7 +142,7 @@ const NotificationDropdown: React.FC = () => {
         const handleNewNotification = (payload: any) => {
             console.log("Socket new-notification:", payload);
             playNotificationSound();
-            messageApi.info(payload?.message || "New notification!", 4);
+            setSocketToast({ type: 'info', content: payload?.message || 'New notification!' });
             refetch();
         };
 
@@ -151,7 +151,7 @@ const NotificationDropdown: React.FC = () => {
         return () => {
             offMessage("new-notification", handleNewNotification);
         };
-    }, [onMessage, offMessage, messageApi, refetch]); // dependencies included
+    }, [onMessage, offMessage, refetch]); // dependencies included
 
 
     function getTimeLabel(createdAt?: string): string {
@@ -248,11 +248,11 @@ const NotificationDropdown: React.FC = () => {
         if (!item.read && item._id) {
             try {
                 await markAsRead().unwrap();
-                messageApi.success('Marked as read');
+                message.success('Marked as read');
                 refetch();
             } catch (error) {
                 console.error('Failed to mark notification as read:', error);
-                messageApi.error('Failed to mark as read');
+                message.error('Failed to mark as read');
             }
         }
 
@@ -270,22 +270,22 @@ const NotificationDropdown: React.FC = () => {
     // Fixed: Properly implement mark as unread
     const handleMarkAsUnread = async (item: NotificationItem) => {
         if (!item._id) {
-            messageApi.error('Notification ID is missing');
+            message.error('Notification ID is missing');
             return;
         }
 
         try {
             // Call the markAsUnread mutation with the notification ID
             await markAsUnread(item._id).unwrap();
-            messageApi.success('Marked as unread');
+            message.success('Marked as unread');
             refetch();
         } catch (error: any) {
             console.error('Failed to mark notification as unread:', error);
             // Check if the error is because the notification is already unread
             if (error.data?.message?.includes('already unread') || !item.read) {
-                messageApi.warning('Notification is already unread');
+                message.warning('Notification is already unread');
             } else {
-                messageApi.error('Failed to mark as unread');
+                message.error('Failed to mark as unread');
             }
         }
     };
@@ -295,11 +295,11 @@ const NotificationDropdown: React.FC = () => {
 
         try {
             await deleteNotification({ id: item._id }).unwrap();
-            messageApi.success('Notification deleted');
+            message.success('Notification deleted');
             refetch();
         } catch (error) {
             console.error('Failed to delete notification:', error);
-            messageApi.error('Failed to delete notification');
+            message.error('Failed to delete notification');
         }
     };
 
@@ -313,11 +313,11 @@ const NotificationDropdown: React.FC = () => {
     const handleMarkAllAsRead = async () => {
         try {
             await markAsRead().unwrap();
-            messageApi.success('All notifications marked as read');
+            message.success('All notifications marked as read');
             refetch();
         } catch (error) {
             console.error('Failed to mark all as read:', error);
-            messageApi.error('Failed to mark all as read');
+            message.error('Failed to mark all as read');
         }
     };
 
@@ -853,7 +853,6 @@ const NotificationDropdown: React.FC = () => {
 
     return (
         <>
-            {contextHolder}
 
             {/* Desktop: Dropdown */}
             {screens.md ? (
