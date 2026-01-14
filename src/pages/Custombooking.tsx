@@ -43,7 +43,7 @@ interface ApiError {
 
 const CustomBooking = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string } | null>(null);
+    const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string; } | null>(null);
     const currentUser = useAppSelector((state: any) => state.auth.user);
     const userId = currentUser?.userId ?? currentUser?._id ?? null;
     const {
@@ -368,112 +368,112 @@ const CustomBooking = () => {
         const canCancel = canCancelBooking(booking.status);
 
         return (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mb-4"
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mb-4"
+            >
+                <Card
+                    size="small"
+                    className="hover:shadow-md transition-shadow duration-300"
+                    style={{ borderColor: themeColors.border }}
                 >
-                    <Card
-                        size="small"
-                        className="hover:shadow-md transition-shadow duration-300"
-                        style={{ borderColor: themeColors.border }}
-                    >
-                        <div className="flex flex-col space-y-4">
-                            {/* Header Row */}
-                            <div className="flex justify-between items-start">
-                                <div className="flex items-start space-x-3">
-                                    <img
-                                        src={booking.car?.image}
-                                        alt={booking.car?.name}
-                                        className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
-                                        style={{ border: `2px solid ${themeColors.border}` }}
-                                    />
-                                    <div className="min-w-0">
-                                        <div className="font-semibold text-sm" style={{ color: themeColors.text }}>
-                                            {booking.car?.name}
-                                        </div>
-                                        <div className="text-xs mt-1" style={{ color: themeColors.lightText }}>
-                                            {booking.car?.color} • {booking.car?.isElectric ? 'Electric' : 'Fuel'}
-                                        </div>
-                                        <div className="text-xs font-bold mt-1" style={{ color: themeColors.secondary }}>
-                                            ${booking.car?.pricePerHour}/hour
-                                        </div>
+                    <div className="flex flex-col space-y-4">
+                        {/* Header Row */}
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-start space-x-3">
+                                <img
+                                    src={booking.car?.image}
+                                    alt={booking.car?.name}
+                                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                                    style={{ border: `2px solid ${themeColors.border}` }}
+                                />
+                                <div className="min-w-0">
+                                    <div className="font-semibold text-sm" style={{ color: themeColors.text }}>
+                                        {booking.car?.name}
                                     </div>
-                                </div>
-                                <div className="flex flex-col items-end space-y-2">
-                                    <Tag
-                                        color={color}
-                                        icon={icon}
-                                        className="text-xs py-0.5 px-2 rounded-full"
-                                    >
-                                        {text}
-                                    </Tag>
-                                    <Badge
-                                        status={booking.paymentStatus === 'paid' ? 'success' : 'warning'}
-                                        text={
-                                            <span className="text-xs">
-                                                {booking.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
-                                            </span>
-                                        }
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Details Grid */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <div className="flex items-center space-x-1">
-                                        <CalendarOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
-                                        <span className="text-xs font-medium" style={{ color: themeColors.text }}>
-                                            {formatDate(booking.date)}
-                                        </span>
+                                    <div className="text-xs mt-1" style={{ color: themeColors.lightText }}>
+                                        {booking.car?.color} • {booking.car?.isElectric ? 'Electric' : 'Fuel'}
                                     </div>
-                                    <div className="flex items-center space-x-1">
-                                        <ClockCircleOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
-                                        <span className="text-xs" style={{ color: themeColors.text }}>
-                                            {booking.startTime} - {booking.endTime}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="space-y-1 text-right">
-                                    <div className="text-sm font-bold" style={{ color: themeColors.primary }}>
-                                        {duration.toFixed(1)} hours
-                                    </div>
-                                    <div className="flex items-center justify-end space-x-1">
-                                        <DollarOutlined style={{ color: themeColors.accent, fontSize: '12px' }} />
-                                        <span className="text-lg font-bold" style={{ color: themeColors.text }}>
-                                            ${booking.totalCost?.toFixed(2) || '0.00'}
-                                        </span>
+                                    <div className="text-xs font-bold mt-1" style={{ color: themeColors.secondary }}>
+                                        ${booking.car?.pricePerHour}/hour
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Action Button */}
-                            <div className="flex justify-end pt-2 border-t" style={{ borderColor: themeColors.border }}>
-                                <Tooltip title={!canCancel ?
-                                    "Cannot cancel this booking" :
-                                    "Cancel Booking"
-                                }>
-                                    <motion.button
-                                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${!canCancel
-                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
-                                            : "bg-white text-red-500 border border-red-300 hover:bg-red-50 hover:border-red-400 hover:text-red-600"
-                                            }`}
-                                        type="button"
-                                        onClick={() => showConfirmModal(booking._id, booking.car?.name || 'this car')}
-                                        disabled={!canCancel}
-                                        whileHover={!canCancel ? {} : { scale: 1.05 }}
-                                        whileTap={!canCancel ? {} : { scale: 0.95 }}
-                                    >
-                                        <DeleteOutlined />
-                                        <span className="text-sm">Cancel Booking</span>
-                                    </motion.button>
-                                </Tooltip>
+                            <div className="flex flex-col items-end space-y-2">
+                                <Tag
+                                    color={color}
+                                    icon={icon}
+                                    className="text-xs py-0.5 px-2 rounded-full"
+                                >
+                                    {text}
+                                </Tag>
+                                <Badge
+                                    status={booking.paymentStatus === 'paid' ? 'success' : 'warning'}
+                                    text={
+                                        <span className="text-xs">
+                                            {booking.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                                        </span>
+                                    }
+                                />
                             </div>
                         </div>
-                    </Card>
-                </motion.div>
+
+                        {/* Details Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <div className="flex items-center space-x-1">
+                                    <CalendarOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
+                                    <span className="text-xs font-medium" style={{ color: themeColors.text }}>
+                                        {formatDate(booking.date)}
+                                    </span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                    <ClockCircleOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
+                                    <span className="text-xs" style={{ color: themeColors.text }}>
+                                        {booking.startTime} - {booking.endTime}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="space-y-1 text-right">
+                                <div className="text-sm font-bold" style={{ color: themeColors.primary }}>
+                                    {duration.toFixed(1)} hours
+                                </div>
+                                <div className="flex items-center justify-end space-x-1">
+                                    <DollarOutlined style={{ color: themeColors.accent, fontSize: '12px' }} />
+                                    <span className="text-lg font-bold" style={{ color: themeColors.text }}>
+                                        ${booking.totalCost?.toFixed(2) || '0.00'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Button */}
+                        <div className="flex justify-end pt-2 border-t" style={{ borderColor: themeColors.border }}>
+                            <Tooltip title={!canCancel ?
+                                "Cannot cancel this booking" :
+                                "Cancel Booking"
+                            }>
+                                <motion.button
+                                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${!canCancel
+                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                                        : "bg-white text-red-500 border border-red-300 hover:bg-red-50 hover:border-red-400 hover:text-red-600"
+                                        }`}
+                                    type="button"
+                                    onClick={() => showConfirmModal(booking._id, booking.car?.name || 'this car')}
+                                    disabled={!canCancel}
+                                    whileHover={!canCancel ? {} : { scale: 1.05 }}
+                                    whileTap={!canCancel ? {} : { scale: 0.95 }}
+                                >
+                                    <DeleteOutlined />
+                                    <span className="text-sm">Cancel Booking</span>
+                                </motion.button>
+                            </Tooltip>
+                        </div>
+                    </div>
+                </Card>
+            </motion.div>
         );
     };
 

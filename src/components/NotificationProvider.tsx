@@ -12,7 +12,7 @@ const NotificationProvider: React.FC<{ children: React.ReactNode; }> = ({ childr
     const userId = currentUser?.userId;
     const { onMessage, offMessage } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL, userId);
     const [messageApi, contextHolder] = message.useMessage();
-    const [incomingNotif, setIncomingNotif] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string } | null>(null);
+    const [incomingNotif, setIncomingNotif] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string; } | null>(null);
 
     useEffect(() => {
         // Listen for server-side notifications

@@ -68,7 +68,7 @@ const NotificationDropdown: React.FC = () => {
     const { token } = useToken();
     const screens = useBreakpoint();
     const [drawerVisible, setDrawerVisible] = useState(false);
-    const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string } | null>(null);
+    const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string; } | null>(null);
 
     const { data: notificationsResponse, isLoading, refetch } = useGetNotificationsQuery(undefined);
     const [markAsRead] = useMarkAsReadMutation();
