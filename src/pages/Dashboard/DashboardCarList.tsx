@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGetAllCarsQuery } from "@/redux/feature/car/carManagement.api";
-import { TCar } from "@/types/global";
+import { TBooking, TCar } from "@/types/global";
 import {
     Button,
     Form,
@@ -91,6 +91,7 @@ const DashboardCarList = () => {
     const { data: allCars } = useGetAllCarsQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
+
 
     const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation();
     const [form] = Form.useForm();
@@ -227,14 +228,18 @@ const DashboardCarList = () => {
         const hours = Math.max(1, end.diff(start, 'hour'));
         const totalCost = selectedCar.pricePerHour * hours;
 
-        const bookingData = {
+        const bookingData: TBooking = {
+            _id: '', // Empty string or undefined; backend will override
+            userId: currentUser?.userId || '', // From auth
             carId: selectedCar._id,
             date: values.pickupDate.format('YYYY-MM-DD'),
             startTime: start.format('HH:mm'),
             endTime: end.format('HH:mm'),
-            extras: [],
-            totalCost: totalCost,
-        } as const;
+            features: [],
+            totalCost: totalCost
+        };
+
+        console.log('Submitting booking:', bookingData);
 
         try {
             // Add optimistic update immediately
@@ -243,7 +248,7 @@ const DashboardCarList = () => {
 
             // Create booking
             const result = await createBooking(bookingData).unwrap();
-
+            console.log("booking result:", result);
             // message.success(`Booking created for ${selectedCar.name}`);
 
             // Emit a booking-created event (server may use this or ignore)

@@ -41,20 +41,22 @@ interface ApiError {
     status?: number;
 }
 
-const CustomBooking = () => {
+const MyBooking = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [socketToast, setSocketToast] = useState<{ type: 'info' | 'success' | 'error' | 'warning'; content: string; } | null>(null);
-    const currentUser = useAppSelector((state: any) => state.auth.user);
-    const userId = currentUser?.userId ?? currentUser?._id ?? null;
+
     const {
         data: bookings,
         isLoading,
         refetch,
-        isUninitialized, // ← নতুন: query start হয়েছে কিনা চেক
+
     } = useGetBookingsQuery(undefined, {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
+
+    console.log("Bookings data:", bookings);
+
     const { onMessage, offMessage, joinRoom } = useSocket(import.meta.env.VITE_SOCKET_SERVER_URL);
     const [deleteBooking, { isLoading: isDeleting }] =
         useDeleteBookingMutation();
@@ -160,11 +162,7 @@ const CustomBooking = () => {
         return normalizedStatus !== 'approved' && normalizedStatus !== 'cancelled' && normalizedStatus !== 'completed';
     };
 
-    if (isLoading) return (
-        <div className="flex justify-center items-center min-h-[60vh]">
-            <Spin size="large" />
-        </div>
-    );
+
 
     // Desktop table columns
     const desktopColumns = [
@@ -278,25 +276,7 @@ const CustomBooking = () => {
                 </div>
             ),
         },
-        {
-            title: <span style={{ color: themeColors.text, fontWeight: 600 }}>Status</span>,
-            dataIndex: 'status',
-            key: 'status',
-            width: 100,
-            responsive: ['sm'] as any,
-            render: (status: string | undefined) => {
-                const { color, text, icon } = getStatusColor(status);
-                return (
-                    <Tag
-                        color={color}
-                        icon={icon}
-                        className="flex items-center justify-center space-x-1 py-0.5 px-2 rounded-full text-xs font-medium w-full"
-                    >
-                        {text}
-                    </Tag>
-                );
-            },
-        },
+
         {
             title: <span style={{ color: themeColors.text, fontWeight: 600 }}>Payment</span>,
             dataIndex: 'paymentStatus',
@@ -308,7 +288,7 @@ const CustomBooking = () => {
                     status={status === 'paid' ? 'success' : status === 'pending' ? 'warning' : 'default'}
                     text={
                         <span className="text-xs font-medium">
-                            {status === 'paid' ? 'Paid' : status === 'pending' ? 'Pending' : 'N/A'}
+                            {status === 'paid' ? 'Paid' : status === 'pending' ? 'Pending' : 'Unpaid'}
                         </span>
                     }
                 />
@@ -476,7 +456,11 @@ const CustomBooking = () => {
             </motion.div>
         );
     };
-
+    if (isLoading) return (
+        <div className="flex justify-center items-center min-h-[60vh]">
+            <Spin size="large" />
+        </div>
+    );
     return (
         <motion.div
             className="py-6 px-3 sm:px-6"
@@ -799,4 +783,4 @@ const CustomBooking = () => {
     );
 };
 
-export default CustomBooking;
+export default MyBooking;

@@ -42,11 +42,11 @@ export interface TBooking {
     _id: string;
     userId: string; // Using a separate user ID for clarity
     carId: string; // Using a separate car ID for clarity
+    date: string; // ISO date string
+    features?: string[]; // Optional extras
     startTime: string; // ISO date string or timestamp
     endTime: string; // ISO date string or timestamp
     totalCost: number; // Total cost as a number
-    status: "approved" | "pending" | "canceled" | "completed"; // Possible statuses
-    paymentStatus: string;
 }
 
 export interface Bookings {

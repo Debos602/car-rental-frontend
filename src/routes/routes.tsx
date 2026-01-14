@@ -9,7 +9,7 @@ import Dashboard from "@/pages/Dashboard/Dashboard";
 import ProtectedRoute from "@/layout/ProtectedRoute";
 import ErrorPage from "@/layout/ErrorPage";
 import Profile from "@/pages/Dashboard/Profile";
-import Custombooking from "@/pages/Custombooking";
+import Custombooking from "@/pages/Dashboard/components/MyBooking";
 import DashBoardOverview from "@/pages/AdminDashboard/DashBoardOverview";
 import ManageCar from "@/pages/AdminDashboard/ManageCar";
 import AdminDashboard from "@/pages/Dashboard/AdminDashboard";
@@ -24,10 +24,9 @@ import Settings from "@/pages/Settings/Settings";
 import Documentation from "@/pages/Documentation/Documentation";
 import Reports from "@/pages/Reports/Reports";
 import UserDashBoardOverview from "@/pages/Dashboard/UserDashboardOverview";
-import History from "@/pages/Dashboard/Notifications";
-import CarList from "@/pages/car/CarList";
 import DashboardCarList from "@/pages/Dashboard/DashboardCarList";
 import Notifications from "@/pages/Dashboard/Notifications";
+import MyBooking from "@/pages/Dashboard/components/MyBooking";
 
 
 const router = createBrowserRouter([
@@ -86,7 +85,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "booking",
-                element: <Custombooking />,
+                element: <MyBooking />,
             },
             {
                 path: "payment",
