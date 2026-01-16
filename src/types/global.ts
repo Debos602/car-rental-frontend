@@ -77,6 +77,7 @@ export interface Bookings {
     paymentStatus: string;
 }
 export interface TOrder {
+    bookingId: string,
     carName: string; // Assuming carName could be null if booking is not found
     date: string; // Assuming date is a Date object
     startTime: string; // Assuming startTime is a string (could also be a Date)

@@ -336,7 +336,7 @@ const MyBooking = () => {
         approved: bookings.data.filter((b: Bookings) => normalizeStatus(b.status) === 'approved').length,
         pending: bookings.data.filter((b: Bookings) => normalizeStatus(b.status) === 'pending').length,
         cancelled: bookings.data.filter((b: Bookings) => normalizeStatus(b.status) === 'cancelled').length,
-        totalSpent: bookings.data.reduce((sum: number, b: Bookings) => sum + (b.totalCost || 0), 0)
+        totalSpent: bookings.data.reduce((sum: number, b: Bookings) => sum + (b.paymentStatus === 'paid' ? 0 : (b.totalCost || 0)), 0)
     } : null;
 
     // Mobile Card View Component

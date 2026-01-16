@@ -70,6 +70,7 @@ const ManagePayment = () => {
 
         // Create order data from the booking
         const orderData: TOrder = {
+            bookingId: firstBooking._id,
             carName: firstBooking.car?.name || firstBooking.carName || "",
             date: firstBooking.date,
             startTime: firstBooking.startTime,
@@ -102,6 +103,7 @@ const ManagePayment = () => {
         }
 
         const orderData: TOrder = {
+            bookingId: booking._id,
             carName: booking.car.name || "",
             date: booking.date,
             endTime: booking.endTime,
@@ -112,8 +114,6 @@ const ManagePayment = () => {
             email: booking.user.email,
             phone: booking.user.phone,
             name: booking.user.name
-
-
         };
 
         try {
@@ -242,15 +242,21 @@ const ManagePayment = () => {
             width: 160,
             render: (record: Bookings) => (
                 <div className="flex items-center gap-2">
-                    <Button
-                        type="primary"
-                        size="middle"
-                        onClick={() => handleCreateOrderForBooking(record)}
-                        loading={isCreatingOrder}
-                        style={{ backgroundColor: themeColors.primary }}
-                    >
-                        Pay Now
-                    </Button>
+                    {(() => {
+                        const isPaid = record.paymentStatus === 'paid';
+                        return (
+                            <Button
+                                type={isPaid ? 'default' : 'primary'}
+                                size="middle"
+                                onClick={() => !isPaid && handleCreateOrderForBooking(record)}
+                                loading={isCreatingOrder && !isPaid}
+                                disabled={isPaid || isCreatingOrder}
+                                style={{ backgroundColor: isPaid ? undefined : themeColors.primary }}
+                            >
+                                {isPaid ? 'Paid' : 'Pay Now'}
+                            </Button>
+                        );
+                    })()}
                 </div>
             ),
         },
@@ -263,7 +269,7 @@ const ManagePayment = () => {
     const totalBookingsCount = allBookings.length;
     const paidBookings = allBookings.filter(b => b.paymentStatus === 'paid');
     const unpaidBookings = allBookings.filter(b => b.paymentStatus !== 'paid');
-    const totalUnpaidAmount = allBookings.reduce((sum, booking) => sum + (booking.totalCost || 0), 0);
+    const totalUnpaidAmount = unpaidBookings.reduce((sum, booking) => sum + (booking.totalCost || 0), 0);
     const pendingBookingsCount = unpaidBookings.length;
 
     if (isLoadingBookings) {
@@ -336,13 +342,10 @@ const ManagePayment = () => {
                     }}
                 >
                     {/* Card Header */}
-                    <div className="mb-6">
+                    <div className="mb-4">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
                                 <Title level={3} style={{ color: themeColors.text }}>Payment Overview</Title>
-                                <Text type="secondary" style={{ color: themeColors.lightText }}>
-                                    {totalBookingsCount} booking{totalBookingsCount !== 1 ? 's' : ''} in total
-                                </Text>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <CreditCardOutlined style={{ color: themeColors.primary, fontSize: '20px' }} />
@@ -431,7 +434,7 @@ const ManagePayment = () => {
                                 }}
                                 onClick={handleCreateOrder}
                                 loading={isCreatingOrder}
-                                disabled={allBookings.length === 0 || isCreatingOrder}
+                                disabled={unpaidBookings.length === 0 || isCreatingOrder}
                             >
                                 {isCreatingOrder ? 'Processing...' : 'Proceed to Payment'}
                             </Button>
