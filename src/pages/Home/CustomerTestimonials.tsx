@@ -43,26 +43,22 @@ const CustomerTestimonials = () => {
         <div className="bg-gradient-to-b from-white to-gray-50 text-black">
             <section ref={ref} className="py-16 container mx-auto">
 
-                <div className="relative max-w-6xl mx-auto">
+                <div className="relative mx-auto">
                     {/* decorative big quote (soft) */}
                     <div className="absolute -right-12 -top-12 text-[140px] text-[#A66A3A] opacity-5 pointer-events-none select-none">“</div>
 
-                    <motion.h4
-                        className="text-2xl font-bold text-[#D2691E] mb-4 text-center"
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8 }}
-                    >
-                        Testimonials
-                    </motion.h4>
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-amber-50 text-[#D2691E] px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-amber-200">
+                        <span className="w-2 h-2 bg-gradient-to-r from-[#D2691E] to-amber-600 rounded-full"></span>
+                        Testimonial
+                    </div>
 
                     <motion.p
-                        className="text-3xl font-bold text-black text-center mb-8"
+                        className="text-3xl font-bold text-black mb-10"
                         initial={{ opacity: 0, y: -20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 1 }}
                     >
-                        What Our Customers Say
+                        What Our <span className="text-[#D2691E]">Customers</span> Say
                     </motion.p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

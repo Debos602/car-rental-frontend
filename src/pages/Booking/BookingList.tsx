@@ -91,7 +91,7 @@ const BookingList = () => {
                     </div>
                     <div>
                         <p className="font-semibold text-gray-900">{record.car?.name}</p>
-                        <p className="text-sm text-gray-600">{record.car?.brand}</p>
+                        <p className="text-sm text-gray-600">{record.car?.color}</p>
                     </div>
                 </motion.div>
             ),

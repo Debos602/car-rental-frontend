@@ -355,45 +355,7 @@ const HeroSection = () => {
                                         </div>
                                     </motion.div>
 
-                                    <motion.div variants={itemVariant} className="pt-1 sm:pt-2">
-                                        <motion.div
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <Button
-                                                size="large"
-                                                className="bg-gradient-to-r from-chocolate to-amber-800 hover:from-amber-800 hover:to-chocolate border-0 text-white font-bold rounded-lg shadow-xl hover:shadow-2xl text-base sm:text-lg md:text-xl w-full h-10 sm:h-12"
-                                                onClick={handleSearch}
-                                            >
-                                                Search Available Cars
-                                            </Button>
-                                        </motion.div>
-                                    </motion.div>
 
-                                    {/* Popular searches */}
-                                    <motion.div
-                                        className="hidden md:block pt-3 sm:pt-4 border-t border-gray-200"
-                                        variants={itemVariant}
-                                    >
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 sm:gap-2">
-                                            <span className="text-sm font-semibold text-gray-900">Popular searches:</span>
-                                            <div className="flex flex-wrap gap-2">
-                                                <button
-                                                    onClick={() => setLocation("Dhaka")}
-                                                    className="text-xs sm:text-sm text-chocolate hover:text-amber-800 font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-chocolate/40 hover:border-chocolate hover:bg-chocolate/10 transition-all duration-200 bg-white"
-                                                >
-                                                    Dhaka
-                                                </button>
-                                                <button
-                                                    onClick={() => setLocation("Chittagong")}
-                                                    className="text-xs sm:text-sm text-chocolate hover:text-amber-800 font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-chocolate/40 hover:border-chocolate hover:bg-chocolate/10 transition-all duration-200 bg-white"
-                                                >
-                                                    Chittagong
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </motion.div>
                                 </motion.div>
                             </motion.div>
                         </motion.div>

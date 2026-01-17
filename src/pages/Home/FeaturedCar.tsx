@@ -14,7 +14,7 @@ const NextArrow = (props: CustomArrowProps) => {
     const { onClick } = props;
     return (
         <motion.button
-            className="absolute right-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-r from-[#D2691E] to-transparent text-white p-2 rounded-full shadow-lg hover:opacity-90 transition z-30"
+            className="hidden md:flex absolute right-4 md:right-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-r from-[#D2691E] to-transparent text-white p-2 md:p-3 rounded-full shadow-lg hover:opacity-90 transition z-30"
             onClick={onClick}
             aria-label="Next"
             initial={{ opacity: 0, x: 20 }}
@@ -22,7 +22,7 @@ const NextArrow = (props: CustomArrowProps) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
         >
-            <ArrowRightOutlined style={{ fontSize: "20px" }} />
+            <ArrowRightOutlined style={{ fontSize: "18px" }} />
         </motion.button>
     );
 };
@@ -32,7 +32,7 @@ const PrevArrow = (props: CustomArrowProps) => {
     const { onClick } = props;
     return (
         <motion.button
-            className="absolute left-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-l from-[#D2691E] to-transparent text-white p-2 rounded-full shadow-lg hover:opacity-90 transition z-30"
+            className="hidden md:flex absolute left-4 md:left-6 top-[50%] transform -translate-y-1/2 bg-gradient-to-l from-[#D2691E] to-transparent text-white p-2 md:p-3 rounded-full shadow-lg hover:opacity-90 transition z-30"
             onClick={onClick}
             aria-label="Previous"
             initial={{ opacity: 0, x: -20 }}
@@ -40,7 +40,7 @@ const PrevArrow = (props: CustomArrowProps) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
         >
-            <ArrowLeftOutlined style={{ fontSize: "20px" }} />
+            <ArrowLeftOutlined style={{ fontSize: "18px" }} />
         </motion.button>
     );
 };
@@ -88,10 +88,14 @@ const FeaturedCars = () => {
                 className="container mx-auto py-20"
             >
                 <div className="grid grid-cols-1 md:grid-cols-5">
-                    <div>
-                        <h2 className="text-3xl font-medium text-[#D2691E] mb-2">Featured Cars</h2>
+                    <div className="p-4 md:col-span-1 text-center md:text-left">
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-amber-50 text-[#D2691E] px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-amber-200">
+                            <span className="w-2 h-2 bg-gradient-to-r from-[#D2691E] to-amber-600 rounded-full"></span>
+                            Feature Car
+                        </div>
                         <p className="text-4xl font-semibold text-black mb-4">
-                            Discover Our Top Picks For You Today!
+                            Our Top Picks For You
+                            <span className="text-[#D2691E]"> Today!</span>
                         </p>
                         <p className="text-lg font-medium text-black/80 max-w-2xl mx-auto mb-8">
                             Explore our handpicked selection of the most popular cars, offering
@@ -162,7 +166,7 @@ const FeaturedCars = () => {
                                             >
                                                 <Badge.Ribbon
                                                     text={car.status}
-                                                    color="#7c2d12"
+                                                    color="#D2691E"
                                                     className="text-xs"
                                                     style={{ fontSize: '10px', padding: '0 8px', height: '20px', lineHeight: '20px' }}
                                                 >
@@ -170,11 +174,11 @@ const FeaturedCars = () => {
                                                         <Card
                                                             className="h-full bg-gradient-to-b from-white to-amber-50 shadow-lg group rounded-lg overflow-hidden transform transition-all duration-200 hover:shadow-xl border border-gray-100"
                                                             cover={
-                                                                <div className="relative overflow-hidden h-36 sm:h-40">
+                                                                <div className="relative overflow-hidden h-44 sm:h-52 md:h-56 lg:h-60">
                                                                     <img
                                                                         alt={`${car.brand} ${car.name} ${car.model}`}
                                                                         loading="lazy"
-                                                                        className="h-full w-full object-cover group-hover:scale-105 transition duration-400"
+                                                                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                                         src={car.image || '/placeholder-car.png'}
                                                                     />
                                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
@@ -202,8 +206,8 @@ const FeaturedCars = () => {
                                                                     </div>
                                                                 </div>
 
-                                                                <p className="text-gray-600 text-xs mb-3 line-clamp-2 flex-grow-0">
-                                                                    {car.description?.slice(0, 80) ?? ''}...
+                                                                <p className="text-gray-600 text-sm sm:text-xs mb-3 line-clamp-2 flex-grow-0">
+                                                                    {car.description?.slice(0, 90) ?? ''}...
                                                                 </p>
 
                                                                 <div className="space-y-2 mt-auto">
@@ -240,7 +244,7 @@ const FeaturedCars = () => {
                                                                             <Link
                                                                                 to={`/car-details/${car._id}`}
                                                                                 aria-label={`View details for ${car.name}`}
-                                                                                className="bg-gradient-to-r from-chocolate to-amber-800 hover:from-amber-800 hover:to-chocolate text-white px-8 py-3 rounded-md font-semibold transition-all duration-200 transform hover:scale-105 shadow text-xs"
+                                                                                className="bg-gradient-to-r from-chocolate to-amber-800 hover:from-amber-800 hover:to-chocolate text-white px-4 py-2 sm:px-8 sm:py-3 rounded-md font-semibold transition-all duration-200 transform hover:scale-105 shadow text-xs sm:text-sm"
                                                                             >
                                                                                 View
                                                                             </Link>
