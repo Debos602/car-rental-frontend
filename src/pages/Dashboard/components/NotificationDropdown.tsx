@@ -35,6 +35,7 @@ import type { MenuProps } from "antd";
 import {
     useGetNotificationsQuery,
     useMarkAsReadMutation,
+    useMarkAsReadSingleMutation,
     useDeleteNotificationMutation,
     useMarkAsUnreadMutation
 } from "@/redux/feature/notification/notificationApi";
@@ -72,6 +73,7 @@ const NotificationDropdown: React.FC = () => {
 
     const { data: notificationsResponse, isLoading, refetch } = useGetNotificationsQuery(undefined);
     const [markAsRead] = useMarkAsReadMutation();
+    const [markAsReadSingle] = useMarkAsReadSingleMutation();
     const [deleteNotification] = useDeleteNotificationMutation();
     const [markAsUnread] = useMarkAsUnreadMutation();
 
@@ -247,7 +249,7 @@ const NotificationDropdown: React.FC = () => {
         // Mark as read when clicked only if it's unread
         if (!item.read && item._id) {
             try {
-                await markAsRead().unwrap();
+                await markAsReadSingle(item._id).unwrap();
                 message.success('Marked as read');
                 refetch();
             } catch (error) {
@@ -343,7 +345,7 @@ const NotificationDropdown: React.FC = () => {
                         <span style={{ color: token.colorError }}>Delete</span>
                     </div>
                 ),
-                onClick: () => handleDeleteNotification(item)
+                onClick: () => handleDeleteNotification(item._id ? item : { ...item, _id: '' }), // Ensure _id is defined   
             }
         ]
     });

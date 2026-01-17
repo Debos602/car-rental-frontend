@@ -9,6 +9,9 @@ import { Table, Modal, message, Tag, Tooltip } from "antd";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { DeleteOutlined, CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { userInfo } from "os";
+import { useSelector } from "react-redux";
 
 interface ApiError {
     data?: {
@@ -18,6 +21,9 @@ interface ApiError {
 }
 
 const BookingList = () => {
+
+    const user = useSelector((state: any) => state.auth.user);
+
     const {
         data: bookings,
         isLoading,
@@ -26,7 +32,7 @@ const BookingList = () => {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-
+    const navigate = useNavigate();
     // console.log("Bookings Data:", bookings);
 
     const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
@@ -69,21 +75,6 @@ const BookingList = () => {
             </div>
         );
     }
-
-    const getStatusColor = (status: string) => {
-        switch (status?.toLowerCase()) {
-            case 'confirmed':
-            case 'approved':
-                return 'green';
-            case 'pending':
-                return 'orange';
-            case 'cancelled':
-            case 'rejected':
-                return 'red';
-            default:
-                return 'default';
-        }
-    };
 
     const columns = [
         {
@@ -229,12 +220,23 @@ const BookingList = () => {
                             whileTap={{ scale: 0.95 }}
                             className="inline-block"
                         >
-                            <button
-                                onClick={() => refetch()}
-                                className="bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg"
-                            >
-                                Refresh Bookings
-                            </button>
+                            {
+                                user.role === 'user' ? (
+                                    <button
+                                        onClick={() => navigate('/dashboard/booking')}
+                                        className="bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg"
+                                    >
+                                        User Dashboard
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => navigate('/admin-dashboard/manage-booking')}
+                                        className="bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg"
+                                    >
+                                        Admin Dashboard
+                                    </button>
+                                )
+                            }
                         </motion.div>
                     </div>
                 </motion.div>

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import BookingSearch from "@/components/BookingSearch";
 import BookingCarList from "./BookingCarList";
 import BookingForm from "./BookingForm";
 import BookingList from "./BookingList";
+import CustomSection from "@/components/CustomSection";
+import image from "../../assets/about.png";
 
 const Booking = () => {
     const [searchParams, setSearchParams] = useState({
@@ -21,7 +22,11 @@ const Booking = () => {
 
     return (
         <div data-theme="light">
-            <BookingSearch onSearch={handleSearch} />
+            <CustomSection
+                image={image}
+                title="About/BookingList/Car"
+                paragraph="Learn more about our company, our team, and our commitment to excellence."
+            />
             <BookingList />
             <BookingForm />
             <BookingCarList searchParams={searchParams} />

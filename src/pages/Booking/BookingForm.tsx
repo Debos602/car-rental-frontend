@@ -102,21 +102,19 @@ const BookingForm = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50 to-stone-100 py-6 px-4">
-            <div className="max-w-7xl mx-auto">
+        <div className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50 to-stone-100">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <motion.div
-                    className="text-center mb-8"
+                    className="mb-8"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <h1 className="text-3xl md:text-4xl font-bold text-chocolate-dark mb-2">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2">
                         Complete Your Booking
                     </h1>
-                    <p className="text-base text-chocolate max-w-xl mx-auto">
-                        Review and confirm your information to proceed
-                    </p>
+
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -450,7 +448,7 @@ const BookingForm = () => {
                     border-color: #5C2E00 !important;
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
 

@@ -23,13 +23,22 @@ export const notificationApi = baseApi.injectEndpoints({
         }),
 
 
-        // 🔹 Mark notification as read (example)
+        // 🔹 Mark all notifications as read
         markAsRead: builder.mutation<void, void>({
             query: () => ({
                 url: `/notifications/mark-read`,
                 method: "PATCH",
             }),
             invalidatesTags: ["Notification"],
+        }),
+
+        // 🔹 Mark a single notification as read
+        markAsReadSingle: builder.mutation<void, string>({
+            query: (notificationId: string) => ({
+                url: `/notifications/mark-read/${notificationId}`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Notification'],
         }),
         // Add this mutation to your notification API
         markAsUnread: builder.mutation({
@@ -54,6 +63,7 @@ export const notificationApi = baseApi.injectEndpoints({
 export const {
     useGetNotificationsQuery,
     useMarkAsReadMutation,
+    useMarkAsReadSingleMutation,
     useDeleteNotificationMutation,
     useMarkAsUnreadMutation,
     useGetAllNotificationsQuery

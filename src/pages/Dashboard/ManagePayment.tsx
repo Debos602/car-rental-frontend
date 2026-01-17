@@ -49,49 +49,76 @@ const ManagePayment = () => {
         refetchOnFocus: true,
     });
 
-    // console.log("Bookings Data from payment:", bookings);
-
     const handleCreateOrder = async () => {
-        // Get all bookings
+        // Build orders from unpaid bookings: support bulk payment
         const allBookings = bookings?.data || [];
+        const unpaid = allBookings.filter((b: Bookings) => b.paymentStatus !== 'paid');
 
-        if (allBookings.length === 0) {
-            toast.error("No bookings found for payment");
+        if (unpaid.length === 0) {
+            toast.error("No unpaid bookings found to pay");
             return;
         }
 
-        // Find the first booking (you can modify this logic based on your needs)
-        const firstBooking = allBookings[0];
+        if (unpaid.length === 1) {
+            // Single booking - keep existing behaviour
+            const firstBooking = unpaid[0];
+            const orderData: TOrder = {
+                bookingId: firstBooking._id,
+                carName: firstBooking.car?.name || "",
+                date: firstBooking.date,
+                startTime: firstBooking.startTime,
+                endTime: firstBooking.endTime,
+                totalCost: firstBooking.totalCost || 0,
+                transactionId: firstBooking.transactionId || `TXN-${Date.now()}`,
+                paymentStatus: firstBooking.paymentStatus || "pending",
+                email: firstBooking.user?.email || "",
+                phone: firstBooking.user?.phone || "",
+                name: firstBooking.user?.name || ""
+            };
 
-        if (!firstBooking) {
-            toast.error("No booking available to pay");
+            try {
+                const response = await createOrder(orderData).unwrap();
+                toast.success("Payment link created successfully!");
+                if (response?.data?.payment_url) {
+                    window.open(response.data.payment_url, "_self");
+                }
+            } catch (error: any) {
+                toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
+            }
             return;
         }
 
-        // Create order data from the booking
-        const orderData: TOrder = {
-            bookingId: firstBooking._id,
-            carName: firstBooking.car?.name || firstBooking.carName || "",
-            date: firstBooking.date,
-            startTime: firstBooking.startTime,
-            endTime: firstBooking.endTime,
-            totalCost: firstBooking.totalCost || 0,
-            transactionId: firstBooking.transactionId || `TXN-${Date.now()}`,
-            paymentStatus: firstBooking.paymentStatus || "pending",
-            email: firstBooking.user?.email || "",
-            phone: firstBooking.user?.phone || "",
-            name: firstBooking.user?.name || ""
+        // Multiple unpaid bookings -> create a bulk order
+        const bookingIds = unpaid.map((b: Bookings) => b._id);
+        const totalAmount = unpaid.reduce((sum: number, b: Bookings) => sum + (b.totalCost || 0), 0);
+
+        // Use contact info from the first unpaid booking (adjust if needed)
+        const contact = unpaid[0]?.user || { name: '', email: '', phone: '' };
+
+        // Build a bulk order payload. Backend should support receiving `bookingIds` for bulk payments.
+        const bulkOrderPayload: any = {
+            bookingIds,
+            carName: 'Multiple Bookings',
+            date: new Date().toISOString(),
+            startTime: '',
+            endTime: '',
+            totalCost: totalAmount,
+            transactionId: `TXN-BULK-${Date.now()}`,
+            paymentStatus: 'pending',
+            name: contact.name || '',
+            email: contact.email || '',
+            phone: contact.phone || '',
+            isBulk: true
         };
 
         try {
-            const response = await createOrder(orderData).unwrap();
-            toast.success("Payment link created successfully!");
+            const response = await createOrder(bulkOrderPayload).unwrap();
+            toast.success("Bulk payment link created successfully!");
             if (response?.data?.payment_url) {
                 window.open(response.data.payment_url, "_self");
             }
         } catch (error: any) {
-            // console.error("Error creating order:", error);
-            toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
+            toast.error(error?.data?.message || "Failed to create bulk payment link. Please try again.");
         }
     };
 
@@ -104,16 +131,16 @@ const ManagePayment = () => {
 
         const orderData: TOrder = {
             bookingId: booking._id,
-            carName: booking.car.name || "",
+            carName: booking.car?.name || "",
             date: booking.date,
             endTime: booking.endTime,
             startTime: booking.startTime,
             totalCost: booking.totalCost || 0,
             transactionId: booking.transactionId || `TXN-${Date.now()}`,
             paymentStatus: booking.paymentStatus || "pending",
-            email: booking.user.email,
-            phone: booking.user.phone,
-            name: booking.user.name
+            email: booking.user?.email || "",
+            phone: booking.user?.phone || "",
+            name: booking.user?.name || ""
         };
 
         try {
@@ -123,7 +150,6 @@ const ManagePayment = () => {
                 window.open(response.data.payment_url, "_self");
             }
         } catch (error: any) {
-            // console.error("Error creating order:", error);
             toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
         }
     };
@@ -145,7 +171,7 @@ const ManagePayment = () => {
                     )}
                     <div>
                         <div className="font-medium text-sm" style={{ color: themeColors.text }}>
-                            {record.car?.name || record.car.name || "N/A"}
+                            {record.car?.name || "N/A"}
                         </div>
                         <Text type="secondary" className="text-xs">
                             {record.car?.color || ""}
@@ -267,9 +293,8 @@ const ManagePayment = () => {
 
     // Calculate statistics
     const totalBookingsCount = allBookings.length;
-    const paidBookings = allBookings.filter(b => b.paymentStatus === 'paid');
     const unpaidBookings = allBookings.filter(b => b.paymentStatus !== 'paid');
-    const totalUnpaidAmount = unpaidBookings.reduce((sum, booking) => sum + (booking.totalCost || 0), 0);
+    const totalUnpaidAmount = unpaidBookings.reduce((sum: number, booking: Bookings) => sum + (booking.totalCost || 0), 0);
     const pendingBookingsCount = unpaidBookings.length;
 
     if (isLoadingBookings) {
@@ -292,9 +317,7 @@ const ManagePayment = () => {
                 <Title level={2} className=" mb-2" style={{ color: themeColors.text }}>
                     Payment Management
                 </Title>
-                <Text className=" block" type="secondary" style={{ color: themeColors.lightText }}>
-                    Review and complete your booking payments
-                </Text>
+
             </motion.div>
 
             {/* Payment Summary Stats */}
@@ -377,67 +400,6 @@ const ManagePayment = () => {
                                     )
                                 }}
                             />
-                        </div>
-                    </div>
-
-                    {/* Payment Summary */}
-                    <div className="bg-gray-50 p-4 rounded-lg mb-6" style={{ backgroundColor: `${themeColors.background}`, borderColor: themeColors.border }}>
-                        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <div>
-                                <Text strong style={{ color: themeColors.text }} className="text-lg">
-                                    Total Booking Amount:
-                                </Text>
-                                <Text type="secondary" style={{ color: themeColors.lightText }}>
-                                    {totalBookingsCount} item{totalBookingsCount !== 1 ? 's' : ''} • Pay to confirm bookings
-                                </Text>
-                            </div>
-                            <div className="text-right">
-                                <Text strong className="text-2xl" style={{ color: themeColors.accent }}>
-                                    ${totalUnpaidAmount.toFixed(2)}
-                                </Text>
-                                <Text type="secondary" className="block text-xs" style={{ color: themeColors.lightText }}>
-                                    All taxes included
-                                </Text>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Payment Actions */}
-                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t" style={{ borderColor: themeColors.border }}>
-                        <div>
-                            <Text style={{ color: themeColors.lightText }} className="text-sm">
-                                <CheckCircleOutlined style={{ color: themeColors.accent, marginRight: '8px' }} />
-                                100% Secure Payment • SSL Encrypted
-                            </Text>
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <Button
-                                type="default"
-                                size="large"
-                                className="px-6"
-                                style={{
-                                    borderColor: themeColors.border,
-                                    color: themeColors.text
-                                }}
-                                onClick={() => window.location.href = '/dashboard/booking'}
-                            >
-                                View All Bookings
-                            </Button>
-                            <Button
-                                type="primary"
-                                size="large"
-                                icon={isCreatingOrder ? <LoadingOutlined /> : <CreditCardOutlined />}
-                                className="px-8"
-                                style={{
-                                    backgroundColor: themeColors.primary,
-                                    borderColor: themeColors.primary
-                                }}
-                                onClick={handleCreateOrder}
-                                loading={isCreatingOrder}
-                                disabled={unpaidBookings.length === 0 || isCreatingOrder}
-                            >
-                                {isCreatingOrder ? 'Processing...' : 'Proceed to Payment'}
-                            </Button>
                         </div>
                     </div>
                 </Card>
