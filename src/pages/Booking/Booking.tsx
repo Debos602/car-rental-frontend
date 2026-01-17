@@ -24,11 +24,10 @@ const Booking = () => {
         <div data-theme="light">
             <CustomSection
                 image={image}
-                title="About/BookingList/Car"
+                title="Home/BookingList/Car"
                 paragraph="Learn more about our company, our team, and our commitment to excellence."
             />
             <BookingList />
-            <BookingForm />
             <BookingCarList searchParams={searchParams} />
         </div>
     );

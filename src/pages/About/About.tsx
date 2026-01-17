@@ -40,34 +40,12 @@ const About = () => {
     return (
         <div data-theme="light" className="overflow-hidden bg-gradient-to-b from-white to-[#D2691E]/10">
             {/* Hero About Section */}
-            <div className="relative min-h-[80vh] flex items-center justify-center" style={bgImage}>
-                <div className="absolute inset-0 bg-black/40"></div>
-                <motion.div
-                    className="relative z-10 text-center px-4 max-w-4xl mx-auto"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-                        Our <span className="text-[#D2691E]">Story</span>
-                    </h1>
-                    <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-                        Discover the journey that drives us to deliver exceptional car rental experiences,
-                        blending passion with excellence since 2000.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <span className="px-6 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full border border-white/30">
-                            24/7 Service
-                        </span>
-                        <span className="px-6 py-2 bg-[#D2691E] text-white rounded-full">
-                            500+ Happy Clients
-                        </span>
-                        <span className="px-6 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full border border-white/30">
-                            Nationwide Coverage
-                        </span>
-                    </div>
-                </motion.div>
-            </div>
+            <CustomSection
+                image={backgroundImage}
+                title="Home/AboutUs/Company"
+                paragraph="Discover our journey, values, and the team dedicated to providing you with exceptional car rental experiences."
+
+            />
 
             {/* Company History */}
             <section className="py-24 relative overflow-hidden">
@@ -189,161 +167,259 @@ const About = () => {
                 </div>
             </section>
 
+
             {/* Our Team */}
             <section
                 ref={teamRef}
-                className="py-24 bg-gradient-to-b from-white to-[#D2691E]/10 relative overflow-hidden"
+                className="py-24 lg:py-32 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
             >
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#D2691E]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#4335A7]/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
+                {/* Subtle decorative blobs */}
+                <div className="absolute -right-20 top-20 w-96 h-96 bg-[#D2691E]/5 rounded-full blur-3xl opacity-60" />
+                <div className="absolute -left-20 bottom-20 w-80 h-80 bg-amber-300/10 rounded-full blur-3xl opacity-70" />
 
-                <div className="container mx-auto px-4 relative z-10">
+                <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+                    {/* Header */}
                     <motion.div
-                        className="text-center mb-16"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: teamInView ? 1 : 0 }}
+                        className="text-center mb-16 lg:mb-20"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: teamInView ? 1 : 0, y: teamInView ? 0 : 30 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
-                            Meet Our <span className="text-[#D2691E]">Leadership</span>
+                        <span className="inline-block px-5 py-2 rounded-full bg-[#D2691E]/10 text-[#D2691E] font-medium text-sm tracking-wider mb-5">
+                            MEET OUR TEAM
+                        </span>
+
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                            The People Behind <span className="text-[#D2691E]">Your Journey</span>
                         </h2>
-                        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                            The passionate individuals driving our success forward
+
+                        <p className="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
+                            Passionate professionals dedicated to delivering exceptional car rental experiences with integrity and innovation.
                         </p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {/* Team Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
                         {teamMembers.map((member, index) => (
                             <motion.div
                                 key={member.name}
-                                className="group relative bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500"
+                                className="group relative bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-3"
                                 initial={{ opacity: 0, y: 50 }}
-                                animate={{ opacity: teamInView ? 1 : 0, y: teamInView ? 0 : 50 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                whileHover={{ y: -10 }}
+                                animate={{
+                                    opacity: teamInView ? 1 : 0,
+                                    y: teamInView ? 0 : 50,
+                                }}
+                                transition={{
+                                    duration: 0.7,
+                                    delay: index * 0.12,
+                                    ease: "easeOut",
+                                }}
                             >
-                                <div className="relative h-72 overflow-hidden">
+                                {/* Image + Overlay */}
+                                <div className="relative h-80 overflow-hidden">
                                     <img
                                         src={member.img}
                                         alt={member.name}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                                        loading="lazy"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    <div className="absolute top-4 right-4 bg-[#D2691E] text-white px-3 py-1 rounded-full text-sm font-medium">
-                                        {member.tag}
+
+                                    {/* Gradient overlay on hover */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                    {/* Role badge */}
+                                    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20">
+                                        <span className="px-5 py-2 bg-[#D2691E]/90 text-white text-sm font-medium rounded-full backdrop-blur-sm shadow-lg">
+                                            {member.tag}
+                                        </span>
                                     </div>
                                 </div>
 
-                                <div className="p-6">
-                                    <h3 className="text-xl font-bold text-black mb-1">{member.name}</h3>
+                                {/* Content */}
+                                <div className="p-7 text-center">
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#D2691E] transition-colors duration-300">
+                                        {member.name}
+                                    </h3>
+
                                     <p className="text-[#D2691E] font-medium mb-4">{member.role}</p>
-                                    <p className="text-gray-600 text-sm mb-6">{member.desc}</p>
 
-                                    <div className="flex gap-4">
-                                        <a href="#" className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-[#D2691E] hover:text-white transition-colors duration-300">
-                                            <FaLinkedin />
-                                        </a>
-                                        <a href="#" className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-[#D2691E] hover:text-white transition-colors duration-300">
-                                            <FaTwitter />
-                                        </a>
-                                        <a href="#" className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-[#D2691E] hover:text-white transition-colors duration-300">
-                                            <FaEnvelope />
-                                        </a>
+                                    <p className="text-gray-600 text-sm leading-relaxed mb-7 line-clamp-3">
+                                        {member.desc}
+                                    </p>
+
+                                    {/* Social Icons */}
+                                    <div className="flex justify-center gap-4">
+                                        {[
+                                            { icon: <FaLinkedin className="w-5 h-5" />, label: "LinkedIn" },
+                                            { icon: <FaTwitter className="w-5 h-5" />, label: "Twitter" },
+                                            { icon: <FaEnvelope className="w-5 h-5" />, label: "Email" },
+                                        ].map((social, idx) => (
+                                            <motion.a
+                                                key={idx}
+                                                href="#"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-gray-500 hover:text-[#D2691E] transition-colors duration-300"
+                                                aria-label={social.label}
+                                                whileHover={{ scale: 1.2, rotate: 8 }}
+                                                whileTap={{ scale: 0.95 }}
+                                            >
+                                                {social.icon}
+                                            </motion.a>
+                                        ))}
                                     </div>
                                 </div>
+
+                                {/* Bottom accent line */}
+                                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D2691E]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Optional bottom CTA */}
+                    <motion.div
+                        className="text-center mt-16"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: teamInView ? 1 : 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                    >
+                        <p className="text-gray-600 mb-6">
+                            Want to join our growing team? We're always looking for passionate people!
+                        </p>
+                        <a
+                            href="/careers"
+                            className="inline-flex items-center gap-3 px-8 py-4 bg-[#D2691E] hover:bg-[#c15c18] text-white font-medium rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+                        >
+                            View Career Opportunities
+                            <span>→</span>
+                        </a>
+                    </motion.div>
                 </div>
             </section>
 
             {/* Commitment Section - FIXED VERSION */}
-            <section ref={commitmentRef} className="py-24 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
-                {/* Simplified background pattern without complex SVG string */}
-                <div className="absolute inset-0 opacity-5">
-                    <div className="absolute inset-0 bg-[length:60px_60px]" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D2691E' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")`
-                    }}></div>
-                </div>
+            <section
+                ref={commitmentRef}
+                className="py-24 lg:py-32 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
+            >
+                {/* Decorative subtle blobs - same style as team section */}
+                <div className="absolute -right-20 top-20 w-96 h-96 bg-[#D2691E]/5 rounded-full blur-3xl opacity-60" />
+                <div className="absolute -left-32 bottom-10 w-80 h-80 bg-amber-300/10 rounded-full blur-3xl opacity-70" />
 
-                <div className="container mx-auto px-4 relative z-10">
+                <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+                    {/* Header */}
                     <motion.div
-                        className="max-w-4xl mx-auto text-center mb-16"
+                        className="text-center mb-16 lg:mb-20"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: commitmentInView ? 1 : 0, y: commitmentInView ? 0 : 30 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.9 }}
                     >
-                        <h3 className="text-4xl md:text-5xl font-bold mb-6">
-                            Our <span className="text-[#D2691E]">Commitment</span> to You
-                        </h3>
-                        <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                            We're dedicated to providing exceptional service while minimizing our environmental footprint.
-                            Every rental contributes to a greener future through our sustainability initiatives.
+                        <span className="inline-block px-5 py-2 rounded-full bg-[#D2691E]/10 text-[#D2691E] font-medium text-sm tracking-wider mb-5">
+                            OUR COMMITMENT
+                        </span>
+
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                            Driving with <span className="text-[#D2691E]">Purpose</span>
+                        </h2>
+
+                        <p className="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
+                            We're committed to making every journey more sustainable, responsible, and enjoyable — today and for future generations.
                         </p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+                        {/* Left - Text commitments */}
                         <motion.div
-                            className="space-y-8"
-                            initial={{ x: -100, opacity: 0 }}
-                            animate={{ x: commitmentInView ? 0 : -100, opacity: commitmentInView ? 1 : 0 }}
+                            className="space-y-8 order-2 lg:order-1"
+                            initial={{ x: -60, opacity: 0 }}
+                            animate={{ x: commitmentInView ? 0 : -60, opacity: commitmentInView ? 1 : 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
-                            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700">
-                                <h4 className="text-xl font-bold text-white mb-3">Eco-Friendly Fleet</h4>
-                                <p className="text-gray-300">30% of our vehicles are hybrid or electric, with plans to reach 50% by 2025.</p>
-                            </div>
-                            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700">
-                                <h4 className="text-xl font-bold text-white mb-3">Carbon Offset Program</h4>
-                                <p className="text-gray-300">We offset 100% of our operational carbon emissions through verified projects.</p>
-                            </div>
-                            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700">
-                                <h4 className="text-xl font-bold text-white mb-3">Community Impact</h4>
-                                <p className="text-gray-300">Supporting local communities through various outreach and employment programs.</p>
-                            </div>
+                            {[
+                                {
+                                    title: "Green Fleet Initiative",
+                                    desc: "Over 40% of our vehicles are already hybrid or fully electric — with a clear goal to reach 75% sustainable fleet by 2026.",
+                                    progress: 68,
+                                },
+                                {
+                                    title: "Carbon Neutral Operations",
+                                    desc: "Every rental is 100% carbon offset through verified renewable energy and global reforestation programs.",
+                                    progress: 100,
+                                },
+                                {
+                                    title: "Community & Responsibility",
+                                    desc: "We invest 5% of annual profits into local environmental projects and community development programs.",
+                                    progress: null,
+                                },
+                            ].map((item, i) => (
+                                <div
+                                    key={i}
+                                    className="group bg-white rounded-2xl p-7 border border-gray-100 shadow-lg hover:shadow-2xl hover:border-[#D2691E]/30 transition-all duration-500 hover:-translate-y-2"
+                                >
+                                    <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#D2691E] transition-colors duration-300">
+                                        {item.title}
+                                    </h4>
+
+                                    <p className="text-gray-600 mb-5 leading-relaxed">{item.desc}</p>
+
+                                    {item.progress !== null && (
+                                        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-[#D2691E] to-amber-600 rounded-full transition-all duration-1000 ease-out"
+                                                style={{ width: commitmentInView ? `${item.progress}%` : '0%' }}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </motion.div>
 
+                        {/* Right - Visual + highlight */}
                         <motion.div
-                            className="grid grid-cols-2 gap-6"
-                            initial={{ x: 100, opacity: 0 }}
-                            animate={{ x: commitmentInView ? 0 : 100, opacity: commitmentInView ? 1 : 0 }}
+                            className="order-1 lg:order-2"
+                            initial={{ x: 60, opacity: 0 }}
+                            animate={{ x: commitmentInView ? 0 : 60, opacity: commitmentInView ? 1 : 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                            <div className="relative rounded-2xl overflow-hidden shadow-2xl group border border-gray-100">
                                 <img
                                     src={carLeft}
-                                    alt="Eco-friendly Car"
-                                    className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500"
+                                    alt="Sustainable mobility - electric and hybrid vehicles"
+                                    className="w-full h-[380px] md:h-[460px] object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
-                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                    <p className="text-white font-medium">Sustainable Choices</p>
-                                </div>
-                            </div>
-                            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                                <img
-                                    src={carRight}
-                                    alt="Luxury Car"
-                                    className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500"
-                                />
-                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                    <p className="text-white font-medium">Premium Experience</p>
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
+
+                                <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+                                    <div className="inline-block px-5 py-2 bg-[#D2691E]/90 text-white font-medium rounded-full mb-4 backdrop-blur-sm">
+                                        Eco-Conscious Choice
+                                    </div>
+
+                                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                                        Cleaner Mobility Today
+                                    </h3>
+
+                                    <p className="text-white/90 text-lg">
+                                        Premium electric & hybrid options • Fast charging network • Real impact with every mile
+                                    </p>
                                 </div>
                             </div>
                         </motion.div>
                     </div>
 
+                    {/* Final CTA */}
                     <motion.div
-                        className="mt-16 text-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: commitmentInView ? 1 : 0 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="text-center mt-16 lg:mt-20"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: commitmentInView ? 1 : 0, y: commitmentInView ? 0 : 30 }}
+                        transition={{ duration: 0.9, delay: 0.7 }}
                     >
                         <a
-                            href="/contact"
-                            className="inline-flex items-center gap-2 bg-[#D2691E] text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-[#b3591a] transition-colors duration-300 shadow-lg hover:shadow-xl"
+                            href="/vehicles?filter=eco"
+                            className="inline-flex items-center gap-3 px-8 py-5 bg-[#D2691E] hover:bg-[#c15c18] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
                         >
-                            Join Our Sustainable Journey
+                            Discover Our Green Vehicles
+                            <span>→</span>
                         </a>
                     </motion.div>
                 </div>
