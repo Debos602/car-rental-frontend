@@ -128,18 +128,22 @@ const ManagePayment = () => {
             title: "Start Time",
             key: "startTime",
             render: (record: Bookings) => (
-                <span className="font-medium">
-                    {formatOnlyTime(record.startTime)}
-                </span>
+                <div className="flex items-center space-x-2">
+                    <span className="font-medium">
+                        {formatOnlyTime(record.startTime)}
+                    </span>
+                </div>
             ),
         },
         {
             title: "End Time",
             key: "endTime",
             render: (record: Bookings) => (
-                <span className="font-medium">
-                    {formatOnlyTime(record.endTime)}
-                </span>
+                <div className="flex items-center space-x-2">
+                    <span className="font-medium">
+                        {formatOnlyTime(record.endTime)}
+                    </span>
+                </div>
             ),
         },
         {
@@ -324,6 +328,7 @@ const ManagePayment = () => {
                     <div className="mb-6">
                         <div className="overflow-x-auto">
                             <Table
+                                bordered
                                 dataSource={allBookings}
                                 columns={columns}
                                 rowKey={(record: Bookings) => record._id}

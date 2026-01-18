@@ -568,6 +568,7 @@ const MyBooking = () => {
                                 <div className="overflow-x-auto">
                                     <div className="min-w-[900px]">
                                         <Table
+                                            bordered
                                             dataSource={bookings.data}
                                             columns={desktopColumns}
                                             rowKey="_id"
