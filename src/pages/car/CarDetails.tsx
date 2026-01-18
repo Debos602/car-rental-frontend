@@ -82,7 +82,7 @@ const CarDetails = () => {
 
         // Treat raw price as unknown to handle unexpected shapes coming from backend
         const price: unknown = (carData as any).pricePerHour;
-        console.log("Raw price value:", price, "Type:", typeof price);
+        // console.log("Raw price value:", price, "Type:", typeof price);
 
         // Try different ways to extract the number
         let numericPrice: number;
@@ -102,7 +102,7 @@ const CarDetails = () => {
             numericPrice = Number(price as any);
         }
 
-        console.log("Parsed numeric price:", numericPrice);
+        // console.log("Parsed numeric price:", numericPrice);
 
         if (isNaN(numericPrice) || !isFinite(numericPrice) || numericPrice <= 0) {
             console.error("Invalid price after parsing:", numericPrice);
@@ -228,7 +228,7 @@ const CarDetails = () => {
 
     const totalHours = Math.max(1, endHour - startHour);
     const totalCostDisplay = calculateTotalCost();
-    console.log("Total cost display:", totalCostDisplay);
+    // console.log("Total cost display:", totalCostDisplay);
 
     const today = new Date().toISOString().split("T")[0];
 

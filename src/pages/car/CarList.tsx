@@ -25,9 +25,9 @@ const CarList = () => {
         refetchOnFocus: true,
     });
 
-    console.log("All cars data:", allCars);
+    // console.log("All cars data:", allCars);
 
-    console.log("Cars data:", cars);
+    // console.log("Cars data:", cars);
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
     const [form] = Form.useForm();
     const PAGE_SIZE = 6;

@@ -15,8 +15,8 @@ import {
     DollarCircleFilled,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { formatTimeRange } from "@/lib/time";
 import { useSelector } from "react-redux";
+import { formatOnlyTime } from "@/lib/time";
 
 interface ApiError {
     data?: { message: string; };
@@ -85,7 +85,7 @@ const BookingList = () => {
                     <div className="relative overflow-hidden rounded-xl shadow-md">
                         <img
                             src={image}
-                            className="h-16 w-28 object-cover transition-transform duration-500 hover:scale-110"
+                            className="hidden md:block h-16 w-28 object-cover  transition-transform duration-500 hover:scale-110"
                             alt={record.car?.name}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
@@ -116,17 +116,24 @@ const BookingList = () => {
             ),
         },
         {
-            title: "Time",
-            key: "time",
+            title: "Start Time",
+            key: "startTime",
             render: (record: Bookings) => (
-                <div className="flex flex-col sm:flex-row sm:gap-6 text-sm">
-                    <div>
-                        <span className="text-gray-600">Schedule:</span>{" "}
-                        <span className="font-medium text-chocolate">{formatTimeRange(record.date ? `${record.date}T${record.startTime}` : record.startTime, record.date ? `${record.date}T${record.endTime}` : record.endTime)}</span>
-                    </div>
-                </div>
+                <span className="font-medium">
+                    {formatOnlyTime(record.startTime)}
+                </span>
             ),
         },
+        {
+            title: "End Time",
+            key: "endTime",
+            render: (record: Bookings) => (
+                <span className="font-medium">
+                    {formatOnlyTime(record.endTime)}
+                </span>
+            ),
+        },
+
         {
             title: "Total",
             dataIndex: "totalCost",
@@ -180,7 +187,7 @@ const BookingList = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-white py-10 sm:py-12">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-white py-8 md:py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <motion.div
@@ -201,7 +208,7 @@ const BookingList = () => {
                         onClick={() =>
                             navigate(user.role === "user" ? "/dashboard/booking" : "/admin-dashboard/manage-booking")
                         }
-                        className="px-7 py-3 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-medium rounded-xl shadow-lg transition-all duration-300"
+                        className="px-7 py-3 bg-[#D2691E] hover:text-black text-white font-medium rounded-xl shadow-lg transition-all duration-300"
                     >
                         {user.role === "user" ? "User Dashboard" : "Admin Dashboard"}
                     </motion.button>
@@ -242,7 +249,7 @@ const BookingList = () => {
                                         pageSize: 6,
                                         className: "px-6 py-5",
                                     }}
-                                    className="custom-ant-table"
+                                    className="custom-ant-table scroll-y-auto"
                                     rowClassName={() => "hover:bg-amber-50/40 transition-colors duration-200"}
                                 />
                             </div>
@@ -280,7 +287,7 @@ const BookingList = () => {
                                 title: "Total Bookings",
                                 value: bookings.data.length,
                                 icon: <CalendarOutlined />,
-                                color: "chocolate",
+                                color: "black",
                             },
                             {
                                 title: "Total Spent",

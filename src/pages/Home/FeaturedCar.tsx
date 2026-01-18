@@ -85,7 +85,7 @@ const FeaturedCars = () => {
                 initial={{ opacity: 0, y: 40 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 1 }}
-                className="container mx-auto py-20"
+                className="container mx-auto py-8 md:py-20"
             >
                 <div className="grid grid-cols-1 md:grid-cols-5">
                     <div className="p-4 md:col-span-1 text-center md:text-left">
@@ -97,7 +97,7 @@ const FeaturedCars = () => {
                             Our Top Picks For You
                             <span className="text-[#D2691E]"> Today!</span>
                         </p>
-                        <p className="text-lg font-medium text-black/80 max-w-2xl mx-auto mb-8">
+                        <p className="text-lg font-medium text-black/80 max-w-2xl mx-auto md:mb-8 ">
                             Explore our handpicked selection of the most popular cars, offering
                             unbeatable comfort, style, and performance.
                         </p>

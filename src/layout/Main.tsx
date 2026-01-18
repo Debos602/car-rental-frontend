@@ -1,9 +1,7 @@
 import { Layout } from "antd";
-
 import { Outlet } from "react-router-dom";
-
 import Header from "./Header";
-import Footer from "@/pages/Home/Footer";
+import Footer from "@/layout/Footer";
 
 const { Content } = Layout;
 

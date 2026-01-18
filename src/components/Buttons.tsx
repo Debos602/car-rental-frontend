@@ -5,14 +5,15 @@ interface ButtonProps {
     children: React.ReactNode;
     to: string;
     className?: string;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
-const Buttons = ({ children, to, className }: ButtonProps) => {
+const Buttons = ({ children, to, className, onClick }: ButtonProps) => {
     const baseClasses =
         "flex items-center border uppercase rounded-xl border-[#D2691E] bg-[#D2691E] text-white hover:bg-[#a8581a] transition duration-300 px-6 py-3 font-bold";
 
     return (
-        <Link to={to} className={`${baseClasses} ${className ?? ""}`.trim()}>
+        <Link to={to} className={`${baseClasses} ${className ?? ""}`.trim()} onClick={onClick}>
             {children}
             <RightOutlined className="ml-1 text-sm" />
         </Link>

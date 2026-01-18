@@ -39,7 +39,7 @@ const CommitmentSection = () => {
                 }}></div>
             </div>
 
-            <section className="container mx-auto py-20 px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative">
+            <section className="container mx-auto py-8 md:py-20 px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative">
                 {/* Content Section */}
                 <motion.div
                     className="relative"

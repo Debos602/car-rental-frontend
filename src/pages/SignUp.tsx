@@ -8,6 +8,7 @@ import { Rule } from "antd/es/form";
 import { motion } from "framer-motion";
 import bgImage from "../../src/assets/img-2.jpg";
 import { UserOutlined, MailOutlined, LockOutlined, PhoneOutlined, HomeOutlined } from "@ant-design/icons";
+import logo from "@/assets/car_lgo.png";
 
 // Define the type for form fields
 type FieldType = {
@@ -82,7 +83,7 @@ const SignUp: React.FC = () => {
         <div className="h-screen grid grid-cols-1 md:grid-cols-2">
 
             {/* Left: full-height image panel */}
-            <div className="w-full">
+            <div className="w-full hidden md:block">
                 <div
                     className="relative h-full w-full bg-cover bg-center"
                     style={{ backgroundImage: `url(${bgImage})` }}
@@ -91,13 +92,24 @@ const SignUp: React.FC = () => {
                     <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-br from-[#D2691E] to-transparent transform skew-x-[-12deg] -translate-x-6 hidden md:block" />
                     <div className="relative z-10 h-full flex items-center justify-center p-8 md:p-10">
                         <div>
+                            <Link to="/" className="flex-shrink-0 flex items-center gap-3 group mb-2">
+                                <img
+                                    src={logo}
+                                    className="h-12 lg:h-14 object-contain group-hover:scale-105 transition-transform duration-300"
+                                    alt="Car Rental Logo"
+                                />
+                                <div className="hidden lg:block">
+                                    <h1 className="text-xl font-lora font-bold text-white">Car Rental</h1>
+                                    <p className="text-xs text-white">Premium Car Rentals</p>
+                                </div>
+                            </Link>
                             <motion.h2
                                 initial={{ y: -10, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.1, duration: 0.6 }}
-                                className="text-4xl md:text-5xl font-extrabold mb-3 text-white"
+                                className="text-4xl md:text-5xl font-extrabold mb-4 text-white"
                             >
-                                Join Us Today!
+                                Join Us <span className="text-[#f16704]">Today!</span>
                             </motion.h2>
                             <motion.p
                                 initial={{ y: 8, opacity: 0 }}
@@ -118,7 +130,7 @@ const SignUp: React.FC = () => {
                     <div className="absolute top-2 right-4">
                         <Button type="default" icon={<HomeOutlined />} onClick={() => navigate('/')}>Home</Button>
                     </div>
-                    <h2 className="text-3xl font-extrabold text-center mb-2 text-[#111827] tracking-wide">Create Your Account</h2>
+                    <h2 className="text-3xl font-extrabold text-center mb-2 mt-4 md:mt-0 text-[#111827] tracking-wide">Create Your Account</h2>
                     <p className="text-center text-gray-600 mb-6 text-base">Sign up to get started</p>
                     <Form
                         name="signup"

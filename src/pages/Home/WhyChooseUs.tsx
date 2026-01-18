@@ -19,7 +19,7 @@ const WhyChooseUs = () => {
 
     return (
         <div className="bg-black/80 bg-gradient-to-l from-white/20 to-black text-white relative overflow-hidden">
-            <section ref={ref} className="container mx-auto py-20 relative">
+            <section ref={ref} className="container mx-auto py-8 md:py-20 relative">
                 {/* Decorative chocolate circle behind heading */}
                 <div className="absolute -left-20 -top-20 w-72 h-72 rounded-full bg-[#D2691E] opacity-10 blur-xl pointer-events-none"></div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">

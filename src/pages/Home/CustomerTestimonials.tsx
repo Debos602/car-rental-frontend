@@ -41,7 +41,7 @@ const CustomerTestimonials = () => {
 
     return (
         <div className="bg-gradient-to-b from-white to-gray-50 text-black">
-            <section ref={ref} className="py-16 container mx-auto">
+            <section ref={ref} className="py-8 md:py-20 container mx-auto">
 
                 <div className="relative mx-auto">
                     {/* decorative big quote (soft) */}
@@ -53,7 +53,7 @@ const CustomerTestimonials = () => {
                     </div>
 
                     <motion.p
-                        className="text-3xl font-bold text-black mb-10"
+                        className="text-3xl font-bold text-black mb-8"
                         initial={{ opacity: 0, y: -20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 1 }}

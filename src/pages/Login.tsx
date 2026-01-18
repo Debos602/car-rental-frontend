@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import bgImage from "../../src/assets/img-1.jpg";
 import { motion } from "framer-motion";
 import { MailOutlined, LockOutlined, HomeOutlined } from "@ant-design/icons";
+import logo from "@/assets/car_lgo.png";
 
 type FieldType = {
     email?: string;
@@ -67,10 +68,10 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="h-screen grid grid-cols-1 md:grid-cols-2">
 
             {/* Left: full-height image panel */}
-            <div className="w-full">
+            <div className="w-full hidden md:block">
                 <div
                     className="relative h-full w-full bg-cover bg-center"
                     style={{ backgroundImage: `url(${bgImage})` }}
@@ -79,13 +80,25 @@ const Login: React.FC = () => {
                     <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-br from-[#D2691E] to-transparent transform skew-x-[-12deg] -translate-x-6 hidden md:block" />
                     <div className="relative z-10 h-full flex items-center justify-center p-8 md:p-10">
                         <div>
+                            <Link to="/" className="flex-shrink-0 flex items-center gap-3 group mb-2">
+                                <img
+                                    src={logo}
+                                    className="h-12 lg:h-14 object-contain group-hover:scale-105 transition-transform duration-300"
+                                    alt="Car Rental Logo"
+                                />
+                                <div className="hidden lg:block">
+                                    <h1 className="text-xl font-lora font-bold text-white">Car Rental</h1>
+                                    <p className="text-xs text-white">Premium Car Rentals</p>
+                                </div>
+                            </Link>
+
                             <motion.h2
                                 initial={{ y: -10, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.1, duration: 0.6 }}
                                 className="text-4xl md:text-5xl font-extrabold mb-3 text-white"
                             >
-                                Welcome Back!
+                                Welcome <span className="text-[#D2691E]">Back!</span>
                             </motion.h2>
                             <motion.p
                                 initial={{ y: 8, opacity: 0 }}

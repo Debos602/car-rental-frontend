@@ -16,9 +16,8 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined
 } from "@ant-design/icons";
-import { formatTimeRange } from "@/lib/time";
+import { formatOnlyTime } from "@/lib/time";
 import { useSocket } from "@/hook/useSocket";
-import { useAppSelector } from "@/redux/hook";
 
 
 // Theme colors based on your dashboard
@@ -239,7 +238,6 @@ const MyBooking = () => {
             responsive: ['md'] as any,
             render: (date: string) => (
                 <div className="flex flex-col">
-                    <CalendarOutlined style={{ color: themeColors.primary, fontSize: '12px', marginBottom: '4px' }} />
                     <span className="text-xs font-medium" style={{ color: themeColors.text }}>
                         {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </span>
@@ -250,28 +248,24 @@ const MyBooking = () => {
             ),
         },
         {
-            title: <span style={{ color: themeColors.text, fontWeight: 600 }}>Time</span>,
-            key: 'time',
-            width: 100,
-            responsive: ['md'] as any,
+            title: "Start Time",
+            key: "startTime",
             render: (record: Bookings) => (
-                <div className="space-y-1">
-                    <div className="flex items-center space-x-1">
-                        <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
-                        <span className="text-xs font-medium" style={{ color: themeColors.text }}>
-                            {formatTimeRange(record.startTime, record.endTime)}
-                        </span>
-                    </div>
-                    <div className="text-xs" style={{ color: themeColors.lightText }}>to</div>
-                    <div className="flex items-center space-x-1">
-                        <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
-                        <span className="text-xs font-medium" style={{ color: themeColors.text }}>
-                            {formatTimeRange(record.startTime, record.endTime)}
-                        </span>
-                    </div>
-                </div>
+                <span className="font-medium">
+                    {formatOnlyTime(record.startTime)}
+                </span>
             ),
         },
+        {
+            title: "End Time",
+            key: "endTime",
+            render: (record: Bookings) => (
+                <span className="font-medium">
+                    {formatOnlyTime(record.endTime)}
+                </span>
+            ),
+        },
+
         {
             title: <span style={{ color: themeColors.text, fontWeight: 600 }}>Duration</span>,
             key: 'duration',
@@ -296,7 +290,6 @@ const MyBooking = () => {
             responsive: ['sm'] as any,
             render: (totalCost: number) => (
                 <div className="flex flex-col items-center">
-                    <DollarOutlined style={{ color: themeColors.accent, fontSize: '12px', marginBottom: '4px' }} />
                     <span className="font-bold text-sm" style={{ color: themeColors.text }}>
                         ${totalCost.toFixed(2)}
                     </span>
@@ -437,7 +430,7 @@ const MyBooking = () => {
                                 <div className="flex items-center space-x-1">
                                     <ClockCircleOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
                                     <span className="text-xs" style={{ color: themeColors.text }}>
-                                        {formatTimeRange(`${booking.date}T${booking.startTime}`, `${booking.date}T${booking.endTime}`)}
+                                        {/* {(`${booking.date}T${booking.startTime}`, `${booking.date}T${booking.endTime}`)} */}
                                     </span>
                                 </div>
                             </div>

@@ -39,7 +39,7 @@ const NextArrow = (props: CustomArrowProps) => {
 
     return (
         <motion.button
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-chocolate to-amber-800 text-white p-2 sm:p-3 md:p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-30 border-2 border-white hover:from-amber-800 hover:to-chocolate"
+            className="absolute right-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30 "
             onClick={onClick}
             aria-label="Next"
             initial={{ opacity: 0, x: 40 }}
@@ -57,12 +57,12 @@ const PrevArrow = (props: CustomArrowProps) => {
 
     return (
         <motion.button
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-gradient-to-l from-chocolate to-amber-800 text-white p-2 sm:p-3 md:p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-30 border-2 border-white hover:from-amber-800 hover:to-chocolate"
+            className="absolute left-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30"
             onClick={onClick}
             aria-label="Previous"
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
+            exit={{ opacity: 0, x: 0 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
         >
             <ArrowLeftOutlined className="text-xs sm:text-sm md:text-base" />
@@ -360,8 +360,6 @@ const HeroSection = () => {
                             </motion.div>
                         </motion.div>
                     </div>
-
-
                 </div>
             </motion.div>
 

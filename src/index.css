@@ -791,3 +791,9 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+
+.ant-pagination-item-active a {
+    color: #fff !important;
+    background-color: #D2691E !important;
+}
