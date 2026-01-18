@@ -10,9 +10,10 @@ import {
     ClockCircleOutlined,
     CarOutlined,
     CreditCardOutlined,
-    CheckCircleOutlined,
-    LoadingOutlined
+    CheckCircleOutlined
+
 } from "@ant-design/icons";
+import { formatOnlyTime } from "@/lib/time";
 
 const { Title, Text } = Typography;
 
@@ -49,78 +50,7 @@ const ManagePayment = () => {
         refetchOnFocus: true,
     });
 
-    const handleCreateOrder = async () => {
-        // Build orders from unpaid bookings: support bulk payment
-        const allBookings = bookings?.data || [];
-        const unpaid = allBookings.filter((b: Bookings) => b.paymentStatus !== 'paid');
-
-        if (unpaid.length === 0) {
-            toast.error("No unpaid bookings found to pay");
-            return;
-        }
-
-        if (unpaid.length === 1) {
-            // Single booking - keep existing behaviour
-            const firstBooking = unpaid[0];
-            const orderData: TOrder = {
-                bookingId: firstBooking._id,
-                carName: firstBooking.car?.name || "",
-                date: firstBooking.date,
-                startTime: firstBooking.startTime,
-                endTime: firstBooking.endTime,
-                totalCost: firstBooking.totalCost || 0,
-                transactionId: firstBooking.transactionId || `TXN-${Date.now()}`,
-                paymentStatus: firstBooking.paymentStatus || "pending",
-                email: firstBooking.user?.email || "",
-                phone: firstBooking.user?.phone || "",
-                name: firstBooking.user?.name || ""
-            };
-
-            try {
-                const response = await createOrder(orderData).unwrap();
-                toast.success("Payment link created successfully!");
-                if (response?.data?.payment_url) {
-                    window.open(response.data.payment_url, "_self");
-                }
-            } catch (error: any) {
-                toast.error(error?.data?.message || "Failed to create payment link. Please try again.");
-            }
-            return;
-        }
-
-        // Multiple unpaid bookings -> create a bulk order
-        const bookingIds = unpaid.map((b: Bookings) => b._id);
-        const totalAmount = unpaid.reduce((sum: number, b: Bookings) => sum + (b.totalCost || 0), 0);
-
-        // Use contact info from the first unpaid booking (adjust if needed)
-        const contact = unpaid[0]?.user || { name: '', email: '', phone: '' };
-
-        // Build a bulk order payload. Backend should support receiving `bookingIds` for bulk payments.
-        const bulkOrderPayload: any = {
-            bookingIds,
-            carName: 'Multiple Bookings',
-            date: new Date().toISOString(),
-            startTime: '',
-            endTime: '',
-            totalCost: totalAmount,
-            transactionId: `TXN-BULK-${Date.now()}`,
-            paymentStatus: 'pending',
-            name: contact.name || '',
-            email: contact.email || '',
-            phone: contact.phone || '',
-            isBulk: true
-        };
-
-        try {
-            const response = await createOrder(bulkOrderPayload).unwrap();
-            toast.success("Bulk payment link created successfully!");
-            if (response?.data?.payment_url) {
-                window.open(response.data.payment_url, "_self");
-            }
-        } catch (error: any) {
-            toast.error(error?.data?.message || "Failed to create bulk payment link. Please try again.");
-        }
-    };
+    console.log("Bookings data:", bookings);
 
     // Create payment for a specific booking (used by per-row action)
     const handleCreateOrderForBooking = async (booking: Bookings) => {
@@ -195,21 +125,21 @@ const ManagePayment = () => {
             ),
         },
         {
-            title: <span className="font-semibold" style={{ color: themeColors.text }}>Time Slot</span>,
-            key: "time",
-            width: 120,
+            title: "Start Time",
+            key: "startTime",
             render: (record: Bookings) => (
-                <div className="space-y-1">
-                    <div className="flex items-center space-x-1">
-                        <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
-                        <span className="text-xs" style={{ color: themeColors.text }}>{record.startTime}</span>
-                    </div>
-                    <div className="text-xs text-center" style={{ color: themeColors.lightText }}>to</div>
-                    <div className="flex items-center space-x-1">
-                        <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
-                        <span className="text-xs" style={{ color: themeColors.text }}>{record.endTime}</span>
-                    </div>
-                </div>
+                <span className="font-medium">
+                    {formatOnlyTime(record.startTime)}
+                </span>
+            ),
+        },
+        {
+            title: "End Time",
+            key: "endTime",
+            render: (record: Bookings) => (
+                <span className="font-medium">
+                    {formatOnlyTime(record.endTime)}
+                </span>
             ),
         },
         {
@@ -218,21 +148,32 @@ const ManagePayment = () => {
             width: 100,
             render: (record: Bookings) => {
                 try {
-                    const start = new Date(`${record.date}T${record.startTime}`);
-                    const end = new Date(`${record.date}T${record.endTime}`);
-                    const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+                    const start = new Date(record.startTime);
+                    const end = new Date(record.endTime);
+
+                    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                        return <div className="text-center">N/A</div>;
+                    }
+
+                    const duration =
+                        (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+
                     return (
                         <div className="text-center">
-                            <span className="text-sm font-bold" style={{ color: themeColors.primary }}>
+                            <span
+                                className="text-sm font-bold"
+                                style={{ color: themeColors.primary }}
+                            >
                                 {duration.toFixed(1)}h
                             </span>
                         </div>
                     );
-                } catch (error) {
+                } catch {
                     return <div className="text-center">N/A</div>;
                 }
             },
-        },
+        }
+        ,
         {
             title: <span className="font-semibold" style={{ color: themeColors.text }}>Amount</span>,
             dataIndex: "totalCost",
