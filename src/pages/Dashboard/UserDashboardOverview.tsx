@@ -26,6 +26,8 @@ import {
     Line
 } from "recharts";
 import { CSSProperties } from "react";
+import { formatOnlyTime } from "@/lib/time";
+import { Bookings } from "@/types/global";
 
 const { Title, Text } = Typography;
 
@@ -194,7 +196,32 @@ export default function UserDashBoardOverview() {
     // Colors for charts based on theme
     const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
     const PAYMENT_COLORS = ['#10b981', '#f59e0b'];
+    const computeDurationHours = (dateStr?: string, start?: string, end?: string) => {
+        if (!start || !end) return 0;
 
+        const makeDate = (d?: string, t?: string) => {
+            if (!d || !t) return null;
+            // If time already contains a 'T', assume full ISO
+            if (t.includes('T')) return new Date(t);
+            // If date string contains time already
+            if (d.includes('T')) return new Date(d);
+            try {
+                return new Date(`${d}T${t}`);
+            } catch (e) {
+                return null;
+            }
+        };
+
+        const sd = makeDate(dateStr, start);
+        const ed = makeDate(dateStr, end);
+        if (!sd || !ed) return 0;
+        const s = sd.getTime();
+        const e = ed.getTime();
+        if (!Number.isFinite(s) || !Number.isFinite(e)) return 0;
+        const diffHours = (e - s) / (1000 * 60 * 60);
+        if (!Number.isFinite(diffHours) || Number.isNaN(diffHours) || diffHours <= 0) return 0;
+        return Math.round((diffHours + Number.EPSILON) * 10) / 10; // 1 decimal
+    };
     // Responsive table columns with breakpoints
     const columns = [
         {
@@ -219,30 +246,36 @@ export default function UserDashBoardOverview() {
             ),
         },
         {
-            title: 'Date & Time',
-            key: 'datetime',
-            width: 150,
-            render: (record: Booking) => (
-                <div className="min-w-0">
-                    <div className="font-medium text-sm" style={{ color: themeColors.text }}>{new Date(record.date).toLocaleDateString()}</div>
-                    <Text type="secondary" className="text-xs truncate" style={{ color: themeColors.lightText }}>
-                        {record.startTime} - {record.endTime}
-                    </Text>
-                </div>
+            title: "Start Time",
+            key: "startTime",
+            render: (record: Bookings) => (
+                <span className="font-medium">
+                    {formatOnlyTime(record.startTime)}
+                </span>
             ),
         },
         {
-            title: 'Duration',
+            title: "End Time",
+            key: "endTime",
+            render: (record: Bookings) => (
+                <span className="font-medium">
+                    {formatOnlyTime(record.endTime)}
+                </span>
+            ),
+        },
+
+        {
+            title: <span style={{ color: themeColors.text, fontWeight: 600 }}>Duration</span>,
             key: 'duration',
-            width: 100,
-            responsive: ['md'] as any,
-            render: (record: Booking) => {
-                const start = new Date(`${record.date}T${record.startTime}`);
-                const end = new Date(`${record.date}T${record.endTime}`);
-                const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+            width: 90,
+            responsive: ['lg'] as any,
+            render: (record: Bookings) => {
+                const duration = computeDurationHours(record.date, record.startTime, record.endTime);
                 return (
-                    <div className="font-medium text-sm" style={{ color: themeColors.text }}>
-                        {duration.toFixed(1)}h
+                    <div className="text-center">
+                        <div className="text-xs font-bold" style={{ color: themeColors.primary }}>
+                            {duration > 0 ? `${duration.toFixed(1)}h` : "—"}
+                        </div>
                     </div>
                 );
             },
@@ -688,6 +721,7 @@ export default function UserDashBoardOverview() {
                     <div className="w-full overflow-x-auto" style={scrollbarStyles}>
                         <div className="min-w-[800px]">
                             <Table
+                                bordered
                                 columns={columns}
                                 dataSource={bookingsData.slice(0, 5)}
                                 rowKey="_id"
