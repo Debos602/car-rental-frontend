@@ -58,8 +58,6 @@ interface IBookingValues {
     returnDate: Dayjs;
     pickupTime: Dayjs;
     returnTime: Dayjs;
-    pickupLocation: string;
-    returnLocation: string;
 }
 
 const containerVariants = {
@@ -233,8 +231,9 @@ const DashboardCarList = () => {
             userId: currentUser?.userId || '', // From auth
             carId: selectedCar._id,
             date: values.pickupDate.format('YYYY-MM-DD'),
-            startTime: start.format('HH:mm'),
-            endTime: end.format('HH:mm'),
+            // Send full ISO datetimes for backend compatibility
+            startTime: start.toISOString(),
+            endTime: end.toISOString(),
             features: [],
             totalCost: totalCost
         };

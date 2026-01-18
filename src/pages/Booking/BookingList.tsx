@@ -15,6 +15,7 @@ import {
     DollarCircleFilled,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { formatTimeRange } from "@/lib/time";
 import { useSelector } from "react-redux";
 
 interface ApiError {
@@ -120,12 +121,8 @@ const BookingList = () => {
             render: (record: Bookings) => (
                 <div className="flex flex-col sm:flex-row sm:gap-6 text-sm">
                     <div>
-                        <span className="text-gray-600">Start:</span>{" "}
-                        <span className="font-medium text-chocolate">{record.startTime}</span>
-                    </div>
-                    <div>
-                        <span className="text-gray-600">End:</span>{" "}
-                        <span className="font-medium text-gray-700">{record.endTime}</span>
+                        <span className="text-gray-600">Schedule:</span>{" "}
+                        <span className="font-medium text-chocolate">{formatTimeRange(record.date ? `${record.date}T${record.startTime}` : record.startTime, record.date ? `${record.date}T${record.endTime}` : record.endTime)}</span>
                     </div>
                 </div>
             ),

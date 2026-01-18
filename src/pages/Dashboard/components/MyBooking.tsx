@@ -16,6 +16,7 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined
 } from "@ant-design/icons";
+import { formatTimeRange } from "@/lib/time";
 import { useSocket } from "@/hook/useSocket";
 import { useAppSelector } from "@/redux/hook";
 
@@ -146,6 +147,34 @@ const MyBooking = () => {
         }
     };
 
+    // Robust duration calculator that handles HH:mm or ISO timestamps
+    const computeDurationHours = (dateStr?: string, start?: string, end?: string) => {
+        if (!start || !end) return 0;
+
+        const makeDate = (d?: string, t?: string) => {
+            if (!d || !t) return null;
+            // If time already contains a 'T', assume full ISO
+            if (t.includes('T')) return new Date(t);
+            // If date string contains time already
+            if (d.includes('T')) return new Date(d);
+            try {
+                return new Date(`${d}T${t}`);
+            } catch (e) {
+                return null;
+            }
+        };
+
+        const sd = makeDate(dateStr, start);
+        const ed = makeDate(dateStr, end);
+        if (!sd || !ed) return 0;
+        const s = sd.getTime();
+        const e = ed.getTime();
+        if (!Number.isFinite(s) || !Number.isFinite(e)) return 0;
+        const diffHours = (e - s) / (1000 * 60 * 60);
+        if (!Number.isFinite(diffHours) || Number.isNaN(diffHours) || diffHours <= 0) return 0;
+        return Math.round((diffHours + Number.EPSILON) * 10) / 10; // 1 decimal
+    };
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
@@ -230,14 +259,14 @@ const MyBooking = () => {
                     <div className="flex items-center space-x-1">
                         <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
                         <span className="text-xs font-medium" style={{ color: themeColors.text }}>
-                            {record.startTime}
+                            {formatTimeRange(record.startTime, record.endTime)}
                         </span>
                     </div>
                     <div className="text-xs" style={{ color: themeColors.lightText }}>to</div>
                     <div className="flex items-center space-x-1">
                         <ClockCircleOutlined style={{ color: themeColors.secondary, fontSize: '10px' }} />
                         <span className="text-xs font-medium" style={{ color: themeColors.text }}>
-                            {record.endTime}
+                            {formatTimeRange(record.startTime, record.endTime)}
                         </span>
                     </div>
                 </div>
@@ -249,13 +278,11 @@ const MyBooking = () => {
             width: 90,
             responsive: ['lg'] as any,
             render: (record: Bookings) => {
-                const start = new Date(`${record.date}T${record.startTime}`);
-                const end = new Date(`${record.date}T${record.endTime}`);
-                const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+                const duration = computeDurationHours(record.date, record.startTime, record.endTime);
                 return (
                     <div className="text-center">
                         <div className="text-xs font-bold" style={{ color: themeColors.primary }}>
-                            {duration.toFixed(1)}h
+                            {duration > 0 ? `${duration.toFixed(1)}h` : "—"}
                         </div>
                     </div>
                 );
@@ -341,9 +368,7 @@ const MyBooking = () => {
 
     // Mobile Card View Component
     const MobileBookingCard = ({ booking }: { booking: Bookings; }) => {
-        const start = new Date(`${booking.date}T${booking.startTime}`);
-        const end = new Date(`${booking.date}T${booking.endTime}`);
-        const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+        const duration = computeDurationHours(booking.date, booking.startTime, booking.endTime);
         const { color, text, icon } = getStatusColor(booking.status);
         const canCancel = canCancelBooking(booking.status);
 
@@ -412,7 +437,7 @@ const MyBooking = () => {
                                 <div className="flex items-center space-x-1">
                                     <ClockCircleOutlined style={{ color: themeColors.lightText, fontSize: '12px' }} />
                                     <span className="text-xs" style={{ color: themeColors.text }}>
-                                        {booking.startTime} - {booking.endTime}
+                                        {formatTimeRange(`${booking.date}T${booking.startTime}`, `${booking.date}T${booking.endTime}`)}
                                     </span>
                                 </div>
                             </div>

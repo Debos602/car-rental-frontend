@@ -48,7 +48,7 @@ const About = () => {
             />
 
             {/* Company History */}
-            <section className="py-24 relative overflow-hidden">
+            <section className="py-20 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#FFF6E9] via-white to-[#D2691E]/5"></div>
                 <div className="container mx-auto px-4 relative z-10">
                     <motion.div
@@ -171,7 +171,7 @@ const About = () => {
             {/* Our Team */}
             <section
                 ref={teamRef}
-                className="py-24 lg:py-32 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
+                className="py-12 lg:py-16 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
             >
                 {/* Subtle decorative blobs */}
                 <div className="absolute -right-20 top-20 w-96 h-96 bg-[#D2691E]/5 rounded-full blur-3xl opacity-60" />
@@ -287,7 +287,7 @@ const About = () => {
                             Want to join our growing team? We're always looking for passionate people!
                         </p>
                         <a
-                            href="/careers"
+                            href="/about"
                             className="inline-flex items-center gap-3 px-8 py-4 bg-[#D2691E] hover:bg-[#c15c18] text-white font-medium rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
                         >
                             View Career Opportunities
@@ -300,7 +300,7 @@ const About = () => {
             {/* Commitment Section - FIXED VERSION */}
             <section
                 ref={commitmentRef}
-                className="py-24 lg:py-32 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
+                className="py-12 lg:py-16 bg-gradient-to-b from-white via-amber-50/30 to-slate-50 relative overflow-hidden"
             >
                 {/* Decorative subtle blobs - same style as team section */}
                 <div className="absolute -right-20 top-20 w-96 h-96 bg-[#D2691E]/5 rounded-full blur-3xl opacity-60" />
@@ -309,7 +309,7 @@ const About = () => {
                 <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
                     {/* Header */}
                     <motion.div
-                        className="text-center mb-16 lg:mb-20"
+                        className="text-center mb-8 lg:mb-12"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: commitmentInView ? 1 : 0, y: commitmentInView ? 0 : 30 }}
                         transition={{ duration: 0.9 }}
@@ -407,21 +407,7 @@ const About = () => {
                         </motion.div>
                     </div>
 
-                    {/* Final CTA */}
-                    <motion.div
-                        className="text-center mt-16 lg:mt-20"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: commitmentInView ? 1 : 0, y: commitmentInView ? 0 : 30 }}
-                        transition={{ duration: 0.9, delay: 0.7 }}
-                    >
-                        <a
-                            href="/vehicles?filter=eco"
-                            className="inline-flex items-center gap-3 px-8 py-5 bg-[#D2691E] hover:bg-[#c15c18] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
-                        >
-                            Discover Our Green Vehicles
-                            <span>→</span>
-                        </a>
-                    </motion.div>
+
                 </div>
             </section>
 

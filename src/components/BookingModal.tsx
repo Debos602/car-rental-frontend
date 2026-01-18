@@ -11,8 +11,7 @@ export interface IBookingValues {
     returnDate: Dayjs;
     pickupTime: Dayjs;
     returnTime: Dayjs;
-    pickupLocation: string;
-    returnLocation: string;
+
 }
 
 type Props = {
@@ -81,13 +80,7 @@ const BookingModal: React.FC<Props> = ({ selectedCar, open, bookingForm, onCance
                         </Col>
                     </Row>
 
-                    <Form.Item label="Pickup Location" name="pickupLocation" rules={[{ required: true, message: 'Please enter pickup location' }]}>
-                        <Input placeholder="Enter pickup location" className="rounded-lg" />
-                    </Form.Item>
 
-                    <Form.Item label="Return Location" name="returnLocation" rules={[{ required: true, message: 'Please enter return location' }]}>
-                        <Input placeholder="Enter return location" className="rounded-lg" />
-                    </Form.Item>
 
                     <div className="mt-6 flex justify-end gap-3">
                         <Button onClick={onCancel} className="rounded-lg">Cancel</Button>
