@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useGetAvailableCarsQuery } from "@/redux/feature/car/carManagement.api";
 import { Spin, Table, Typography, Button, Card, Empty, Tag } from "antd";
 import { EyeInvisibleOutlined, ReloadOutlined } from "@ant-design/icons";
@@ -14,6 +15,15 @@ const AvailableCar = () => {
         refetch,
     } = useGetAvailableCarsQuery(params);
     const carsArray = Array.isArray(cars?.data) ? cars.data : [];
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const columns = [
         {
@@ -130,18 +140,65 @@ const AvailableCar = () => {
                 }
             >
                 {carsArray.length > 0 ? (
-                    <Table
-                        dataSource={carsArray}
-                        columns={columns}
-                        rowKey="_id"
-                        size="small"
-                        pagination={{
-                            pageSize: 6,
-                            showSizeChanger: false,
-                            simple: true,
-                        }}
-                        className="compact-table"
-                    />
+                    isMobile ? (
+                        <div className="space-y-3">
+                            {carsArray.map((car: any) => (
+                                <Card key={car._id} bordered className="shadow-sm">
+                                    <div className="flex items-start gap-3">
+                                        <motion.img
+                                            src={car.image}
+                                            alt={car.name}
+                                            className="w-28 h-20 rounded-lg object-cover border"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.25 }}
+                                        />
+                                        <div className="flex-1">
+                                            <div className="flex items-start justify-between">
+                                                <div>
+                                                    <Title level={5} className="m-0">{car.name}</Title>
+                                                    <Text className="text-sm text-gray-600">{car.location}</Text>
+                                                </div>
+                                                <Tag color={car.status === "available" ? "green" : "red"} className="capitalize">
+                                                    {car.status === "available" ? "Available" : "Unavailable"}
+                                                </Tag>
+                                            </div>
+
+                                            <div className="flex items-center justify-between mt-2">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="h-3 w-3 rounded-full border" style={{ backgroundColor: car.color }} />
+                                                        <Text className="text-sm">{car.color}</Text>
+                                                    </div>
+                                                    <div className="mt-2">
+                                                        <Tag color={car.isElectric ? "green" : "blue"}>
+                                                            {car.isElectric ? "Electric" : "Fuel"}
+                                                        </Tag>
+                                                    </div>
+                                                </div>
+                                                <Text strong className="text-blue-600">${car.pricePerHour}/hr</Text>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+                    ) : (
+                        <Table
+                            bordered
+                            dataSource={carsArray}
+                            columns={columns}
+                            rowKey="_id"
+                            size="small"
+                            pagination={{
+                                pageSize: 4,
+                                showSizeChanger: false,
+                                simple: true,
+                            }}
+                            className=""
+                            scroll={{ x: 'max-content' }}
+                        />
+                    )
                 ) : (
                     <Empty
                         image={Empty.PRESENTED_IMAGE_SIMPLE}

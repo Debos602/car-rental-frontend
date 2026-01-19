@@ -18,7 +18,7 @@ import { Dropdown } from "antd";
 import logo from '../assets/car_lgo.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
-import { logout } from "@/redux/feature/authSlice";
+import { logout } from "@/redux/feature/auth/authSlice";
 import { clearBookings } from "@/redux/feature/booking/bookingSlice";
 import { useEffect, useState, useRef } from "react";
 import { TUser } from "@/types/global";

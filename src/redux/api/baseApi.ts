@@ -6,7 +6,7 @@ import {
     fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { logout, setUser } from "../feature/authSlice";
+import { logout, setUser } from "../feature/auth/authSlice";
 
 // Base query with proxy support in dev
 const baseQuery = fetchBaseQuery({

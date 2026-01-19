@@ -1,4 +1,4 @@
-import { useGetUserQuery } from "@/redux/feature/authApi";
+import { useGetUserQuery } from "@/redux/feature/auth/authApi";
 import { useGetBookingsQuery } from "@/redux/feature/booking/bookingApi";
 import { Card, Statistic, Table, Tag, Spin, Row, Col, Typography, List } from "antd";
 import {

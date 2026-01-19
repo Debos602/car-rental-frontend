@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { logout, useCurrentToken } from "@/redux/feature/authSlice";
+import { logout, useCurrentToken } from "@/redux/feature/auth/authSlice";
 import { verifyToken } from "@/utilities/verifyToken";
 import { toast } from "sonner";
 

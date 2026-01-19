@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import { useResetPasswordMutation } from "@/redux/feature/authApi"; // Assuming you're using RTK Query
+import { useResetPasswordMutation } from "@/redux/feature/auth/authApi"; // Assuming you're using RTK Query
 
 type FieldType = {
     newPassword: string;

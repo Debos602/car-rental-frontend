@@ -18,21 +18,37 @@ import {
     AppstoreOutlined,
     SafetyOutlined,
     GlobalOutlined,
+    CloseOutlined,
+    MenuOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Layout, Menu, Input, Badge, Dropdown, Tooltip, Typography, Spin, Empty } from "antd";
+import {
+    Avatar,
+    Button,
+    Layout,
+    Menu,
+    Input,
+    Badge,
+    Dropdown,
+    Tooltip,
+    Typography,
+    Spin,
+    Empty,
+    Drawer,
+    Grid
+} from "antd";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { logout } from "@/redux/feature/authSlice";
 import logo from "@/assets/car_lgo.png";
 import { RootState } from "@/redux/store";
 import { TUser } from "@/types/global";
 import type { MenuProps } from 'antd';
 import { useGetAllNotificationsQuery } from "@/redux/feature/notification/notificationApi";
-// Adjust path as needed
+import { logout } from "@/redux/feature/auth/authSlice";
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 const { Search } = Input;
+const { useBreakpoint } = Grid;
 
 // Notification type interface
 interface NotificationItem {
@@ -53,10 +69,25 @@ const AdminDashboard: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+    const screens = useBreakpoint();
     const [collapsed, setCollapsed] = useState(false);
+    const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [showAllNotifications, setShowAllNotifications] = useState(false);
     const menuContainerRef = useRef<HTMLDivElement>(null);
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+    const isMobile = !screens.lg;
+    const isTablet = !screens.xl && screens.md;
+
+    useEffect(() => {
+        if (!isMobile) {
+            setMobileMenuVisible(false);
+        }
+        if (isMobile) {
+            setCollapsed(true);
+        }
+    }, [isMobile]);
 
     const handleLogout = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -79,14 +110,12 @@ const AdminDashboard: React.FC = () => {
 
     const { data: notificationsData, isLoading, refetch } = useGetAllNotificationsQuery(undefined, {
         refetchOnMountOrArgChange: true,
-        pollingInterval: 30000, // Poll every 30 seconds for new notifications
+        pollingInterval: 30000,
     });
-
-    // console.log("Notifications Data:", notificationsData);
 
     const notifications: NotificationItem[] = notificationsData?.data ?? [];
     const unreadCount = notifications.filter((n) => !n.read).length;
-    // console.log("Notifications Data:", notifications.length);
+
     // Format time label
     const getTimeLabel = (createdAt?: string): string => {
         if (!createdAt) return 'Some time ago';
@@ -155,7 +184,6 @@ const AdminDashboard: React.FC = () => {
     };
 
     const handleNotificationClick = (item: NotificationItem) => {
-        // Handle notification click based on type
         if (item.title.includes('Booking')) {
             navigate('/admin-dashboard/manage-booking');
         } else if (item.title.includes('Car')) {
@@ -165,11 +193,10 @@ const AdminDashboard: React.FC = () => {
         } else if (item.title.includes('Payment')) {
             navigate('/admin-dashboard/manage-return-car');
         }
+        setShowAllNotifications(false);
     };
 
     const handleMarkAllAsRead = async () => {
-        // Implement mark all as read functionality
-        // You'll need to add this mutation to your API
         console.log('Mark all as read');
     };
 
@@ -348,37 +375,37 @@ const AdminDashboard: React.FC = () => {
         {
             key: "1",
             icon: <DashboardOutlined />,
-            label: <Link to="dashboard-overview">Dashboard Overview</Link>,
+            label: <Link to="dashboard-overview" onClick={() => isMobile && setMobileMenuVisible(false)}>Dashboard Overview</Link>,
         },
         {
             key: "2",
             icon: <CarOutlined />,
-            label: <Link to="manage-car">Manage Cars</Link>,
+            label: <Link to="manage-car" onClick={() => isMobile && setMobileMenuVisible(false)}>Manage Cars</Link>,
         },
         {
             key: "3",
             icon: <BookOutlined />,
-            label: <Link to="manage-booking">Manage Bookings</Link>,
+            label: <Link to="manage-booking" onClick={() => isMobile && setMobileMenuVisible(false)}>Manage Bookings</Link>,
         },
         {
             key: "4",
             icon: <MoneyCollectOutlined />,
-            label: <Link to="manage-return-car">Return & Payments</Link>,
+            label: <Link to="manage-return-car" onClick={() => isMobile && setMobileMenuVisible(false)}>Return & Payments</Link>,
         },
         {
             key: "5",
             icon: <TeamOutlined />,
-            label: <Link to="user-management">User Management</Link>,
+            label: <Link to="user-management" onClick={() => isMobile && setMobileMenuVisible(false)}>User Management</Link>,
         },
         {
             key: "6",
             icon: <PieChartOutlined />,
-            label: <Link to="reports">Reports & Analytics</Link>,
+            label: <Link to="reports" onClick={() => isMobile && setMobileMenuVisible(false)}>Reports & Analytics</Link>,
         },
         {
             key: "7",
             icon: <SettingOutlined />,
-            label: <Link to="settings">Settings</Link>,
+            label: <Link to="settings" onClick={() => isMobile && setMobileMenuVisible(false)}>Settings</Link>,
         },
         {
             type: 'divider',
@@ -387,7 +414,7 @@ const AdminDashboard: React.FC = () => {
         {
             key: "8",
             icon: <FileTextOutlined />,
-            label: <Link to="documentation">Documentation</Link>,
+            label: <Link to="documentation" onClick={() => isMobile && setMobileMenuVisible(false)}>Documentation</Link>,
         },
     ];
 
@@ -452,120 +479,156 @@ const AdminDashboard: React.FC = () => {
         },
     ];
 
-    return (
-        <Layout className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-            {/* Sidebar with fixed logo */}
-            <Sider
-                trigger={null}
-                collapsible
-                collapsed={collapsed}
-                width={280}
-                collapsedWidth={80}
-                className="shadow-2xl admin-sidebar"
-                style={{
-                    background: 'linear-gradient(180deg, #4335A7 0%, #2D1B69 100%)',
-                    borderRight: '1px solid rgba(255, 255, 255, 0.15)',
-                    overflow: 'hidden',
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    zIndex: 100,
-                }}
-            >
-                <div className="flex flex-col h-full">
-                    {/* Fixed Logo Section */}
-                    <div className="h-28 flex-shrink-0 border-b border-white/15 bg-gradient-to-r from-[#4335A7] to-[#3a2c95]">
-                        <div className="flex items-center justify-center h-full px-4">
-                            {!collapsed ? (
-                                <div className="flex items-center gap-4 w-full">
-                                    <div className="bg-white/10 p-3 rounded-2xl border border-white/20 shadow-lg">
-                                        <img
-                                            src={logo}
-                                            className="h-12 object-contain"
-                                            alt="logo"
-                                        />
-                                    </div>
-                                    <div className="flex-1">
-                                        <Title level={3} className="!m-0 !text-white !font-bold tracking-tight">
-                                            Car Rental
-                                        </Title>
-                                        <Text className="text-white/80 text-sm font-medium">
-                                            Admin Panel
-                                        </Text>
-                                    </div>
-                                </div>
-                            ) : (
-                                <Tooltip title="Car Rental Admin" placement="right">
-                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/20 shadow-lg">
-                                        <img
-                                            src={logo}
-                                            className="h-10 object-contain"
-                                            alt="logo"
-                                        />
-                                    </div>
-                                </Tooltip>
+    const sidebarContent = (
+        <div className="flex flex-col h-full">
+            {/* Fixed Logo Section */}
+            <div className="h-28 flex-shrink-0 border-b border-white/15 bg-gradient-to-r from-[#4335A7] to-[#3a2c95]">
+                <div className="flex items-center justify-center h-full px-4">
+                    {!collapsed || isMobile ? (
+                        <div className="flex items-center gap-4 w-full">
+                            <div className="bg-white/10 p-3 rounded-2xl border border-white/20 shadow-lg">
+                                <img
+                                    src={logo}
+                                    className="h-12 object-contain"
+                                    alt="logo"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <Title level={3} className="hidden md:block !m-0 !text-white !font-bold tracking-tight">
+                                    Car Rental
+                                </Title>
+                                <Text className="text-white/80 text-sm font-medium">
+                                    Admin Panel
+                                </Text>
+                            </div>
+                            {isMobile && (
+                                <Button
+                                    type="text"
+                                    icon={<CloseOutlined className="text-white" />}
+                                    onClick={() => setMobileMenuVisible(false)}
+                                    className="ml-auto"
+                                />
                             )}
                         </div>
-                    </div>
-
-                    {/* Scrollable Navigation Menu */}
-                    <div
-                        ref={menuContainerRef}
-                        className="flex-1 overflow-y-auto"
-                        style={{
-                            minHeight: '0',
-                        }}
-                    >
-                        <div className="px-4 py-4">
-                            <Menu
-                                mode="inline"
-                                selectedKeys={[getSelectedKey()]}
-                                items={menuItems}
-                                className="admin-menu bg-transparent border-none"
-                                theme="dark"
-                                style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Fixed User Info Section at Bottom */}
-                    {!collapsed && (
-                        <div className="flex-shrink-0 p-5 border-t border-white/15 bg-gradient-to-r from-white/5 to-transparent backdrop-blur-sm">
-                            <div className="flex items-center gap-3">
-                                <Avatar
-                                    size={50}
-                                    src={`https://ui-avatars.com/api/?name=${user?.name}&background=${encodeURIComponent('#D2691E')}&color=fff&size=128&bold=true`}
-                                    className="border-3 border-white/30 shadow-lg"
+                    ) : (
+                        <Tooltip title="Car Rental Admin" placement="right">
+                            <div className="bg-white/10 p-4 rounded-2xl border border-white/20 shadow-lg">
+                                <img
+                                    src={logo}
+                                    className="h-10 object-contain"
+                                    alt="logo"
                                 />
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-base font-bold text-white truncate">
-                                        {user?.name}
-                                    </p>
-                                    <div className="flex items-center gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                                        <p className="text-xs text-white/70 truncate">
-                                            {user?.role === 'admin' ? 'Administrator' : 'User Manager'}
-                                        </p>
-                                    </div>
-                                </div>
-                                <GlobalOutlined className="text-white/60 text-lg" />
                             </div>
-                        </div>
+                        </Tooltip>
                     )}
                 </div>
-            </Sider>
+            </div>
+
+            {/* Scrollable Navigation Menu */}
+            <div
+                ref={menuContainerRef}
+                className="flex-1 overflow-y-auto"
+                style={{
+                    minHeight: '0',
+                }}
+            >
+                <div className="px-4 py-4">
+                    <Menu
+                        mode="inline"
+                        selectedKeys={[getSelectedKey()]}
+                        items={menuItems}
+                        className="admin-menu bg-transparent border-none"
+                        theme="dark"
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                        }}
+                    />
+                </div>
+            </div>
+
+            {/* Fixed User Info Section at Bottom */}
+            {(!collapsed || isMobile) && (
+                <div className="flex-shrink-0 p-5 border-t border-white/15 bg-gradient-to-r from-white/5 to-transparent backdrop-blur-sm">
+                    <div className="flex items-center gap-3">
+                        <Avatar
+                            size={50}
+                            src={`https://ui-avatars.com/api/?name=${user?.name}&background=${encodeURIComponent('#D2691E')}&color=fff&size=128&bold=true`}
+                            className="border-3 border-white/30 shadow-lg"
+                        />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-base font-bold text-white truncate">
+                                {user?.name}
+                            </p>
+                            <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                                <p className="text-xs text-white/70 truncate">
+                                    {user?.role === 'admin' ? 'Administrator' : 'User Manager'}
+                                </p>
+                            </div>
+                        </div>
+                        <GlobalOutlined className="text-white/60 text-lg" />
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+
+    return (
+        <Layout className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            {/* Desktop Sidebar */}
+            {!isMobile && (
+                <Sider
+                    trigger={null}
+                    collapsible
+                    collapsed={collapsed}
+                    width={280}
+                    collapsedWidth={80}
+                    className="shadow-2xl admin-sidebar hidden lg:block"
+                    style={{
+                        background: 'linear-gradient(180deg, #4335A7 0%, #2D1B69 100%)',
+                        borderRight: '1px solid rgba(255, 255, 255, 0.15)',
+                        overflow: 'hidden',
+                        height: '100vh',
+                        position: 'fixed',
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        zIndex: 100,
+                    }}
+                >
+                    {sidebarContent}
+                </Sider>
+            )}
+
+            {/* Mobile Drawer Menu */}
+            <Drawer
+                title={null}
+                placement="left"
+                closable={false}
+                onClose={() => setMobileMenuVisible(false)}
+                open={mobileMenuVisible}
+                width={280}
+                bodyStyle={{ padding: 0 }}
+                className="lg:hidden"
+                style={{ zIndex: 1001 }}
+            >
+                {sidebarContent}
+            </Drawer>
 
             {/* Main Content Area */}
-            <Layout className={`transition-all duration-300 ${collapsed ? 'ml-[80px]' : 'ml-[280px]'}`}
-                style={{ minHeight: '100vh' }}>
+            <Layout
+                className={`transition-all duration-300 ${isMobile
+                    ? 'ml-0'
+                    : collapsed
+                        ? 'ml-[80px]'
+                        : 'ml-[280px]'
+                    }`}
+                style={{ minHeight: '100vh' }}
+            >
                 {/* Header */}
                 <Header
-                    className="sticky top-0 z-50 h-24 px-8 shadow-lg bg-gradient-to-r from-white to-gray-50 border-b border-gray-200/80"
+                    className="sticky top-0 z-50 h-20 md:h-24 px-4 md:px-8 shadow-lg bg-gradient-to-r from-white to-gray-50 border-b border-gray-200/80"
                     style={{
                         backdropFilter: 'blur(20px)',
                         backgroundColor: 'rgba(255, 255, 255, 0.98)'
@@ -573,53 +636,103 @@ const AdminDashboard: React.FC = () => {
                 >
                     <div className="flex items-center justify-between h-full">
                         {/* Left Side */}
-                        <div className="flex items-center gap-6">
-                            <Button
-                                type="text"
-                                icon={
-                                    collapsed ? (
-                                        <MenuUnfoldOutlined className="text-2xl" />
-                                    ) : (
-                                        <MenuFoldOutlined className="text-2xl" />
-                                    )
-                                }
-                                onClick={() => setCollapsed(!collapsed)}
-                                className="flex items-center justify-center w-12 h-12 rounded-xl hover:bg-gray-100/80 text-gray-700 hover:text-[#4335A7] transition-all duration-300"
-                            />
-
-                            <div className="relative">
-                                <Search
-                                    placeholder="Search cars, bookings, users..."
-                                    allowClear
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-80 lg:w-96 hidden lg:block"
-                                    size="large"
-                                    prefix={<SearchOutlined className="text-gray-500 text-lg" />}
-                                    style={{
-                                        borderRadius: '12px',
-                                        fontSize: '16px',
-                                        height: '48px'
-                                    }}
+                        <div className="flex items-center gap-4">
+                            {isMobile ? (
+                                <Button
+                                    type="text"
+                                    icon={<MenuOutlined className="text-2xl" />}
+                                    onClick={() => setMobileMenuVisible(true)}
+                                    className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-gray-100/80 text-gray-700 hover:text-[#4335A7] transition-all duration-300"
                                 />
+                            ) : (
+                                <Button
+                                    type="text"
+                                    icon={
+                                        collapsed ? (
+                                            <MenuUnfoldOutlined className="text-2xl" />
+                                        ) : (
+                                            <MenuFoldOutlined className="text-2xl" />
+                                        )
+                                    }
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl hover:bg-gray-100/80 text-gray-700 hover:text-[#4335A7] transition-all duration-300"
+                                />
+                            )}
+
+                            {/* Search - Different behavior for mobile */}
+                            <div className="flex items-center gap-2">
+                                {isSearchVisible ? (
+                                    <div className="flex items-center gap-2 w-full">
+                                        <Search
+                                            placeholder="Search..."
+                                            allowClear
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            className="w-full"
+                                            size="middle"
+                                            prefix={<SearchOutlined className="text-gray-500" />}
+                                            autoFocus
+                                            onBlur={() => !searchTerm && setIsSearchVisible(false)}
+                                            style={{
+                                                borderRadius: '12px',
+                                            }}
+                                        />
+                                        <Button
+                                            type="text"
+                                            icon={<CloseOutlined />}
+                                            onClick={() => {
+                                                setIsSearchVisible(false);
+                                                setSearchTerm('');
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <>
+                                        {isMobile ? (
+                                            <Button
+                                                type="text"
+                                                icon={<SearchOutlined className="text-xl" />}
+                                                onClick={() => setIsSearchVisible(true)}
+                                                className="md:hidden"
+                                            />
+                                        ) : (
+                                            <Search
+                                                placeholder="Search cars, bookings, users..."
+                                                allowClear
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="w-60 lg:w-80 xl:w-96"
+                                                size="large"
+                                                prefix={<SearchOutlined className="text-gray-500 text-lg" />}
+                                                style={{
+                                                    borderRadius: '12px',
+                                                    fontSize: '16px',
+                                                    height: '48px'
+                                                }}
+                                            />
+                                        )}
+                                    </>
+                                )}
                             </div>
                         </div>
 
                         {/* Right Side */}
-                        <div className="flex items-center gap-5">
-                            {/* Quick Stats */}
-                            <div className="hidden lg:flex items-center gap-6">
-                                <div className="text-center px-4">
-                                    <div className="text-lg font-bold text-[#4335A7]">24</div>
-                                    <div className="text-xs text-gray-500 font-medium">Active Bookings</div>
+                        <div className="flex items-center gap-3 md:gap-5">
+                            {/* Quick Stats - Hide on mobile */}
+                            {!isMobile && (
+                                <div className="hidden md:flex items-center gap-4 lg:gap-6">
+                                    <div className="text-center px-3 lg:px-4">
+                                        <div className="text-base lg:text-lg font-bold text-[#4335A7]">24</div>
+                                        <div className="text-xs text-gray-500 font-medium">Active Bookings</div>
+                                    </div>
+                                    <div className="text-center px-3 lg:px-4">
+                                        <div className="text-base lg:text-lg font-bold text-[#D2691E]">12</div>
+                                        <div className="text-xs text-gray-500 font-medium">Cars Available</div>
+                                    </div>
                                 </div>
-                                <div className="text-center px-4">
-                                    <div className="text-lg font-bold text-[#D2691E]">12</div>
-                                    <div className="text-xs text-gray-500 font-medium">Cars Available</div>
-                                </div>
-                            </div>
+                            )}
 
-                            {/* Notifications - Using Custom Notification Dropdown */}
+                            {/* Notifications */}
                             <div className="relative">
                                 <Dropdown
                                     menu={{
@@ -633,14 +746,14 @@ const AdminDashboard: React.FC = () => {
                                     trigger={['click']}
                                     placement="bottomRight"
                                     overlayStyle={{
-                                        width: '400px',
+                                        width: isMobile ? 'calc(100vw - 32px)' : '400px',
                                         maxHeight: '500px',
                                         overflow: 'hidden',
                                     }}
                                     onOpenChange={(open) => {
                                         if (!open) {
                                             setShowAllNotifications(false);
-                                            refetch(); // Refresh notifications when dropdown closes
+                                            refetch();
                                         }
                                     }}
                                 >
@@ -650,7 +763,7 @@ const AdminDashboard: React.FC = () => {
                                     >
                                         <Badge
                                             count={unreadCount}
-                                            offset={[1, -2]}
+                                            offset={isMobile ? [-5, -2] : [1, -2]}
                                             overflowCount={99}
                                             style={{
                                                 backgroundColor: unreadCount > 0 ? '#ff4d4f' : '#d9d9d9',
@@ -658,15 +771,17 @@ const AdminDashboard: React.FC = () => {
                                             }}
                                         >
                                             <div className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                                                <BellOutlined style={{ fontSize: "24px" }} className="text-bold text-gray-600 hover:text-[#4335A7]" />
+                                                <BellOutlined style={{ fontSize: isMobile ? "20px" : "24px" }} className="text-bold text-gray-600 hover:text-[#4335A7]" />
                                             </div>
                                         </Badge>
                                     </Button>
                                 </Dropdown>
                             </div>
 
-                            {/* Divider */}
-                            <div className="h-8 w-px bg-gray-300"></div>
+                            {/* Divider - Hide on mobile */}
+                            {!isMobile && (
+                                <div className="h-8 w-px bg-gray-300"></div>
+                            )}
 
                             {/* User Dropdown */}
                             <Dropdown
@@ -675,21 +790,23 @@ const AdminDashboard: React.FC = () => {
                                 placement="bottomRight"
                                 overlayClassName="w-64"
                             >
-                                <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50/80 px-4 py-2 rounded-xl transition-all duration-300 group">
-                                    {/* Text */}
-                                    <div className="hidden lg:flex flex-col leading-tight">
-                                        <p className="text-sm font-semibold text-gray-900 truncate max-w-[140px] group-hover:text-[#4335A7] transition-colors">
-                                            {user?.name}
-                                        </p>
-                                        <div className="flex items-center gap-1 mt-0.5 text-xs text-gray-500">
-                                            <AppstoreOutlined className="text-[10px]" />
-                                            <span className="font-medium capitalize tracking-wide">
-                                                {user?.role}
-                                            </span>
+                                <div className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-gray-50/80 px-2 md:px-4 py-2 rounded-xl transition-all duration-300 group">
+                                    {/* Text - Hide on mobile */}
+                                    {!isMobile && (
+                                        <div className="hidden lg:flex flex-col leading-tight">
+                                            <p className="text-sm font-semibold text-gray-900 truncate max-w-[140px] group-hover:text-[#4335A7] transition-colors">
+                                                {user?.name}
+                                            </p>
+                                            <div className="flex items-center gap-1 mt-0.5 text-xs text-gray-500">
+                                                <AppstoreOutlined className="text-[10px]" />
+                                                <span className="font-medium capitalize tracking-wide">
+                                                    {user?.role}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                     <Avatar
-                                        size={40}
+                                        size={isMobile ? 36 : 40}
                                         src={`https://ui-avatars.com/api/?name=${user?.name}&background=${encodeURIComponent(
                                             "#D2691E"
                                         )}&color=fff&size=128&bold=true`}
@@ -703,12 +820,14 @@ const AdminDashboard: React.FC = () => {
                 </Header>
 
                 {/* Main Content */}
-                <Content className="mt-6">
+                <Content className="mt-4 md:mt-6">
                     <div
-                        className="min-h-[calc(100vh-220px)] bg-white overflow-y-auto"
+                        className="min-h-[calc(100vh-180px)] md:min-h-[calc(100vh-220px)] bg-white"
                         style={{
                             background: 'linear-gradient(145deg, #ffffff 0%, #f9fafb 100%)',
-                            margin: '0 24px 24px',
+                            margin: isMobile ? '0 12px 16px' : '0 24px 24px',
+                            borderRadius: isMobile ? '12px' : '16px',
+
                         }}
                     >
                         <Outlet />
@@ -837,35 +956,32 @@ const AdminDashboard: React.FC = () => {
                     display: none !important;
                 }
                 
-                /* Notification dropdown custom styling */
-                .ant-dropdown-menu.notification-dropdown {
-                    padding: 0 !important;
-                    border-radius: 12px !important;
-                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
-                    overflow: hidden;
+                /* Mobile optimizations */
+                @media (max-width: 768px) {
+                    .ant-dropdown-menu {
+                        max-width: calc(100vw - 32px) !important;
+                    }
+                    
+                    .ant-layout-header {
+                        padding: 0 16px !important;
+                    }
+                    
+                    .ant-menu-item,
+                    .ant-menu-submenu-title {
+                        height: 48px !important;
+                        line-height: 48px !important;
+                    }
                 }
                 
-                .ant-dropdown-menu-item.notification-item:hover {
-                    background-color: transparent !important;
-                }
-                
-                /* Scrollbar for notification dropdown */
-                .ant-dropdown-menu::-webkit-scrollbar {
-                    width: 6px;
-                }
-                
-                .ant-dropdown-menu::-webkit-scrollbar-track {
-                    background: #f1f1f1;
-                    border-radius: 4px;
-                }
-                
-                .ant-dropdown-menu::-webkit-scrollbar-thumb {
-                    background: #c1c1c1;
-                    border-radius: 4px;
-                }
-                
-                .ant-dropdown-menu::-webkit-scrollbar-thumb:hover {
-                    background: #a1a1a1;
+                /* Tablet optimizations */
+                @media (min-width: 768px) and (max-width: 1024px) {
+                    .ant-layout-header {
+                        padding: 0 24px !important;
+                    }
+                    
+                    .ant-search-input {
+                        width: 200px !important;
+                    }
                 }
                 
                 /* Animation for new notifications */
@@ -877,6 +993,12 @@ const AdminDashboard: React.FC = () => {
                 
                 .notification-badge-pulse {
                     animation: pulse-glow 2s infinite;
+                }
+                
+                /* Mobile drawer styles */
+                .ant-drawer-body {
+                    padding: 0 !important;
+                    background: linear-gradient(180deg, #4335A7 0%, #2D1B69 100%);
                 }
             `}</style>
         </Layout>

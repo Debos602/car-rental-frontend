@@ -5,7 +5,7 @@ import { Bookings, TUser } from "@/types/global";
 import {
     useGetUserQuery,
     useUpdateUserMutation,
-} from "@/redux/feature/authApi";
+} from "@/redux/feature/auth/authApi";
 import { toast } from "sonner";
 import { useGetBookingsQuery } from "@/redux/feature/booking/bookingApi";
 import { motion } from "framer-motion";

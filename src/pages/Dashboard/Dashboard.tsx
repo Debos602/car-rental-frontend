@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     BookOutlined,
     DashboardOutlined,
@@ -10,7 +10,10 @@ import {
     RightOutlined,
     LeftOutlined,
     SafetyOutlined,
-    NotificationFilled
+    NotificationFilled,
+    MenuOutlined,
+    CloseOutlined,
+    SearchOutlined,
 } from "@ant-design/icons";
 import {
     Avatar,
@@ -19,37 +22,52 @@ import {
     Layout,
     Menu,
     Spin,
-    Tag
+    Tag,
+    Drawer,
+    Input,
+    Grid
 } from "antd";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hook";
-import { logout } from "@/redux/feature/authSlice";
+import { logout } from "@/redux/feature/auth/authSlice";
 import logo from "@/assets/car_lgo.png";
 import { useGetNotificationsQuery } from "@/redux/feature/notification/notificationApi";
 import NotificationDropdown from "./components/NotificationDropdown";
-import { useGetUserQuery } from "@/redux/feature/authApi";
+import { useGetUserQuery } from "@/redux/feature/auth/authApi";
 
 const { Header, Sider, Content } = Layout;
+const { Search } = Input;
+const { useBreakpoint } = Grid;
 
 const Dashboard: React.FC = () => {
     const {
         data: user,
         isLoading,
-
     } = useGetUserQuery(undefined, {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
-    // console.log("Current User:", user);
+
+    const screens = useBreakpoint();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(!screens.md); // Collapse by default on mobile
+    const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(false);
 
     const { data: notifications = [] } = useGetNotificationsQuery(undefined);
 
+    const isMobile = !screens.md;
+    const isTablet = screens.md && !screens.lg;
 
-
-    // console.log("Notifications:", notifications);
+    useEffect(() => {
+        // Handle sidebar collapse based on screen size
+        if (isMobile) {
+            setCollapsed(true);
+        } else {
+            setCollapsed(false);
+        }
+    }, [isMobile]);
 
     const handleLogout = (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,32 +80,32 @@ const Dashboard: React.FC = () => {
         {
             key: "dashboard",
             icon: <DashboardOutlined />,
-            label: <Link to="/dashboard">Dashboard</Link>,
+            label: <Link to="/dashboard" onClick={() => isMobile && setMobileMenuVisible(false)}>Dashboard</Link>,
         },
         {
             key: "booking",
             icon: <BookOutlined />,
-            label: <Link to="/dashboard/booking">My Bookings</Link>,
+            label: <Link to="/dashboard/booking" onClick={() => isMobile && setMobileMenuVisible(false)}>My Bookings</Link>,
         },
         {
             key: "notifications",
             icon: <NotificationFilled />,
-            label: <Link to="/dashboard/notifications">Notifications</Link>,
+            label: <Link to="/dashboard/notifications" onClick={() => isMobile && setMobileMenuVisible(false)}>Notifications</Link>,
         },
         {
             key: "payment",
             icon: <CreditCardOutlined />,
-            label: <Link to="/dashboard/payment">Payments</Link>,
+            label: <Link to="/dashboard/payment" onClick={() => isMobile && setMobileMenuVisible(false)}>Payments</Link>,
         },
         {
             key: "cars",
             icon: <CarOutlined />,
-            label: <Link to="/dashboard/cars">Cars</Link>,
+            label: <Link to="/dashboard/cars" onClick={() => isMobile && setMobileMenuVisible(false)}>Cars</Link>,
         },
         {
             key: "profile",
             icon: <UserOutlined />,
-            label: <Link to="/dashboard/profile">Profile</Link>,
+            label: <Link to="/dashboard/profile" onClick={() => isMobile && setMobileMenuVisible(false)}>Profile</Link>,
         },
     ];
 
@@ -162,139 +180,221 @@ const Dashboard: React.FC = () => {
         },
     ];
 
-    if (isLoading) {
-        return <div className="flex items-center justify-center h-screen">
-            <Spin size="large" />
-        </div>;
-    }
+    const sidebarContent = (
+        <div className="flex flex-col h-full">
+            {/* Logo Section */}
+            <div className="p-4 md:p-6 border-b border-white/20">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                        <img
+                            src={logo}
+                            className={`transition-all duration-300 ${collapsed && !isMobile ? 'h-10 w-10' : 'h-12 w-auto'}`}
+                            alt="Car Rental Logo"
+                        />
+                        {(!collapsed || isMobile) && (
+                            <div className="ml-3">
+                                <h1 className="text-xl font-bold text-white m-0">Car Rental</h1>
+                                <p className="text-xs text-white/80 m-0">User Dashboard</p>
+                            </div>
+                        )}
+                    </div>
+                    {isMobile && (
+                        <Button
+                            type="text"
+                            icon={<CloseOutlined className="text-white" />}
+                            onClick={() => setMobileMenuVisible(false)}
+                        />
+                    )}
+                </div>
+            </div>
 
+            {/* Navigation Menu with Custom Styling */}
+            <div className="flex-1 overflow-y-auto py-4">
+                <Menu
+                    mode="inline"
+                    defaultSelectedKeys={["dashboard"]}
+                    items={menuItems}
+                    className="sidebar-menu border-none bg-transparent px-2 md:px-3"
+                    theme="dark"
+                />
+            </div>
+
+            {/* Bottom Section */}
+            {(!collapsed || isMobile) && user?.data && (
+                <div className="p-4 border-b border-white/20">
+                    <div className="flex items-center p-3 bg-white/10 rounded-lg">
+                        <Avatar
+                            size="large"
+                            icon={<UserOutlined />}
+                            className="bg-white/20 text-white"
+                            src={user?.data?.image || undefined}
+                        />
+                        <div className="ml-3 flex-1 min-w-0">
+                            <p className="font-semibold text-white m-0 truncate">{user?.data?.name}</p>
+                            <p className="text-xs text-white/80 m-0 truncate">{user?.data?.email}</p>
+                            <Tag color="blue" className="text-xs mt-1">
+                                Member
+                            </Tag>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     return (
         <Layout className="min-h-screen bg-[#4335A7]">
-            {/* Sidebar with floating collapse button */}
-            <Sider
-                trigger={null}
-                collapsible
-                collapsed={collapsed}
-                className="relative"
+            {/* Desktop Sidebar */}
+            {!isMobile && (
+                <Sider
+                    trigger={null}
+                    collapsible
+                    collapsed={collapsed}
+                    className="relative"
+                    width={280}
+                    collapsedWidth={80}
+                    style={{
+                        height: '100vh',
+                        position: 'fixed',
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        zIndex: 100,
+                        borderRight: '1px solid #e5e7eb',
+                        background: 'linear-gradient(180deg, #4335A7 0%, #2D1B69 100%)',
+                    }}
+                >
+                    {/* Floating Collapse Button - Desktop */}
+                    <Button
+                        type="text"
+                        icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
+                        onClick={() => setCollapsed(!collapsed)}
+                        className="absolute -right-3 top-6 z-50 bg-white border border-gray-300 shadow-md hover:shadow-lg w-6 h-10 flex items-center justify-center rounded-r-lg"
+                        style={{ zIndex: 101 }}
+                    />
+                    {sidebarContent}
+                </Sider>
+            )}
+
+            {/* Mobile Drawer */}
+            <Drawer
+                title={null}
+                placement="left"
+                closable={false}
+                onClose={() => setMobileMenuVisible(false)}
+                open={mobileMenuVisible}
                 width={280}
-                collapsedWidth={80}
-                style={{
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    zIndex: 100,
-                    borderRight: '1px solid #e5e7eb',
-                    background: 'linear-gradient(180deg, #4335A7 0%, #2D1B69 100%)',
-                }}
+                bodyStyle={{ padding: 0 }}
+                className="md:hidden"
+                style={{ zIndex: 1001 }}
             >
-                {/* Floating Collapse Button */}
-                <Button
-                    type="text"
-                    icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
-                    onClick={() => setCollapsed(!collapsed)}
-                    className="absolute -right-3 top-6 z-50 bg-white border border-gray-300 shadow-md hover:shadow-lg w-6 h-10 flex items-center justify-center rounded-r-lg"
-                    style={{ zIndex: 101 }}
-                />
-
-                <div className="flex flex-col h-full">
-                    {/* Logo Section */}
-                    <div className="p-6 border-b border-white/20">
-                        <div className="flex items-center justify-center">
-                            <img
-                                src={logo}
-                                className={`transition-all duration-300 ${collapsed ? 'h-10 w-10' : 'h-12 w-auto'}`}
-                                alt="Car Rental Logo"
-                            />
-                            {!collapsed && (
-                                <div className="ml-3">
-                                    <h1 className="text-xl font-bold text-white m-0">Car Rental</h1>
-                                    <p className="text-xs text-white/80 m-0">User Dashboard</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Navigation Menu with Custom Styling */}
-                    <div className="flex-1 overflow-y-auto py-4">
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={["dashboard"]}
-                            items={menuItems}
-                            className="sidebar-menu border-none bg-transparent px-3"
-                            theme="dark"
-                        />
-                    </div>
-
-                    {/* Bottom Section */}
-                    {!collapsed && user?.data && (
-                        <div className="p-4 border-b border-white/20">
-                            <div className="flex items-center p-3 bg-white/10 rounded-lg">
-                                <Avatar
-                                    size="large"
-                                    icon={<UserOutlined />}
-                                    className="bg-white/20 text-white"
-                                    src={user?.data?.image || undefined}
-                                />
-                                <div className="ml-3">
-                                    <p className="font-semibold text-white m-0">{user?.data?.name}</p>
-                                    <p className="text-xs text-white/80 m-0">{user?.data?.email}</p>
-                                    <Tag color="blue" className="text-xs mt-1">
-                                        Member
-                                    </Tag>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </Sider>
+                {sidebarContent}
+            </Drawer>
 
             {/* Main Content Area */}
             <Layout
-                className={`transition-all duration-300 ${collapsed ? 'ml-[80px]' : 'ml-[280px]'}`}
+                className={`transition-all duration-300 ${isMobile
+                    ? 'ml-0'
+                    : collapsed
+                        ? 'ml-[80px]'
+                        : 'ml-[280px]'
+                    }`}
                 style={{ minHeight: '100vh' }}
             >
                 <Header
-                    className="flex justify-between items-center px-6 bg-white shadow-sm"
+                    className="flex justify-between items-center px-4 md:px-6 bg-white shadow-sm"
                     style={{
                         position: 'sticky',
                         top: 0,
                         zIndex: 50,
-                        height: '80px',
+                        height: isMobile ? '70px' : '80px',
                     }}
                 >
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-800 m-0">
-                            Dashboard
-                        </h1>
+                    <div className="flex items-center gap-3 md:gap-4">
+                        {isMobile && (
+                            <Button
+                                type="text"
+                                icon={<MenuOutlined className="text-xl" />}
+                                onClick={() => setMobileMenuVisible(true)}
+                                className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100"
+                            />
+                        )}
+
+                        <div className="flex items-center gap-2">
+                            {searchVisible ? (
+                                <div className="flex items-center gap-2 w-full">
+                                    <Search
+                                        placeholder="Search..."
+                                        allowClear
+                                        size="middle"
+                                        prefix={<SearchOutlined className="text-gray-500" />}
+                                        autoFocus
+                                        onBlur={() => setSearchVisible(false)}
+                                        style={{
+                                            borderRadius: '8px',
+                                            width: isMobile ? '180px' : '250px',
+                                        }}
+                                    />
+                                    <Button
+                                        type="text"
+                                        icon={<CloseOutlined />}
+                                        onClick={() => setSearchVisible(false)}
+                                        size="small"
+                                    />
+                                </div>
+                            ) : (
+                                <>
+                                    {isMobile ? (
+                                        <Button
+                                            type="text"
+                                            icon={<SearchOutlined className="text-lg" />}
+                                            onClick={() => setSearchVisible(true)}
+                                        />
+                                    ) : (
+                                        <h1 className="text-xl md:text-2xl font-bold text-gray-800 m-0">
+                                            Dashboard
+                                        </h1>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 md:gap-4">
                         <NotificationDropdown />
 
                         <Dropdown
                             menu={{ items: dropdownItems }}
                             placement="bottomRight"
                             trigger={['click']}
+                            overlayClassName="w-64"
                         >
                             <Button
                                 type="text"
-                                className="flex items-center gap-3 hover:bg-gray-100 px-3 py-2 rounded-lg"
+                                className="flex items-center gap-2 md:gap-3 hover:bg-gray-100 px-2 md:px-3 py-2 rounded-lg"
                             >
-                                <div className="hidden md:block text-right">
-                                    <p className="text-sm font-medium text-gray-800 m-0">
-                                        {user?.data?.name}
-                                    </p>
-                                    <p className="text-xs text-gray-500 m-0">
-                                        Premium Member
-                                    </p>
-                                </div>
+                                {!isMobile && (
+                                    <div className="text-right hidden md:block">
+                                        <p className="text-sm font-medium text-gray-800 m-0 truncate max-w-[120px]">
+                                            {user?.data?.name}
+                                        </p>
+                                        <p className="text-xs text-gray-500 m-0">
+                                            Premium Member
+                                        </p>
+                                    </div>
+                                )}
                                 <Avatar
-                                    size="default"
+                                    size={isMobile ? 32 : 40}
                                     icon={<UserOutlined />}
-                                    className="bg-[#4335A7] text-white"
+                                    className="bg-[#4335A7] text-white border-2 border-[#4335A7]/20"
                                     src={user?.data?.image || undefined}
                                 />
                             </Button>
@@ -302,9 +402,9 @@ const Dashboard: React.FC = () => {
                     </div>
                 </Header>
 
-                <Content>
+                <Content className="p-3 md:p-6">
                     {/* Outlet for nested routes */}
-                    <div>
+                    <div className="min-h-[calc(100vh-140px)] md:min-h-[calc(100vh-160px)] bg-white rounded-lg shadow-sm">
                         <Outlet />
                     </div>
                 </Content>
@@ -326,6 +426,7 @@ const Dashboard: React.FC = () => {
                     margin: 4px 0;
                     border-radius: 8px;
                     padding: 0 12px !important;
+                    font-size: 14px;
                 }
                 
                 .sidebar-menu.ant-menu-dark .ant-menu-item:hover,
@@ -377,6 +478,49 @@ const Dashboard: React.FC = () => {
                 .sidebar-menu.ant-menu-inline-collapsed .ant-menu-item,
                 .sidebar-menu.ant-menu-inline-collapsed .ant-menu-submenu-title {
                     padding: 0 24px !important;
+                }
+                
+                /* Mobile optimizations */
+                @media (max-width: 768px) {
+                    .ant-layout-header {
+                        padding: 0 16px !important;
+                    }
+                    
+                    .sidebar-menu.ant-menu-dark .ant-menu-item,
+                    .sidebar-menu.ant-menu-dark .ant-menu-submenu-title {
+                        height: 44px;
+                        line-height: 44px;
+                        font-size: 13px;
+                    }
+                    
+                    .ant-menu-item-icon,
+                    .anticon {
+                        font-size: 16px !important;
+                    }
+                }
+                
+                /* Tablet optimizations */
+                @media (min-width: 768px) and (max-width: 1024px) {
+                    .ant-layout-header {
+                        padding: 0 20px !important;
+                    }
+                    
+                    h1 {
+                        font-size: 1.5rem !important;
+                    }
+                }
+                
+                /* Mobile drawer styles */
+                .ant-drawer-body {
+                    padding: 0 !important;
+                    background: linear-gradient(180deg, #4335A7 0%, #2D1B69 100%);
+                }
+                
+                /* Content area responsive padding */
+                @media (max-width: 768px) {
+                    .ant-layout-content {
+                        padding: 12px !important;
+                    }
                 }
             `}</style>
         </Layout>

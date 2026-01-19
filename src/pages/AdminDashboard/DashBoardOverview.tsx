@@ -150,7 +150,7 @@ const DashBoardOverview = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100">
             {/* Header Section - More Compact */}
             <motion.div
                 initial={{ opacity: 0, y: -30 }}
@@ -489,7 +489,7 @@ const DashBoardOverview = () => {
                 className="mb-4"
             >
                 <Card
-                    className="border-0 shadow rounded-lg overflow-hidden"
+                    className="border-0 shadow rounded-lg"
                     styles={{ body: { padding: 0 } }}
                 >
                     {/* Custom Tabs Header */}
@@ -519,7 +519,7 @@ const DashBoardOverview = () => {
                     </div>
 
                     {/* Tab Content */}
-                    <div className="p-4 bg-white">
+                    <div className=" bg-white">
                         {activeTab === "bookings" && <TotalBookings />}
                         {activeTab === "cars" && <AvailableCar />}
                         {activeTab === "revenue" && <TotalRevenue />}

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./feature/authSlice";
+import authReducer from "./feature/auth/authSlice";
 import bookingReducer from "./feature/booking/bookingSlice";
 import carReducer from "./feature/car/carSlice"; // Import only the reducer, not CarState here
 import notificationReducer from "./feature/notification/notificationSlice";

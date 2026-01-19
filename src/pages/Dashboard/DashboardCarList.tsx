@@ -37,7 +37,7 @@ import { useCreateBookingMutation } from "@/redux/feature/booking/bookingApi";
 import { motion } from "framer-motion";
 import { useSocket } from "@/hook/useSocket";
 import { useAppSelector } from "@/redux/hook";
-import { selectCurrentUser } from "@/redux/feature/authSlice";
+import { selectCurrentUser } from "@/redux/feature/auth/authSlice";
 import BookingModal from "@/components/BookingModal";
 
 const { RangePicker } = DatePicker;

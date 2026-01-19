@@ -1,7 +1,7 @@
 import { useSocket } from "@/hook/useSocket";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hook";
-import { selectCurrentUser } from "@/redux/feature/authSlice";
+import { selectCurrentUser } from "@/redux/feature/auth/authSlice";
 
 const SocketTest = () => {
     const user = useAppSelector(selectCurrentUser);

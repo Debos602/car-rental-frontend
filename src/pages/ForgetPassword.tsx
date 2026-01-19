@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useForgetPasswordMutation } from "@/redux/feature/authApi";
+import { useForgetPasswordMutation } from "@/redux/feature/auth/authApi";
 import { ValidateErrorEntity } from "rc-field-form/lib/interface";
 import { motion } from "framer-motion";
 

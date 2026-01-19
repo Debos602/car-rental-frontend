@@ -411,6 +411,7 @@ const ManageBooking = () => {
                         transition={{ duration: 0.3 }}
                     >
                         <Table
+                            bordered
                             columns={columns}
                             dataSource={bookingList.map((booking: Bookings, index: number) => ({
                                 ...booking,

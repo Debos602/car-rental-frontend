@@ -3,7 +3,7 @@ import { Button, Form, Input, Checkbox, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import type { FormProps } from "antd";
 import { StoreValue } from "rc-field-form/lib/interface";
-import { useSignupMutation } from "@/redux/feature/authApi";
+import { useSignupMutation } from "@/redux/feature/auth/authApi";
 import { Rule } from "antd/es/form";
 import { motion } from "framer-motion";
 import bgImage from "../../src/assets/img-2.jpg";

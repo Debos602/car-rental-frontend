@@ -155,7 +155,7 @@ const TotalBookings = () => {
             </div>
 
             {/* Table */}
-            <div className="p-4">
+            <div>
                 {bookings.length > 0 ? (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -163,6 +163,7 @@ const TotalBookings = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
                         <Table<Booking>
+                            bordered
                             columns={columns}
                             dataSource={bookings}
                             rowKey={(record) => record._id}
@@ -171,7 +172,8 @@ const TotalBookings = () => {
                                 showSizeChanger: false,
                                 showTotal: (total) => `Showing ${total} bookings`,
                             }}
-                            className=""
+                            scroll={{ x: 'max-content' }}
+                            className="bg-white p-4"
                             rowClassName={(record, index) =>
                                 index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                             }

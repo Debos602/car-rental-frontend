@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addNotification, selectNotifications } from "@/redux/feature/notification/notificationSlice";
 import { useSocket } from "@/hook/useSocket";
 import { useAppSelector as useSelector } from "@/redux/hook";
-import { selectCurrentUser } from "@/redux/feature/authSlice";
+import { selectCurrentUser } from "@/redux/feature/auth/authSlice";
 import { message } from "antd";
 
 const NotificationProvider: React.FC<{ children: React.ReactNode; }> = ({ children }) => {

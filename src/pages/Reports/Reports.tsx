@@ -495,6 +495,7 @@ export default function Reports() {
                     <Card className="shadow-sm">
                         <h3 className="text-lg font-semibold mb-4">Top Customers by Spending</h3>
                         <Table
+                            bordered
                             dataSource={topCustomers}
                             columns={customerColumns}
                             pagination={false}
@@ -523,6 +524,7 @@ export default function Reports() {
                         }
                     >
                         <Table
+                            bordered
                             dataSource={recentBookings}
                             columns={bookingColumns}
                             pagination={false}

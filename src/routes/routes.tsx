@@ -12,7 +12,7 @@ import Profile from "@/pages/Dashboard/Profile";
 import Custombooking from "@/pages/Dashboard/components/MyBooking";
 import DashBoardOverview from "@/pages/AdminDashboard/DashBoardOverview";
 import ManageCar from "@/pages/AdminDashboard/ManageCar";
-import AdminDashboard from "@/pages/Dashboard/AdminDashboard";
+import AdminDashboard from "@/pages/AdminDashboard/AdminDashboard";
 import ManageBooking from "@/pages/AdminDashboard/ManageBooking";
 import ManageReturnCars from "@/pages/AdminDashboard/ManageReturnCars";
 import UserManagement from "@/pages/AdminDashboard/UserManagement";

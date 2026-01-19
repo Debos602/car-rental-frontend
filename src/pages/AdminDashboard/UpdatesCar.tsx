@@ -208,13 +208,6 @@ const UpdatesCar = () => {
             render: (record: TCar) => (
                 <Space>
                     <Button
-                        type="default"
-                        icon={<EyeOutlined />}
-                        onClick={() => window.open(record.image, '_blank')}
-                        className="hover:border-[#4335A7] hover:text-[#4335A7]"
-                        size="small"
-                    />
-                    <Button
                         type="primary"
                         icon={<EditOutlined />}
                         onClick={() => openUpdateModal(record)}
@@ -306,7 +299,7 @@ const UpdatesCar = () => {
                                 columns={columns}
                                 rowKey="_id"
                                 pagination={{
-                                    pageSize: 8,
+                                    pageSize: 4,
                                     showSizeChanger: true,
                                     showQuickJumper: true,
                                     size: 'small',

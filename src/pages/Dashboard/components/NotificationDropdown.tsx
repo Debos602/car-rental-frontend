@@ -28,7 +28,7 @@ import {
     Grid
 } from "antd";
 import { useAppSelector } from "@/redux/hook";
-import { selectCurrentUser } from "@/redux/feature/authSlice";
+import { selectCurrentUser } from "@/redux/feature/auth/authSlice";
 import { useSocket } from "@/hook/useSocket";
 import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";

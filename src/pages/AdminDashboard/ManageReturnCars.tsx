@@ -32,7 +32,7 @@ import {
     KeyOutlined,
     SafetyCertificateOutlined
 } from "@ant-design/icons";
-import { Bookings, TBooking } from "@/types/global";
+import { Bookings } from "@/types/global";
 
 
 
@@ -447,6 +447,7 @@ const ManageReturnCars = () => {
                         transition={{ duration: 0.3 }}
                     >
                         <Table
+                            bordered
                             columns={columns}
                             dataSource={bookingList.map((booking: Bookings, index: number) => ({
                                 ...booking,

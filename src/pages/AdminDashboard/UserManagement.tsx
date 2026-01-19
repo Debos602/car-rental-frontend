@@ -1,7 +1,7 @@
 import {
     useGetAllUsersQuery,
     useUpdateUserRoleMutation,
-} from "@/redux/feature/authApi";
+} from "@/redux/feature/auth/authApi";
 import {
     Table,
     Button,
@@ -428,6 +428,7 @@ const UserManagement = () => {
                         transition={{ duration: 0.3 }}
                     >
                         <Table
+                            bordered
                             dataSource={filteredUsers.map(user => ({ ...user, key: user._id }))}
                             columns={columns}
                             pagination={{
