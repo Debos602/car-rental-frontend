@@ -480,8 +480,8 @@ const AdminDashboard: React.FC = () => {
 
     const sidebarContent = (
         <div className="flex flex-col h-full">
-            {/* Fixed Logo Section */}
-            <div className="h-28 flex-shrink-0 border-b border-white/15 bg-gradient-to-r from-[#4335A7] to-[#3a2c95]">
+            {/* Fixed Logo Section - Modified for collapsed state */}
+            <div className={`${collapsed && !isMobile ? 'h-20' : 'h-28'} flex-shrink-0 border-b border-white/15 bg-gradient-to-r from-[#4335A7] to-[#3a2c95]`}>
                 <div className="flex items-center justify-center h-full px-4">
                     {!collapsed || isMobile ? (
                         <div className="flex items-center gap-4 w-full">
@@ -510,15 +510,16 @@ const AdminDashboard: React.FC = () => {
                             )}
                         </div>
                     ) : (
-                        <Tooltip title="Car Rental Admin" placement="right">
-                            <div className="bg-white/10 p-4 rounded-2xl border border-white/20 shadow-lg">
+                        // Show only logo/icon in collapsed state
+                        <div className="flex items-center justify-center w-full">
+                            <div className="bg-white/10 p-3 rounded-2xl border border-white/20 shadow-lg">
                                 <img
                                     src={logo}
-                                    className="h-10 object-contain"
+                                    className="h-10 w-10 object-contain"
                                     alt="logo"
                                 />
                             </div>
-                        </Tooltip>
+                        </div>
                     )}
                 </div>
             </div>
@@ -538,6 +539,7 @@ const AdminDashboard: React.FC = () => {
                         items={menuItems}
                         className="admin-menu bg-transparent border-none"
                         theme="dark"
+                        inlineCollapsed={collapsed && !isMobile} // Important: Enable collapsed mode
                         style={{
                             background: 'transparent',
                             border: 'none',
@@ -546,8 +548,8 @@ const AdminDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Fixed User Info Section at Bottom */}
-            {(!collapsed || isMobile) && (
+            {/* Fixed User Info Section at Bottom - Hide when collapsed on desktop */}
+            {((!collapsed && !isMobile) || isMobile) && (
                 <div className="flex-shrink-0 p-5 border-t border-white/15 bg-gradient-to-r from-white/5 to-transparent backdrop-blur-sm">
                     <div className="flex items-center gap-3">
                         <Avatar
@@ -582,7 +584,7 @@ const AdminDashboard: React.FC = () => {
                     collapsible
                     collapsed={collapsed}
                     width={280}
-                    collapsedWidth={80}
+                    collapsedWidth={80} // Keep this at 80px for icon-only mode
                     className="shadow-2xl admin-sidebar hidden lg:block"
                     style={{
                         background: 'linear-gradient(180deg, #4335A7 0%, #2D1B69 100%)',
@@ -997,6 +999,44 @@ const AdminDashboard: React.FC = () => {
                 .ant-drawer-body {
                     padding: 0 !important;
                     background: linear-gradient(180deg, #4335A7 0%, #2D1B69 100%);
+                }
+
+                /* Add to the existing CSS */
+                /* Ensure icons are visible in collapsed mode */
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-item,
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-submenu-title {
+                    padding: 0 calc(50% - 12px) !important; /* Center the icons */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                }
+
+                /* Collapsed state icons - larger and centered */
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-item .ant-menu-item-icon,
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-item .anticon {
+                    font-size: 22px !important;
+                    margin-right: 0 !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                /* Remove text but keep icons in collapsed mode */
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-item span,
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-submenu-title span:not(.anticon) {
+                    display: none;
+                }
+
+                /* Tooltip for collapsed menu items */
+                .admin-menu.ant-menu-inline-collapsed .ant-menu-item {
+                    position: relative;
+                }
+
+                /* Ensure tooltip shows menu item title */
+                .ant-tooltip-inner {
+                    font-size: 14px;
+                    font-weight: 500;
                 }
             `}</style>
         </Layout>
