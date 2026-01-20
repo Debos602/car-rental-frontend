@@ -78,14 +78,13 @@ const AdminDashboard: React.FC = () => {
     const [isSearchVisible, setIsSearchVisible] = useState(false);
 
     const isMobile = !screens.lg;
-    const isTablet = !screens.xl && screens.md;
 
     useEffect(() => {
         if (!isMobile) {
             setMobileMenuVisible(false);
         }
         if (isMobile) {
-            setCollapsed(true);
+            setCollapsed(false);
         }
     }, [isMobile]);
 
@@ -609,9 +608,8 @@ const AdminDashboard: React.FC = () => {
                 onClose={() => setMobileMenuVisible(false)}
                 open={mobileMenuVisible}
                 width={280}
-                bodyStyle={{ padding: 0 }}
                 className="lg:hidden"
-                style={{ zIndex: 1001 }}
+                style={{ zIndex: 1001, padding: 0 }}
             >
                 {sidebarContent}
             </Drawer>
