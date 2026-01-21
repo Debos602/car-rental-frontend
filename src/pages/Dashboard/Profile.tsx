@@ -277,7 +277,7 @@ const Profile = () => {
     ];
 
     return (
-        <div className="p-6" style={{ backgroundColor: themeColors.background }}>
+        <div>
             <div>
                 {/* Welcome Banner */}
                 <motion.div

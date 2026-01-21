@@ -447,20 +447,20 @@ const AdminDashboard: React.FC = () => {
         {
             key: '1',
             icon: <DashboardOutlined className="text-lg" />,
-            label: <Link to="/admin-dashboard" className="text-base font-medium">Admin Dashboard</Link>,
-            className: "py-3",
+            label: <Link to="/admin-dashboard" className="text-base font-medium py-3">Admin Dashboard</Link>,
+
         },
         {
             key: '2',
             icon: <HomeOutlined className="text-lg" />,
-            label: <Link to="/" className="text-base font-medium">Return to Home</Link>,
-            className: "py-3",
+            label: <Link to="/" className="text-base font-medium py-3">Return to Home</Link>,
+
         },
         {
             key: '3',
             icon: <SettingOutlined className="text-lg" />,
-            label: <Link to="/admin-dashboard/settings" className="text-base font-medium">Account Settings</Link>,
-            className: "py-3",
+            label: <Link to="/admin-dashboard/settings" className="text-base font-medium py-3">Account Settings</Link>,
+
         },
         {
             type: 'divider',
@@ -474,7 +474,7 @@ const AdminDashboard: React.FC = () => {
                     Logout
                 </button>
             ),
-            className: "py-3",
+
         },
     ];
 
@@ -847,8 +847,7 @@ const AdminDashboard: React.FC = () => {
                     color: white !important;
                     font-weight: 500;
                     font-size: 15px;
-                    height: 50px !important;
-                    line-height: 50px !important;
+                    min-height: 50px; /* allow internal padding to work */
                     margin: 2px 0 !important;
                     border-radius: 10px !important;
                     padding: 0 16px !important;

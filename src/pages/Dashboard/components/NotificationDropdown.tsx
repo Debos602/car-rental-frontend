@@ -262,6 +262,9 @@ const NotificationDropdown: React.FC = () => {
         if (item.title.includes('Booking')) {
             navigate('/dashboard/booking');
         }
+        if (item.title.includes('Payment')) {
+            navigate('/dashboard/payment');
+        }
 
         // Close drawer on mobile after click
         if (!screens.md) {

@@ -315,7 +315,7 @@ const DashboardCarList = () => {
 
     return (
         <div
-            className="user-dashboard-cars-page p-6 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
+            className="user-dashboard-cars-page"
         >
             {/* Header Section */}
             <div

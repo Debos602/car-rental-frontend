@@ -412,7 +412,7 @@ export default function UserDashBoardOverview() {
     };
 
     return (
-        <div className="p-4 sm:p-6" style={{ backgroundColor: themeColors.background }}>
+        <div>
             {/* Header */}
             <div className="mb-6 sm:mb-8">
                 <Title level={2} className="text-lg sm:text-2xl" style={{ color: themeColors.text }}>

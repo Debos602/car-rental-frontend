@@ -481,8 +481,7 @@ const MyBooking = () => {
     );
     return (
         <motion.div
-            className="py-6 px-3 sm:px-6"
-            style={{ backgroundColor: themeColors.background }}
+
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}

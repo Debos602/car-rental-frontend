@@ -27,6 +27,7 @@ import {
     Input,
     Grid
 } from "antd";
+import { useLocation } from "react-router-dom";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hook";
 import { logout } from "@/redux/feature/auth/authSlice";
@@ -54,11 +55,24 @@ const Dashboard: React.FC = () => {
     const [collapsed, setCollapsed] = useState(!screens.md); // Collapse by default on mobile
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
     const [searchVisible, setSearchVisible] = useState(false);
+    const location = useLocation();
 
     const { data: notifications = [] } = useGetNotificationsQuery(undefined);
 
     const isMobile = !screens.md;
     const isTablet = screens.md && !screens.lg;
+
+    const getSelectedKey = () => {
+        const path = location.pathname;
+
+        if (path.startsWith("/dashboard/booking")) return ["booking"];
+        if (path.startsWith("/dashboard/notifications")) return ["notifications"];
+        if (path.startsWith("/dashboard/payment")) return ["payment"];
+        if (path.startsWith("/dashboard/cars")) return ["cars"];
+        if (path.startsWith("/dashboard/profile")) return ["profile"];
+
+        return ["dashboard"];
+    };
 
     useEffect(() => {
         // Handle sidebar collapse based on screen size
@@ -143,7 +157,7 @@ const Dashboard: React.FC = () => {
                     Dashboard
                 </Link>
             ),
-            className: "py-3",
+
         },
         {
             icon: <HomeOutlined className="text-lg" />,
@@ -153,7 +167,7 @@ const Dashboard: React.FC = () => {
                 </Link>
             ),
             key: "2",
-            className: "py-3"
+
         },
         {
             icon: <UserOutlined className="text-lg" />,
@@ -163,11 +177,10 @@ const Dashboard: React.FC = () => {
                 </Link>
             ),
             key: "3",
-            className: "py-3"
+
         },
         {
             icon: <LogoutOutlined className="text-lg" />,
-            className: "py-3",
             label: (
                 <div
                     onClick={handleLogout}
@@ -212,11 +225,12 @@ const Dashboard: React.FC = () => {
             <div className="flex-1 overflow-y-auto py-4">
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={["dashboard"]}
+                    selectedKeys={getSelectedKey()}
                     items={menuItems}
                     className="sidebar-menu border-none bg-transparent px-2 md:px-3"
                     theme="dark"
                 />
+
             </div>
 
             {/* Bottom Section */}
@@ -292,9 +306,9 @@ const Dashboard: React.FC = () => {
                 onClose={() => setMobileMenuVisible(false)}
                 open={mobileMenuVisible}
                 width={280}
-                bodyStyle={{ padding: 0 }}
+
                 className="md:hidden"
-                style={{ zIndex: 1001 }}
+                style={{ zIndex: 1001, padding: 0 }}
             >
                 {sidebarContent}
             </Drawer>
@@ -404,7 +418,7 @@ const Dashboard: React.FC = () => {
 
                 <Content className="p-3 md:p-6">
                     {/* Outlet for nested routes */}
-                    <div className="min-h-[calc(100vh-140px)] md:min-h-[calc(100vh-160px)] bg-white rounded-lg shadow-sm">
+                    <div className="min-h-[calc(100vh-140px)] md:min-h-[calc(100vh-160px)] rounded-lg shadow-sm">
                         <Outlet />
                     </div>
                 </Content>
@@ -521,6 +535,16 @@ const Dashboard: React.FC = () => {
                     .ant-layout-content {
                         padding: 12px !important;
                     }
+                }
+
+                .custom-dropdown .ant-dropdown-menu-item {
+                    padding: 8px 16px !important;
+                    height: auto !important;
+                    line-height: 1.5 !important;
+                }
+
+                .custom-dropdown .ant-dropdown-menu-item-disabled {
+                    padding: 0 !important;
                 }
             `}</style>
         </Layout>

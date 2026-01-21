@@ -251,7 +251,7 @@ const ManagePayment = () => {
     }
 
     return (
-        <div className="min-h-screen py-6 px-4 sm:px-6" style={{ backgroundColor: themeColors.background }}>
+        <div>
             {/* Animated Header */}
             <motion.div
                 initial={{ opacity: 0, y: -50 }}

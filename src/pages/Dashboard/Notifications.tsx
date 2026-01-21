@@ -445,7 +445,6 @@ const Notifications: React.FC = () => {
 
     return (
         <motion.div
-            className="p-6"
             variants={pageVariants}
             initial="initial"
             animate="animate"
