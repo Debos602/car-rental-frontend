@@ -421,60 +421,143 @@ const AdminDashboard: React.FC = () => {
         {
             key: '0',
             label: (
-                <div className="px-4 py-4 border-b border-gray-100 bg-gradient-to-r from-[#4335A7]/5 to-transparent">
-                    <div className="flex items-center gap-3">
+                <div style={{
+                    padding: '16px',
+                    borderBottom: '1px solid #e5e7eb',
+                    background: 'linear-gradient(to right, rgba(67, 53, 167, 0.05), transparent)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <Avatar
                             size={48}
                             src={`https://ui-avatars.com/api/?name=${user?.name}&background=${encodeURIComponent('#D2691E')}&color=fff&size=128&bold=true`}
-                            className="border-3 border-[#D2691E]/30 shadow-md"
+                            style={{
+                                border: '3px solid rgba(210, 105, 30, 0.3)',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                            }}
                         />
                         <div>
-                            <div className="text-base font-bold text-gray-900">{user?.name}</div>
-                            <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                                <SafetyOutlined className="text-green-500" />
-                                <span className="capitalize font-medium">{user?.role}</span>
+                            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#111827' }}>
+                                {user?.name}
+                            </div>
+                            <div style={{
+                                fontSize: '12px',
+                                color: '#6b7280',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                marginTop: '4px'
+                            }}>
+                                <SafetyOutlined style={{ color: '#10B981' }} />
+                                <span style={{ textTransform: 'capitalize', fontWeight: '500' }}>
+                                    {user?.role}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             ),
             disabled: true,
+            style: { padding: 0, cursor: 'default' }
         },
         {
             type: 'divider',
             key: 'divider-1',
+            style: { margin: '0' }
         },
         {
             key: '1',
-            icon: <DashboardOutlined className="text-lg" />,
-            label: <Link to="/admin-dashboard" className="text-base font-medium py-3">Admin Dashboard</Link>,
-
+            icon: <DashboardOutlined style={{ fontSize: '18px' }} />,
+            label: (
+                <Link
+                    to="/admin-dashboard"
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        display: 'block'
+                    }}
+                >
+                    Admin Dashboard
+                </Link>
+            ),
+            style: {
+                padding: '8px 16px',
+                height: 'auto',
+                lineHeight: '1.5'
+            }
         },
         {
             key: '2',
-            icon: <HomeOutlined className="text-lg" />,
-            label: <Link to="/" className="text-base font-medium py-3">Return to Home</Link>,
-
+            icon: <HomeOutlined style={{ fontSize: '18px' }} />,
+            label: (
+                <Link
+                    to="/"
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        display: 'block'
+                    }}
+                >
+                    Return to Home
+                </Link>
+            ),
+            style: {
+                padding: '8px 16px',
+                height: 'auto',
+                lineHeight: '1.5'
+            }
         },
         {
             key: '3',
-            icon: <SettingOutlined className="text-lg" />,
-            label: <Link to="/admin-dashboard/settings" className="text-base font-medium py-3">Account Settings</Link>,
-
+            icon: <SettingOutlined style={{ fontSize: '18px' }} />,
+            label: (
+                <Link
+                    to="/admin-dashboard/settings"
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        display: 'block'
+                    }}
+                >
+                    Account Settings
+                </Link>
+            ),
+            style: {
+                padding: '8px 16px',
+                height: 'auto',
+                lineHeight: '1.5'
+            }
         },
         {
             type: 'divider',
             key: 'divider-2',
+            style: { margin: '0' }
         },
         {
             key: '4',
-            icon: <LogoutOutlined className="text-lg" />,
+            icon: <LogoutOutlined style={{ fontSize: '18px', color: '#EF4444' }} />,
             label: (
-                <button onClick={handleLogout} className="w-full text-left text-base font-medium text-red-500">
+                <button
+                    onClick={handleLogout}
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        color: '#EF4444',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        cursor: 'pointer',
+                        width: '100%',
+                        textAlign: 'left'
+                    }}
+                >
                     Logout
                 </button>
             ),
-
+            style: {
+                padding: '8px 16px',
+                height: 'auto',
+                lineHeight: '1.5'
+            }
         },
     ];
 
@@ -788,7 +871,8 @@ const AdminDashboard: React.FC = () => {
                                 menu={{ items: userMenuItems }}
                                 trigger={["click"]}
                                 placement="bottomRight"
-                                overlayClassName="w-64"
+                                overlayClassName="custom-user-dropdown"
+
                             >
                                 <div className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-gray-50/80 px-2 md:px-4 py-2 rounded-xl transition-all duration-300 group">
                                     {/* Text - Hide on mobile */}
@@ -1036,6 +1120,203 @@ const AdminDashboard: React.FC = () => {
                 .ant-tooltip-inner {
                     font-size: 14px;
                     font-weight: 500;
+                }
+
+                /* ===== DROPDOWN MENU FIXES ===== */
+                /* General dropdown fixes */
+                .ant-dropdown-menu {
+                    border-radius: 12px !important;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+                    padding: 8px 0 !important;
+                    width: 256px !important;
+                    overflow: hidden !important;
+                }
+
+                .ant-dropdown-menu-item {
+                    padding: 8px 16px !important;
+                    height: auto !important;
+                    line-height: 1.5 !important;
+                    margin: 0 !important;
+                    min-height: 44px !important;
+                }
+
+                .ant-dropdown-menu-item:hover {
+                    background-color: #f3f4f6 !important;
+                }
+
+                .ant-dropdown-menu-item-disabled {
+                    opacity: 1 !important;
+                    cursor: default !important;
+                    padding: 0 !important;
+                    background: transparent !important;
+                }
+
+                .ant-dropdown-menu-item-disabled:hover {
+                    background-color: transparent !important;
+                }
+
+                .ant-dropdown-menu-item .ant-dropdown-menu-title-content {
+                    width: 100% !important;
+                }
+
+                .ant-dropdown-menu-item .ant-dropdown-menu-item-icon {
+                    margin-right: 12px !important;
+                    font-size: 18px !important;
+                }
+
+                /* Fix for disabled item */
+                .ant-dropdown-menu-item-disabled .ant-avatar {
+                    border: 3px solid rgba(210, 105, 30, 0.3) !important;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                }
+
+                /* Override any conflicting styles */
+                .ant-dropdown-menu-item-selected,
+                .ant-dropdown-menu-submenu-title-selected {
+                    background-color: transparent !important;
+                }
+
+                /* Fix for button inside dropdown */
+                .ant-dropdown-menu-item button {
+                    width: 100% !important;
+                    text-align: left !important;
+                    background: none !important;
+                    border: none !important;
+                    padding: 0 !important;
+                    cursor: pointer !important;
+                    font-size: 16px !important;
+                    font-weight: 500 !important;
+                    color: inherit !important;
+                }
+
+                .ant-dropdown-menu-item button:hover {
+                    background: none !important;
+                }
+
+                /* Ensure links are properly styled */
+                .ant-dropdown-menu-item a {
+                    color: inherit !important;
+                    text-decoration: none !important;
+                    display: block !important;
+                    font-size: 16px !important;
+                    font-weight: 500 !important;
+                }
+
+                .ant-dropdown-menu-item a:hover {
+                    color: inherit !important;
+                }
+
+                /* Divider styling */
+                .ant-dropdown-menu-item-divider {
+                    margin: 4px 0 !important;
+                    background-color: #e5e7eb !important;
+                }
+
+                /* Responsive dropdown */
+                @media (max-width: 768px) {
+                    .ant-dropdown-menu {
+                        width: 240px !important;
+                        max-width: calc(100vw - 32px) !important;
+                    }
+                    
+                    .ant-dropdown-menu-item {
+                        padding: 8px 14px !important;
+                    }
+                }
+
+                /* User dropdown specific styles */
+                .custom-user-dropdown .ant-dropdown-menu {
+                    border-radius: 12px !important;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+                    padding: 0 !important;
+                    overflow: hidden !important;
+                }
+
+                .custom-user-dropdown .ant-dropdown-menu-item {
+                    padding: 12px 16px !important;
+                }
+
+                .custom-user-dropdown .ant-dropdown-menu-item-disabled {
+                    padding: 16px !important;
+                    margin: 0 !important;
+                }
+
+                /* Notification dropdown specific fixes */
+                .ant-dropdown-menu-item-group-title {
+                    padding: 12px 16px !important;
+                    font-weight: 600 !important;
+                    color: #111827 !important;
+                    background: #f9fafb !important;
+                    border-bottom: 1px solid #e5e7eb !important;
+                }
+
+                /* Fix for notification badge positioning */
+                .ant-badge-count {
+                    transform: translate(50%, -50%) !important;
+                }
+
+                /* Fix dropdown z-index issues */
+                .ant-dropdown {
+                    z-index: 1050 !important;
+                }
+
+                /* Ensure dropdown arrows are visible */
+                .ant-dropdown-arrow {
+                    background: white !important;
+                    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05) !important;
+                }
+
+                /* Custom scrollbar for dropdowns */
+                .ant-dropdown-menu::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .ant-dropdown-menu::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 3px;
+                }
+
+                .ant-dropdown-menu::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 3px;
+                }
+
+                .ant-dropdown-menu::-webkit-scrollbar-thumb:hover {
+                    background: #a8a8a8;
+                }
+
+                /* Fix for ant-design icon alignment */
+                .ant-dropdown-menu-item .anticon {
+                    vertical-align: middle !important;
+                }
+
+                /* Fix for notification dropdown items */
+                .notification-item .ant-dropdown-menu-item {
+                    padding: 0 !important;
+                }
+
+                .notification-item .ant-dropdown-menu-item .ant-dropdown-menu-title-content {
+                    padding: 12px 16px !important;
+                }
+
+                /* Ensure dropdown menu items don't inherit unwanted styles */
+                .ant-dropdown-menu-item-group-list {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+
+                /* Fix for mobile dropdowns */
+                @media (max-width: 768px) {
+                    .ant-dropdown {
+                        position: fixed !important;
+                        top: 80px !important;
+                        right: 16px !important;
+                    }
+                    
+                    .ant-dropdown-menu {
+                        max-height: 70vh !important;
+                        overflow-y: auto !important;
+                    }
                 }
             `}</style>
         </Layout>
