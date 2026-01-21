@@ -389,7 +389,7 @@ const Dashboard: React.FC = () => {
                             menu={{ items: dropdownItems }}
                             placement="bottomRight"
                             trigger={['click']}
-                            overlayClassName="w-64"
+                            overlayClassName="custom-dropdown w-64"
                         >
                             <Button
                                 type="text"
@@ -543,8 +543,22 @@ const Dashboard: React.FC = () => {
                     line-height: 1.5 !important;
                 }
 
+                /* Keep padding for disabled items (headers) so px/py classes apply */
                 .custom-dropdown .ant-dropdown-menu-item-disabled {
-                    padding: 0 !important;
+                    padding: 12px 16px !important;
+                }
+
+                /* Allow buttons inside dropdown items to inherit their parent padding */
+                .custom-dropdown .ant-dropdown-menu-item button {
+                    width: 100% !important;
+                    text-align: left !important;
+                    background: none !important;
+                    border: none !important;
+                    padding: inherit !important;
+                    cursor: pointer !important;
+                    font-size: 16px !important;
+                    font-weight: 500 !important;
+                    color: inherit !important;
                 }
             `}</style>
         </Layout>

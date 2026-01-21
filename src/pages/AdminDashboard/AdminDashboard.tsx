@@ -1182,7 +1182,7 @@ const AdminDashboard: React.FC = () => {
                     text-align: left !important;
                     background: none !important;
                     border: none !important;
-                    padding: 0 !important;
+                    padding: inherit !important; /* allow parent padding (or utility classes) to apply */
                     cursor: pointer !important;
                     font-size: 16px !important;
                     font-weight: 500 !important;
