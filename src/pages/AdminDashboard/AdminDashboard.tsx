@@ -42,7 +42,7 @@ import logo from "@/assets/car_lgo.png";
 import { RootState } from "@/redux/store";
 import { TUser } from "@/types/global";
 import type { MenuProps } from 'antd';
-import { useGetAllNotificationsQuery } from "@/redux/feature/notification/notificationApi";
+import { useGetAllNotificationsQuery, useMarkAsReadMutation } from "@/redux/feature/notification/notificationApi";
 import { logout } from "@/redux/feature/auth/authSlice";
 
 const { Header, Sider, Content } = Layout;
@@ -112,6 +112,8 @@ const AdminDashboard: React.FC = () => {
         pollingInterval: 30000,
     });
 
+    const [markAllRead, { isLoading: isMarkingAll }] = useMarkAsReadMutation();
+
     const notifications: NotificationItem[] = notificationsData?.data ?? [];
     const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -137,52 +139,8 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    // Get notification icon based on type
-    const getNotificationIcon = (item: NotificationItem) => {
-        const title = item.title?.toLowerCase() || '';
-        const message = item.message?.toLowerCase() || '';
-
-        if (title.includes('booking') || message.includes('booking')) {
-            return <BookOutlined className="text-blue-500" />;
-        }
-        if (title.includes('payment') || message.includes('payment')) {
-            return <MoneyCollectOutlined className="text-green-500" />;
-        }
-        if (title.includes('car') || message.includes('car')) {
-            return <CarOutlined className="text-amber-500" />;
-        }
-        if (title.includes('user') || message.includes('user')) {
-            return <TeamOutlined className="text-purple-500" />;
-        }
-        if (title.includes('system') || message.includes('system')) {
-            return <SettingOutlined className="text-gray-500" />;
-        }
-        if (title.includes('alert') || title.includes('warning')) {
-            return <SafetyOutlined className="text-red-500" />;
-        }
-        return <BellOutlined className="text-gray-500" />;
-    };
-
-    // Get notification color based on urgency
-    const getNotificationColor = (item: NotificationItem) => {
-        const title = item.title?.toLowerCase() || '';
-
-        if (title.includes('urgent') || title.includes('critical')) {
-            return 'bg-red-50 border-red-200';
-        }
-        if (title.includes('warning') || title.includes('alert')) {
-            return 'bg-amber-50 border-amber-200';
-        }
-        if (title.includes('payment') || title.includes('completed')) {
-            return 'bg-green-50 border-green-200';
-        }
-        if (!item.read) {
-            return 'bg-blue-50 border-blue-200';
-        }
-        return 'bg-gray-50 border-gray-200';
-    };
-
-    const handleNotificationClick = (item: NotificationItem) => {
+    const handleNotificationClick = async (item: NotificationItem) => {
+        // Navigate based on notification type
         if (item.title.includes('Booking')) {
             navigate('/admin-dashboard/manage-booking');
         } else if (item.title.includes('Car')) {
@@ -193,10 +151,20 @@ const AdminDashboard: React.FC = () => {
             navigate('/admin-dashboard/manage-return-car');
         }
         setShowAllNotifications(false);
+
+        // You could add logic here to mark individual notification as read
+        // if you have a mutation for marking single notification
     };
 
     const handleMarkAllAsRead = async () => {
-        console.log('Mark all as read');
+        if (unreadCount === 0) return;
+        try {
+            await markAllRead().unwrap();
+            // Refetch notifications to update UI
+            refetch();
+        } catch (error) {
+            console.error('Failed to mark notifications as read', error);
+        }
     };
 
     const handleViewAllNotifications = () => {
@@ -208,48 +176,21 @@ const AdminDashboard: React.FC = () => {
         {
             key: 'header',
             label: (
-                <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white">
+                <div className="px-4 py-3 border-b border-gray-200 bg-white">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <BellOutlined className="text-xl text-blue-600" />
-                            <div>
-                                <Text strong className="text-base text-gray-900">
-                                    Notifications
-                                </Text>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <Badge
-                                        count={notifications.length}
-                                        style={{ backgroundColor: '#4335A7' }}
-                                        size="small"
-                                    />
-                                    <Text type="secondary" className="text-xs">
-                                        Total
-                                    </Text>
-                                    {unreadCount > 0 && (
-                                        <>
-                                            <Badge
-                                                count={unreadCount}
-                                                style={{ backgroundColor: '#ff4d4f' }}
-                                                size="small"
-                                            />
-                                            <Text type="secondary" className="text-xs">
-                                                Unread
-                                            </Text>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        {unreadCount > 0 && (
-                            <Button
-                                type="link"
-                                size="small"
-                                className="text-blue-600 text-xs"
-                                onClick={handleMarkAllAsRead}
-                            >
-                                Mark all read
-                            </Button>
-                        )}
+                        <Text strong className="text-base text-gray-900">
+                            Notifications
+                        </Text>
+                        <Button
+                            type="link"
+                            size="small"
+                            className="text-[#4335A7] text-xs font-medium p-0 h-auto"
+                            onClick={handleMarkAllAsRead}
+                            loading={isMarkingAll}
+                            disabled={isMarkingAll || unreadCount === 0}
+                        >
+                            Mark all read
+                        </Button>
                     </div>
                 </div>
             ),
@@ -269,45 +210,45 @@ const AdminDashboard: React.FC = () => {
                 key: item._id || `notification-${index}`,
                 label: (
                     <div
-                        className={`px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-gray-50 ${getNotificationColor(item)} border-l-4`}
+                        className={`px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-b-0`}
                         onClick={() => handleNotificationClick(item)}
                     >
-                        <div className="flex items-start gap-3">
-                            <div className="flex-shrink-0 mt-1">
-                                <div className="w-8 h-8 rounded-lg bg-white border flex items-center justify-center">
-                                    {getNotificationIcon(item)}
-                                </div>
-                            </div>
+                        <div className="flex items-start">
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-2">
+                                {/* Title and time on same line */}
+                                <div className="flex items-start justify-between gap-2 mb-1">
                                     <Text
                                         strong
-                                        className={`text-sm mb-1 line-clamp-1 ${!item.read ? 'text-gray-900' : 'text-gray-700'}`}
+                                        className={`text-sm ${!item.read ? 'text-gray-900' : 'text-gray-600'}`}
                                     >
                                         {item.title}
-                                        {!item.read && (
-                                            <span className="ml-2 inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                                        )}
                                     </Text>
                                     <Text type="secondary" className="text-xs whitespace-nowrap">
                                         {getTimeLabel(item.createdAt)}
                                     </Text>
                                 </div>
+
+                                {/* Notification message */}
                                 <Text
-                                    className="text-sm text-gray-600 line-clamp-2"
+                                    className="text-sm text-gray-600 mb-2"
                                     style={{ lineHeight: '1.4' }}
                                 >
                                     {item.message}
                                 </Text>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <Badge
-                                        dot={!item.read}
-                                        color={item.read ? 'default' : 'blue'}
-                                        size="small"
-                                    />
-                                    <Text type="secondary" className="text-xs">
-                                        {item.read ? 'Read' : 'Unread'}
-                                    </Text>
+
+                                {/* Read/Unread status - positioned at bottom left */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        {!item.read && (
+                                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                        )}
+                                        <Text
+                                            type="secondary"
+                                            className={`text-xs ${!item.read ? 'text-blue-600 font-medium' : 'text-gray-500'}`}
+                                        >
+                                            {!item.read ? 'Unread' : 'Read'}
+                                        </Text>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -317,11 +258,11 @@ const AdminDashboard: React.FC = () => {
             ...(notifications.length > 5 && !showAllNotifications ? [{
                 key: 'show-more',
                 label: (
-                    <div className="px-4 py-2 text-center border-t border-gray-200">
+                    <div className="px-4 py-3 text-center border-t border-gray-200 bg-gray-50">
                         <Button
                             type="link"
                             size="small"
-                            className="text-blue-600"
+                            className="text-[#4335A7] font-medium"
                             onClick={() => setShowAllNotifications(true)}
                         >
                             Show {notifications.length - 5} more notifications
@@ -360,7 +301,7 @@ const AdminDashboard: React.FC = () => {
                         type="default"
                         block
                         onClick={handleViewAllNotifications}
-                        className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                        className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400"
                     >
                         View all notifications
                     </Button>
@@ -828,9 +769,10 @@ const AdminDashboard: React.FC = () => {
                                     }}
                                     trigger={['click']}
                                     placement="bottomRight"
+                                    overlayClassName="notification-dropdown"
                                     overlayStyle={{
-                                        width: isMobile ? 'calc(100vw - 32px)' : '400px',
-                                        maxHeight: '500px',
+                                        width: isMobile ? 'calc(100vw - 32px)' : '480px',
+                                        maxHeight: '560px',
                                         overflow: 'hidden',
                                     }}
                                     onOpenChange={(open) => {
@@ -1299,6 +1241,56 @@ const AdminDashboard: React.FC = () => {
                     padding: 12px 16px !important;
                 }
 
+                /* Notification dropdown specific sizing & style */
+                .notification-dropdown .ant-dropdown-menu {
+                    width: 480px !important;
+                    padding: 0 !important;
+                    max-height: 560px !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item {
+                    padding: 0 !important;
+                    background: transparent !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item-disabled {
+                    padding: 12px 16px !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item .ant-dropdown-menu-title-content {
+                    width: 100% !important;
+                    padding: 0 !important;
+                }
+
+                /* Ensure notification header (disabled item) lays out horizontally */
+                .notification-dropdown .ant-dropdown-menu-item-disabled > div {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+                    gap: 12px !important;
+                    padding: 12px 16px !important;
+                    white-space: normal !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item-disabled .flex {
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 12px !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item-disabled .ml-2,
+                .notification-dropdown .ant-dropdown-menu-item-disabled .mt-1 {
+                    margin: 0 !important;
+                }
+
+                /* Ensure badges and counters align horizontally */
+                .notification-dropdown .ant-badge,
+                .notification-dropdown .ant-badge-count {
+                    display: inline-flex !important;
+                    transform: none !important;
+                    vertical-align: middle !important;
+                }
+
                 /* Ensure dropdown menu items don't inherit unwanted styles */
                 .ant-dropdown-menu-item-group-list {
                     margin: 0 !important;
@@ -1317,6 +1309,21 @@ const AdminDashboard: React.FC = () => {
                         max-height: 70vh !important;
                         overflow-y: auto !important;
                     }
+                }
+
+                /* Notification dropdown specific styles */
+                .notification-dropdown .ant-dropdown-menu {
+                    max-height: 500px !important;
+                    overflow-y: auto !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item-disabled {
+                    cursor: default !important;
+                    background: transparent !important;
+                }
+
+                .notification-dropdown .ant-dropdown-menu-item-disabled:hover {
+                    background: transparent !important;
                 }
             `}</style>
         </Layout>
