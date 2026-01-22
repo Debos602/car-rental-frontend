@@ -79,6 +79,9 @@ const AdminDashboard: React.FC = () => {
     const [showAllNotifications, setShowAllNotifications] = useState(false);
     const menuContainerRef = useRef<HTMLDivElement>(null);
     const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const userTriggerRef = useRef<HTMLDivElement | null>(null);
+    const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+    const [userOverlayStyle, setUserOverlayStyle] = useState<React.CSSProperties | undefined>(undefined);
 
     const isMobile = !screens.lg;
 
@@ -812,9 +815,22 @@ const AdminDashboard: React.FC = () => {
                                 trigger={["click"]}
                                 placement="bottomRight"
                                 overlayClassName="custom-user-dropdown"
-
+                                getPopupContainer={() => document.body}
+                                open={userDropdownOpen}
+                                onOpenChange={(open) => {
+                                    setUserDropdownOpen(open);
+                                    if (open && userTriggerRef.current && isMobile) {
+                                        const rect = userTriggerRef.current.getBoundingClientRect();
+                                        const width = Math.min(window.innerWidth - 64, 320);
+                                        const left = Math.max(16, rect.right - width);
+                                        setUserOverlayStyle({ position: 'fixed', top: rect.bottom + 8, left, width, zIndex: 1060 });
+                                    } else if (!open) {
+                                        setUserOverlayStyle(undefined);
+                                    }
+                                }}
+                                overlayStyle={isMobile ? userOverlayStyle : undefined}
                             >
-                                <div className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-gray-50/80 px-2 md:px-4 py-2 rounded-xl transition-all duration-300 group">
+                                <div ref={userTriggerRef} className="flex items-center gap-2 md:gap-3 cursor-pointer hover:bg-gray-50/80 px-2 md:px-4 py-2 rounded-xl transition-all duration-300 group">
                                     {/* Text - Hide on mobile */}
                                     {!isMobile && (
                                         <div className="hidden lg:flex flex-col leading-tight">
