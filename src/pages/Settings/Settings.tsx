@@ -23,13 +23,10 @@ import {
 } from "antd";
 import {
     SaveOutlined,
-    UploadOutlined,
     BellOutlined,
     LockOutlined,
     UserOutlined,
-    TeamOutlined,
     GlobalOutlined,
-    SecurityScanOutlined,
     DatabaseOutlined,
     ApiOutlined,
     CloudOutlined,

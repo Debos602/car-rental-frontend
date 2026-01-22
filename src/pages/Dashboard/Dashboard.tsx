@@ -32,7 +32,6 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hook";
 import { logout } from "@/redux/feature/auth/authSlice";
 import logo from "@/assets/car_lgo.png";
-import { useGetNotificationsQuery } from "@/redux/feature/notification/notificationApi";
 import NotificationDropdown from "./components/NotificationDropdown";
 import { useGetUserQuery } from "@/redux/feature/auth/authApi";
 
@@ -57,7 +56,6 @@ const Dashboard: React.FC = () => {
     const [searchVisible, setSearchVisible] = useState(false);
     const location = useLocation();
 
-    const { data: notifications = [] } = useGetNotificationsQuery(undefined);
 
     const isMobile = !screens.md;
     const isTablet = screens.md && !screens.lg;

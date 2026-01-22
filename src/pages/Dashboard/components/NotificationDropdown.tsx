@@ -358,7 +358,7 @@ const NotificationDropdown: React.FC = () => {
         <div
             className={`${isMobile ? 'px-4' : 'px-4'} py-3 transition-all duration-200 hover:bg-gray-50 group`}
             style={{
-                backgroundColor: !item.read ? token.colorFillAlter : 'transparent'
+                backgroundColor: (!item.read && !isMobile) ? token.colorFillAlter : 'transparent'
             }}
         >
             <div className="flex items-start gap-3">
@@ -685,7 +685,8 @@ const NotificationDropdown: React.FC = () => {
             open={drawerVisible}
             width="100%"
             style={{ maxWidth: 400 }}
-            styles={{ body: { padding: 0 } }}
+            closable={false}
+            bodyStyle={{ background: 'transparent', padding: 0 }}
         >
             <div className="h-full flex flex-col">
                 {/* Header with stats and actions */}
