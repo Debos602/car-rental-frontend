@@ -7,6 +7,7 @@ import img4 from "../assets/img-4.jpg";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CustomArrowProps } from "react-slick";
@@ -39,7 +40,7 @@ const NextArrow = (props: CustomArrowProps) => {
 
     return (
         <motion.button
-            className="absolute right-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30 "
+            className="absolute right-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30 hidden md:block"
             onClick={onClick}
             aria-label="Next"
             initial={{ opacity: 0, x: 40 }}
@@ -57,7 +58,7 @@ const PrevArrow = (props: CustomArrowProps) => {
 
     return (
         <motion.button
-            className="absolute left-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30"
+            className="absolute left-0 top-1/2 mt-[-26.5px] bg-black text-white p-4 hover:scale-105 transition-transform z-30 hidden md:block"
             onClick={onClick}
             aria-label="Previous"
             initial={{ opacity: 0, x: 0 }}
@@ -72,6 +73,7 @@ const PrevArrow = (props: CustomArrowProps) => {
 
 const HeroSection = () => {
     const [location, setLocation] = useState("");
+    const [isMobileView, setIsMobileView] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const locations = [
         "Dhaka",
         "Chittagong",
@@ -99,7 +101,6 @@ const HeroSection = () => {
     const navigate = useNavigate();
 
     const settings = {
-        dots: false,
         infinite: true,
         speed: 800,
         slidesToShow: 1,
@@ -107,9 +108,18 @@ const HeroSection = () => {
         autoplay: false,
         autoplaySpeed: 4000,
         fade: true,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
+        nextArrow: isMobileView ? undefined : <NextArrow />,
+        prevArrow: isMobileView ? undefined : <PrevArrow />,
+        dots: isMobileView,
     };
+
+    useEffect(() => {
+        const onResize = () => setIsMobileView(window.innerWidth < 768);
+        window.addEventListener('resize', onResize);
+        // set initial
+        onResize();
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
 
     const handleSearch = () => {
         const startD = pickUpDate ? pickUpDate.format("YYYY-MM-DD") : "";
@@ -352,6 +362,16 @@ const HeroSection = () => {
                                                     }
                                                 />
                                             </div>
+                                        </div>
+                                        <div className="mt-4">
+                                            <Button
+                                                type="primary"
+                                                size="large"
+                                                className="w-full bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-700 hover:to-amber-900 border-0 text-white font-bold rounded-xl shadow-lg"
+                                                onClick={handleSearch}
+                                            >
+                                                Search Cars
+                                            </Button>
                                         </div>
                                     </motion.div>
 
