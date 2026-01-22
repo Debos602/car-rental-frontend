@@ -20,6 +20,7 @@ import {
     GlobalOutlined,
     CloseOutlined,
     MenuOutlined,
+    DeleteFilled,
 } from "@ant-design/icons";
 import {
     Avatar,
@@ -29,12 +30,13 @@ import {
     Input,
     Badge,
     Dropdown,
-    Tooltip,
     Typography,
     Spin,
     Empty,
     Drawer,
-    Grid
+    Grid,
+    Modal,
+    message,
 } from "antd";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
@@ -42,7 +44,8 @@ import logo from "@/assets/car_lgo.png";
 import { RootState } from "@/redux/store";
 import { TUser } from "@/types/global";
 import type { MenuProps } from 'antd';
-import { useGetAllNotificationsQuery, useMarkAsReadMutation } from "@/redux/feature/notification/notificationApi";
+import { useGetAllNotificationsQuery } from "@/redux/feature/notification/notificationApi";
+import { useDeleteNotificationAdminMutation } from "@/redux/feature/notification/notificationApi";
 import { logout } from "@/redux/feature/auth/authSlice";
 
 const { Header, Sider, Content } = Layout;
@@ -111,11 +114,20 @@ const AdminDashboard: React.FC = () => {
         refetchOnMountOrArgChange: true,
         pollingInterval: 30000,
     });
-
-    const [markAllRead, { isLoading: isMarkingAll }] = useMarkAsReadMutation();
-
+    const [deleteNotificationAdmin] = useDeleteNotificationAdminMutation();
     const notifications: NotificationItem[] = notificationsData?.data ?? [];
     const unreadCount = notifications.filter((n) => !n.read).length;
+
+    // Helper to extract a usable notification id for API calls
+    const getNotificationId = (item: NotificationItem): string | undefined => {
+        const anyItem: any = item as any;
+        if (anyItem._id && typeof anyItem._id === 'string') return anyItem._id;
+        if (anyItem.id && typeof anyItem.id === 'string') return anyItem.id;
+        if (anyItem.notificationId && typeof anyItem.notificationId === 'string') return anyItem.notificationId;
+        if (anyItem.notification_id && typeof anyItem.notification_id === 'string') return anyItem.notification_id;
+        if (anyItem._id && anyItem._id.$oid && typeof anyItem._id.$oid === 'string') return anyItem._id.$oid;
+        return undefined;
+    };
 
     // Format time label
     const getTimeLabel = (createdAt?: string): string => {
@@ -152,45 +164,25 @@ const AdminDashboard: React.FC = () => {
         }
         setShowAllNotifications(false);
 
-        // You could add logic here to mark individual notification as read
-        // if you have a mutation for marking single notification
     };
 
-    const handleMarkAllAsRead = async () => {
-        if (unreadCount === 0) return;
-        try {
-            await markAllRead().unwrap();
-            // Refetch notifications to update UI
-            refetch();
-        } catch (error) {
-            console.error('Failed to mark notifications as read', error);
-        }
-    };
-
-    const handleViewAllNotifications = () => {
-        navigate('/admin-dashboard/notifications');
-    };
 
     // Notification dropdown menu items
     const notificationMenuItems: MenuProps['items'] = [
         {
             key: 'header',
             label: (
-                <div className="px-4 py-3 border-b border-gray-200 bg-white">
+                <div className="px-4 py-3 border-b" style={{ background: 'linear-gradient(90deg, #FBFBFF 0%, #FFFFFF 100%)' }}>
                     <div className="flex items-center justify-between">
-                        <Text strong className="text-base text-gray-900">
-                            Notifications
-                        </Text>
-                        <Button
-                            type="link"
-                            size="small"
-                            className="text-[#4335A7] text-xs font-medium p-0 h-auto"
-                            onClick={handleMarkAllAsRead}
-                            loading={isMarkingAll}
-                            disabled={isMarkingAll || unreadCount === 0}
-                        >
-                            Mark all read
-                        </Button>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-gradient-to-br from-[#4335A7] to-[#6b45d9] text-white shadow-sm" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <BellOutlined style={{ fontSize: 18 }} />
+                            </div>
+                            <div>
+                                <Text strong className="text-base text-gray-900">Notifications</Text>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             ),
@@ -210,10 +202,15 @@ const AdminDashboard: React.FC = () => {
                 key: item._id || `notification-${index}`,
                 label: (
                     <div
-                        className={`px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-b-0`}
+                        className={`notification-list-item px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 ${!item.read ? 'unread' : ''}`}
                         onClick={() => handleNotificationClick(item)}
                     >
                         <div className="flex items-start">
+                            <div className="mr-3 mt-1 flex-shrink-0">
+                                <div className={`w-9 h-9 rounded-full flex items-center justify-center ${!item.read ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                                    <BellOutlined />
+                                </div>
+                            </div>
                             <div className="flex-1 min-w-0">
                                 {/* Title and time on same line */}
                                 <div className="flex items-start justify-between gap-2 mb-1">
@@ -235,21 +232,38 @@ const AdminDashboard: React.FC = () => {
                                 >
                                     {item.message}
                                 </Text>
-
-                                {/* Read/Unread status - positioned at bottom left */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        {!item.read && (
-                                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                                        )}
-                                        <Text
-                                            type="secondary"
-                                            className={`text-xs ${!item.read ? 'text-blue-600 font-medium' : 'text-gray-500'}`}
-                                        >
-                                            {!item.read ? 'Unread' : 'Read'}
-                                        </Text>
-                                    </div>
-                                </div>
+                            </div>
+                            <div className="ml-3 flex-shrink-0 notification-delete-btn">
+                                <Button
+                                    type="text"
+                                    size="small"
+                                    className="text-red-900"
+                                    icon={<DeleteFilled className="text-red-700" />}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const id = getNotificationId(item);
+                                        if (!id) {
+                                            message.error('Unable to delete: invalid id');
+                                            return;
+                                        }
+                                        Modal.confirm({
+                                            title: 'Delete notification',
+                                            content: 'Are you sure you want to delete this notification? This action cannot be undone.',
+                                            okText: 'Delete',
+                                            okType: 'danger',
+                                            onOk: async () => {
+                                                try {
+                                                    await deleteNotificationAdmin({ id }).unwrap();
+                                                    message.success('Notification deleted');
+                                                    refetch();
+                                                } catch (err: any) {
+                                                    const msg = err?.data?.message || err?.message || 'Failed to delete notification';
+                                                    message.error(msg);
+                                                }
+                                            }
+                                        });
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -292,23 +306,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
             ),
             disabled: true,
-        }]),
-        {
-            key: 'footer',
-            label: (
-                <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                    <Button
-                        type="default"
-                        block
-                        onClick={handleViewAllNotifications}
-                        className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400"
-                    >
-                        View all notifications
-                    </Button>
-                </div>
-            ),
-            disabled: true,
-        },
+        }])
     ];
 
     const menuItems: MenuProps['items'] = [
@@ -1324,6 +1322,40 @@ const AdminDashboard: React.FC = () => {
 
                 .notification-dropdown .ant-dropdown-menu-item-disabled:hover {
                     background: transparent !important;
+                }
+
+                /* Global styling for notification items in admin */
+                .notification-list-item {
+                    display: block !important;
+                    background: transparent;
+                    padding: 12px 16px !important;
+                }
+
+                .notification-list-item .text-sm {
+                    display: block;
+                }
+
+                .notification-list-item.unread {
+                    background: linear-gradient(90deg, rgba(67,53,167,0.04), rgba(106,90,205,0.02)) !important;
+                }
+
+                .notification-list-item .w-2.h-2.rounded-full {
+                    width: 8px !important;
+                    height: 8px !important;
+                }
+
+                .notification-list-item:hover {
+                    background: #ffffff !important;
+                }
+                /* Delete button visibility on hover */
+                .notification-delete-btn {
+                    display: none;
+                }
+
+                .notification-list-item:hover .notification-delete-btn {
+                    display: inline-flex !important;
+                    align-items: center;
+                    justify-content: center;
                 }
             `}</style>
         </Layout>

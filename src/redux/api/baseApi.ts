@@ -81,7 +81,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
                 | any;
 
             const refreshResult = (await fetchBaseQuery({
-                baseUrl: import.meta.env.DEV ? "/" : import.meta.env.VITE_BASE_URL,
+                baseUrl: `${import.meta.env.VITE_BASE_URL}`,
                 credentials: "include",
             })(
                 {

@@ -24,7 +24,8 @@ export const notificationApi = baseApi.injectEndpoints({
 
 
         // 🔹 Mark all notifications as read
-        markAsRead: builder.mutation<void, void>({
+        // Return type is `any` because some backends return a payload like { success: false, message }
+        markAsRead: builder.mutation<any, void>({
             query: () => ({
                 url: `/notifications/mark-read`,
                 method: "PATCH",
@@ -56,6 +57,13 @@ export const notificationApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Notification", "Booking"],
         }),
+        deleteNotificationAdmin: builder.mutation<void, { id: string; }>({
+            query: ({ id }) => ({
+                url: `/notifications/admin/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Notification", "Booking"],
+        }),
 
     }),
 });
@@ -66,5 +74,6 @@ export const {
     useMarkAsReadSingleMutation,
     useDeleteNotificationMutation,
     useMarkAsUnreadMutation,
-    useGetAllNotificationsQuery
+    useGetAllNotificationsQuery,
+    useDeleteNotificationAdminMutation
 } = notificationApi;
