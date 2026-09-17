@@ -42,7 +42,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/booking-list",
-                element: <BookingList />,
+                element: (
+                    <ProtectedRoute allowedRoles={["user", "admin"]}>
+                        <BookingList />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "*",

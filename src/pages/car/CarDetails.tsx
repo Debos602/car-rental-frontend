@@ -8,6 +8,8 @@ import { TCar } from "@/types/global";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Calendar, Clock, Shield, Navigation, Baby } from "lucide-react";
+import { useAppSelector } from "@/redux/hook";
+import { useCurrentToken } from "@/redux/feature/auth/authSlice";
 
 import CarGallery from "./components/CarGallery";
 import CarInfo from "./components/CarInfo";
@@ -24,6 +26,7 @@ const CarDetails = () => {
 
     const [createBooking, { isLoading: bookingLoading }] = useCreateBookingMutation();
     const navigate = useNavigate();
+    const token = useAppSelector(useCurrentToken);
 
     // Time selection
     const [selectedDate, setSelectedDate] = useState<string>("");
@@ -66,11 +69,8 @@ const CarDetails = () => {
         return `${displayHourStr}:00 ${period}`;
     };
 
-    const formatDateTimeForAPI = (dateStr: string, hour: number): string => {
-        if (!dateStr) return "";
-        const date = new Date(dateStr);
-        date.setHours(hour, 0, 0, 0);
-        return date.toISOString();
+    const formatTimeForAPI = (hour: number): string => {
+        return `${hour.toString().padStart(2, '0')}:00`;
     };
 
     // Safely extract price with fallback
@@ -175,6 +175,12 @@ const CarDetails = () => {
     }, [carData, selectedDate, startHour, endHour, selectedExtras]);
 
     const handleBookNow = useCallback(async () => {
+        if (!token) {
+            toast.warning("Please log in to book a car");
+            navigate("/login", { state: { from: { pathname: "/car-details/" + carData?._id } }, replace: true });
+            return;
+        }
+
         if (!carData?._id || !selectedDate) {
             toast.error("Missing required booking information");
             return;
@@ -185,11 +191,13 @@ const CarDetails = () => {
             return;
         }
 
-        const startDateTime = formatDateTimeForAPI(selectedDate, startHour);
-        const endDateTime = formatDateTimeForAPI(selectedDate, endHour);
+        const startTime = formatTimeForAPI(startHour);
+        const endTime = formatTimeForAPI(endHour);
 
-        const bookingStart = new Date(startDateTime);
-        if (bookingStart < new Date()) {
+        // Validate booking is in the future
+        const bookingDateTime = new Date(selectedDate);
+        bookingDateTime.setHours(startHour, 0, 0, 0);
+        if (bookingDateTime < new Date()) {
             toast.error("Booking must be scheduled in the future");
             return;
         }
@@ -207,10 +215,10 @@ const CarDetails = () => {
         const bookingData = {
             carId: carData._id,
             date: selectedDate,
-            startTime: startDateTime,
-            endTime: endDateTime,
-            extras: selectedExtras,
-            totalCost: totalCost,
+            startTime: startTime,
+            endTime: endTime,
+            // extras: selectedExtras, // Server calculates totalCost from car pricePerHour
+            // totalCost: totalCost,     // Server calculates this
         };
 
         console.log("Booking data to send:", bookingData);
@@ -224,7 +232,7 @@ const CarDetails = () => {
             console.error("Booking creation failed:", err);
             toast.error(err?.data?.message || "Failed to create booking. Please try again.");
         }
-    }, [carData, selectedDate, startHour, endHour, selectedExtras, createBooking, navigate, calculateTotalCost]);
+    }, [carData, selectedDate, startHour, endHour, selectedExtras, createBooking, navigate, calculateTotalCost, token]);
 
     const totalHours = Math.max(1, endHour - startHour);
     const totalCostDisplay = calculateTotalCost();
