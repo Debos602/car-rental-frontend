@@ -222,7 +222,6 @@ const CarDetails = () => {
         };
 
         console.log("Booking data to send:", bookingData);
-        console.log("totalCost type in bookingData:", typeof bookingData.totalCost);
 
         try {
             await createBooking(bookingData).unwrap();
@@ -438,16 +437,18 @@ const CarDetails = () => {
                                             {displayPricePerHour}/hour
                                         </div>
                                     </div>
+                                     <BookingButton
+                                        isAvailable={isAvailable && isValidPrice}
+                                        loading={bookingLoading}
+                                        onBook={handleBookNow}
+                                        isDisabled={!selectedDate || totalCostDisplay <= 0 || !isValidPrice}
+                                    />
                                 </div>
+                                
                             </div>
                         </div>
 
-                        <BookingButton
-                            isAvailable={isAvailable && isValidPrice}
-                            loading={bookingLoading}
-                            onBook={handleBookNow}
-                            isDisabled={!selectedDate || totalCostDisplay <= 0 || !isValidPrice}
-                        />
+                       
                     </motion.div>
                 </motion.div>
             </div>
