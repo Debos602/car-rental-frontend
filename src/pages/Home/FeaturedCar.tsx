@@ -172,84 +172,89 @@ const FeaturedCars = () => {
                                                 >
                                                     <div role="article" tabIndex={0} aria-label={`Featured car ${car.name}`} className="h-full">
                                                         <Card
-                                                            className="h-full bg-gradient-to-b from-white to-amber-50 shadow-lg group rounded-lg overflow-hidden transform transition-all duration-200 hover:shadow-xl border border-gray-100"
+                                                            className="h-full bg-gradient-to-b from-white via-amber-50 to-orange-50 shadow-[0_12px_28px_rgba(67,28,16,0.12)] group rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(67,28,16,0.18)] border border-orange-100"
                                                             cover={
                                                                 <div className="relative overflow-hidden h-44 sm:h-52 md:h-56 lg:h-60">
                                                                     <img
                                                                         alt={`${car.brand} ${car.name} ${car.model}`}
                                                                         loading="lazy"
-                                                                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                                         src={car.image || '/placeholder-car.png'}
                                                                     />
-                                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                                                                    <div className="absolute top-2 right-2">
-                                                                        <div className="bg-black/80 text-white px-2 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
+                                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"></div>
+
+                                                                    <div className="absolute top-3 left-3 flex items-center gap-2 rounded-full bg-white/85 px-2.5 py-1 shadow-sm backdrop-blur-sm">
+                                                                        <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-gray-600">{car.year}</span>
+                                                                    </div>
+
+                                                                    <div className="absolute top-3 right-3">
+                                                                        <div className="rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
                                                                             {car.seats} Seats
                                                                         </div>
                                                                     </div>
+
+                                                                    <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 shadow-sm">
+                                                                        <span className="text-[10px] font-semibold text-gray-700">{car.fuelType}</span>
+                                                                    </div>
                                                                 </div>
                                                             }
-                                                            styles={{ body: { padding: '12px' } }}
+                                                            styles={{ body: { padding: '14px 14px 12px' } }}
                                                         >
                                                             <div className="h-full flex flex-col">
-                                                                <div className="flex justify-between items-start mb-2">
-                                                                    <div className="flex-1 min-w-0">
-                                                                        <h3 className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-chocolate transition-colors truncate">
+                                                                <div className="mb-3 flex items-start justify-between gap-2">
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <h3 className="truncate text-base font-bold text-gray-900 transition-colors group-hover:text-chocolate">
                                                                             {car.name}
                                                                         </h3>
-                                                                        <p className="text-gray-500 text-xs mt-0.5 truncate">
+                                                                        <p className="mt-1 truncate text-[11px] text-gray-500">
                                                                             {car.brand} • {car.model}
                                                                         </p>
                                                                     </div>
-                                                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-chocolate to-amber-900 flex items-center justify-center text-white font-bold text-xs flex-shrink-0 ml-2">
-                                                                        {car.year}
+                                                                    <div className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-[10px] font-semibold text-amber-800">
+                                                                        <span>★</span>
+                                                                        <span>{Number(car.rating) || 4.8}</span>
                                                                     </div>
                                                                 </div>
 
-                                                                <p className="text-gray-600 text-sm sm:text-xs mb-3 line-clamp-2 flex-grow-0">
-                                                                    {car.description?.slice(0, 90) ?? ''}...
+                                                                <p className="mb-3 flex-grow text-[12px] leading-5 text-gray-600">
+                                                                    {car.description?.slice(0, 86) ?? ''}{(car.description?.length ?? 0) > 86 ? '...' : ''}
                                                                 </p>
 
-                                                                <div className="space-y-2 mt-auto">
-                                                                    <div className="flex items-center justify-between">
+                                                                <div className="mt-auto space-y-3">
+                                                                    <div className="flex items-end justify-between gap-3">
                                                                         <div>
-                                                                            <p className="text-xs line-through text-gray-400 mb-0.5">
+                                                                            <p className="mb-1 text-[10px] font-medium text-gray-400 line-through">
                                                                                 ${getPreviousPrice(car.pricePerHour)}
                                                                             </p>
-                                                                            <p className="text-lg font-bold text-chocolate">
-                                                                                ${car.pricePerHour}<span className="text-xs font-medium text-gray-600">/hr</span>
+                                                                            <p className="text-2xl font-black leading-none text-chocolate">
+                                                                                ${car.pricePerHour}
+                                                                                <span className="ml-1 text-[11px] font-semibold text-gray-600">/hr</span>
                                                                             </p>
                                                                         </div>
-                                                                        <Rate
-                                                                            disabled
-                                                                            defaultValue={Number(car.rating) || 4}
-                                                                            className="text-amber-400 [&_.ant-rate-star]:mr-0.5 text-xs"
-                                                                        />
+
+                                                                        <div className="flex items-center gap-1 rounded-full border border-orange-200 bg-orange-50 px-2 py-1">
+                                                                            <div
+                                                                                className="h-3 w-3 rounded-full border border-gray-300"
+                                                                                style={{ backgroundColor: car.color }}
+                                                                                aria-hidden
+                                                                            ></div>
+                                                                            <span className="text-[10px] font-medium text-gray-700">{car.color}</span>
+                                                                        </div>
                                                                     </div>
 
-                                                                    <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                                                                        <div className="flex items-center space-x-2">
-                                                                            <div className="flex items-center">
-                                                                                <div
-                                                                                    className="w-3 h-3 rounded-full border border-gray-300 mr-1"
-                                                                                    style={{ backgroundColor: car.color }}
-                                                                                    aria-hidden
-                                                                                ></div>
-                                                                                <span className="text-gray-600 text-xs">{car.color}</span>
-                                                                            </div>
-                                                                            <span className="text-gray-600 text-xs">•</span>
-                                                                            <span className="text-gray-600 text-xs">{car.fuelType}</span>
+                                                                    <div className="flex items-center justify-between border-t border-orange-100 pt-3">
+                                                                        <div className="flex items-center gap-2 text-[11px] text-gray-500">
+                                                                            <span className="rounded-full bg-stone-100 px-2 py-1">{car.seats} seats</span>
+                                                                            <span className="rounded-full bg-stone-100 px-2 py-1">{car.transmission || 'Auto'}</span>
                                                                         </div>
-                                                                        <div className="flex items-center space-x-2">
-                                                                            <Link
-                                                                                to={`/car-details/${car._id}`}
-                                                                                aria-label={`View details for ${car.name}`}
-                                                                                className="bg-gradient-to-r from-chocolate to-amber-800 hover:from-amber-800 hover:to-chocolate text-white px-4 py-2 sm:px-8 sm:py-3 rounded-md font-semibold transition-all duration-200 transform hover:scale-105 shadow text-xs sm:text-sm"
-                                                                            >
-                                                                                View
-                                                                            </Link>
 
-                                                                        </div>
+                                                                        <Link
+                                                                            to={`/car-details/${car._id}`}
+                                                                            aria-label={`View details for ${car.name}`}
+                                                                            className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-chocolate to-amber-800 px-4 py-2 text-[11px] font-bold text-white shadow-md shadow-orange-200 transition-all duration-200 hover:translate-y-[-1px] hover:shadow-lg hover:shadow-orange-200"
+                                                                        >
+                                                                            Details
+                                                                        </Link>
                                                                     </div>
                                                                 </div>
                                                             </div>
